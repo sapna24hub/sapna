@@ -1,38 +1,71 @@
 import React, { useState } from 'react';
-import { X, Plus, Minus, Trash2, ShoppingBag, Coffee, Check, ArrowRight } from 'lucide-react';
+import { 
+  X, 
+  Plus, 
+  Minus, 
+  Trash2, 
+  ShoppingBag, 
+  Coffee, 
+  Check, 
+  ArrowRight,
+  Pizza,
+  Receipt,
+  Sparkles,
+  Tag
+} from 'lucide-react';
 import confetti from 'canvas-confetti';
 
 export default function OrderTrayDrawer({ isOpen, onClose, trayItems = [], onUpdateQuantity, onClearTray }) {
-  const [orderType, setOrderType] = useState('dine_in'); // dine_in or pickup
-  const [tableNumber, setTableNumber] = useState('Table 4 (Window Nook)');
+  const [orderType, setOrderType] = useState('dine_in'); // dine_in, takeaway, delivery
+  const [tableNumber, setTableNumber] = useState('Table 4 (Window Seat)');
   const [customerName, setCustomerName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [couponCode, setCouponCode] = useState('');
+  const [appliedCoupon, setAppliedCoupon] = useState('');
   const [receiptModal, setReceiptModal] = useState(null);
 
   if (!isOpen) return null;
 
-  const subtotal = trayItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
-  const tax = subtotal * 0.0825; // 8.25% tax
-  const total = subtotal + tax;
+  const subtotal = (trayItems || []).reduce((acc, item) => acc + (item.price || 0) * (item.quantity || 1), 0);
+  const tax = subtotal * 0.05; // 5% Cafe GST
+  
+  let discount = 0;
+  if (appliedCoupon === 'CAFE50') discount = Math.min(50, subtotal);
+  else if (appliedCoupon === 'BREW20') discount = subtotal * 0.20;
+
+  const total = Math.max(0, subtotal + tax - discount);
+
+  const handleApplyCoupon = (e) => {
+    e.preventDefault();
+    const code = couponCode.trim().toUpperCase();
+    if (code === 'CAFE50' || code === 'BREW20') {
+      setAppliedCoupon(code);
+    } else {
+      alert('Invalid coupon code. Try CAFE50 (Flat ₹50 OFF) or BREW20 (20% OFF)!');
+    }
+  };
 
   const handleCheckout = (e) => {
     e.preventDefault();
     if (trayItems.length === 0) return;
 
     const receipt = {
-      orderId: `ORD-${Math.floor(100000 + Math.random() * 900000)}`,
-      customerName: customerName || 'Valued Reader',
-      orderType: orderType === 'dine_in' ? `Dine-In (${tableNumber})` : 'Counter Pickup (To-Go)',
+      orderId: `KOT-${Math.floor(100000 + Math.random() * 900000)}`,
+      customerName: customerName || 'Valued Guest',
+      phone: phone || 'Walk-in',
+      orderType: orderType === 'dine_in' ? `Dine-In (${tableNumber})` : orderType === 'takeaway' ? 'Quick Takeaway' : 'Home Delivery',
       items: [...trayItems],
       subtotal,
       tax,
+      discount,
       total,
       time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     };
 
     confetti({
-      particleCount: 80,
-      spread: 60,
-      origin: { y: 0.5 }
+      particleCount: 90,
+      spread: 70,
+      origin: { y: 0.6 }
     });
 
     setReceiptModal(receipt);
@@ -59,20 +92,20 @@ export default function OrderTrayDrawer({ isOpen, onClose, trayItems = [], onUpd
           {/* Drawer Top Header */}
           <div className="p-5 border-b border-[#E3D4C0] flex items-center justify-between bg-[#F4ECDC]">
             <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl bg-[#8C5628] flex items-center justify-center text-white">
+              <div className="w-9 h-9 rounded-xl bg-[#8C5628] flex items-center justify-center text-white shadow-xs">
                 <ShoppingBag className="w-5 h-5 text-[#FAF5EB]" />
               </div>
               <div>
-                <h3 className="font-serif font-bold text-lg text-[#2B1607]">Your Cafe Tray</h3>
-                <span className="text-xs text-[#8C5628] font-medium">
-                  {trayItems.reduce((s, i) => s + i.quantity, 0)} {trayItems.length === 1 ? 'item' : 'items'} selected
+                <h3 className="font-serif font-bold text-lg text-[#2B1607]">Your Cafe Order Tray</h3>
+                <span className="text-xs text-[#8C5628] font-semibold">
+                  {(trayItems || []).reduce((s, i) => s + (i.quantity || 1), 0)} items selected
                 </span>
               </div>
             </div>
 
             <button
               onClick={onClose}
-              className="p-2 rounded-full text-stone-500 hover:text-stone-800 hover:bg-[#EFE3D0]"
+              className="p-2 rounded-full text-stone-500 hover:text-stone-800 hover:bg-[#EFE3D0] transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
@@ -82,16 +115,16 @@ export default function OrderTrayDrawer({ isOpen, onClose, trayItems = [], onUpd
           <div className="flex-1 overflow-y-auto p-5 space-y-4">
             {trayItems.length === 0 ? (
               <div className="text-center py-20 space-y-3">
-                <Coffee className="w-12 h-12 text-[#9E7A50] mx-auto opacity-70" />
-                <h4 className="font-serif text-lg font-bold text-[#3D2512]">Your tray is empty</h4>
+                <Pizza className="w-12 h-12 text-[#9E7A50] mx-auto opacity-70" />
+                <h4 className="font-serif text-lg font-bold text-[#3D2512]">Your order tray is empty</h4>
                 <p className="text-xs text-[#7B5A34] max-w-xs mx-auto">
-                  Browse our Artisan Menu and select a pour-over or fresh almond croissant to begin your literary order.
+                  Add hot cheesy pizzas, crispy burgers, chilled cold coffee or loaded fries to begin your order!
                 </p>
                 <button
                   onClick={onClose}
-                  className="mt-3 px-5 py-2.5 rounded-full bg-[#5B3314] text-white text-xs font-semibold"
+                  className="mt-3 px-6 py-2.5 rounded-full bg-[#5B3314] text-white text-xs font-bold"
                 >
-                  Browse Menu
+                  Browse Cafe Menu
                 </button>
               </div>
             ) : (
@@ -99,131 +132,179 @@ export default function OrderTrayDrawer({ isOpen, onClose, trayItems = [], onUpd
                 {trayItems.map((item) => (
                   <div
                     key={item.id}
-                    className="flex items-center gap-3 bg-[#FFFDF9] p-3 rounded-2xl border border-[#E3D4C0] shadow-sm"
+                    className="flex items-center gap-3 bg-[#FFFDF9] p-3 rounded-2xl border border-[#E3D4C0] shadow-xs"
                   >
                     <img
                       src={item.image_url}
                       alt={item.name}
-                      className="w-16 h-16 rounded-xl object-cover border border-[#D5BE9B]"
+                      className="w-16 h-16 rounded-xl object-cover border border-[#D5BE9B] flex-shrink-0"
                     />
 
                     <div className="flex-1 min-w-0">
                       <h4 className="font-serif font-bold text-xs sm:text-sm text-[#2B1607] truncate">
                         {item.name}
                       </h4>
-                      <p className="text-xs text-[#8C5628] font-semibold mt-0.5">
-                        ${Number(item.price).toFixed(2)} each
+                      <p className="text-xs text-[#8C5628] font-bold mt-0.5">
+                        ₹{item.price} each
                       </p>
                     </div>
 
                     <div className="flex items-center gap-2">
-                      <div className="flex items-center border border-[#D5BE9B] rounded-lg bg-[#FAF5EB] overflow-hidden">
+                      <div className="flex items-center border border-[#D5BE9B] rounded-xl bg-[#FAF5EB] overflow-hidden">
                         <button
-                          onClick={() => onUpdateQuantity(item.id, item.quantity - 1)}
-                          className="p-1 hover:bg-[#E2D4BF] text-stone-700"
+                          onClick={() => onUpdateQuantity(item.id, (item.quantity || 1) - 1)}
+                          className="px-2.5 py-1 text-stone-700 hover:bg-[#EAE0D0] transition-colors font-bold"
                         >
-                          <Minus className="w-3 h-3" />
+                          -
                         </button>
                         <span className="px-2 text-xs font-bold text-[#2B1607]">
-                          {item.quantity}
+                          {item.quantity || 1}
                         </span>
                         <button
-                          onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}
-                          className="p-1 hover:bg-[#E2D4BF] text-stone-700"
+                          onClick={() => onUpdateQuantity(item.id, (item.quantity || 1) + 1)}
+                          className="px-2.5 py-1 text-stone-700 hover:bg-[#EAE0D0] transition-colors font-bold"
                         >
-                          <Plus className="w-3 h-3" />
+                          +
                         </button>
                       </div>
 
                       <button
                         onClick={() => onUpdateQuantity(item.id, 0)}
-                        className="p-1.5 text-stone-400 hover:text-red-600 transition-colors"
-                        title="Remove"
+                        className="text-stone-400 hover:text-rose-600 p-1"
+                        title="Remove item"
                       >
-                        <Trash2 className="w-3.5 h-3.5" />
+                        <Trash2 className="w-4 h-4" />
                       </button>
                     </div>
                   </div>
                 ))}
+
+                {/* Coupon Code Box */}
+                <form onSubmit={handleApplyCoupon} className="pt-2 flex gap-2">
+                  <div className="relative flex-1">
+                    <Tag className="w-3.5 h-3.5 text-stone-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                    <input
+                      type="text"
+                      placeholder="Coupon Code (e.g. CAFE50, BREW20)"
+                      value={couponCode}
+                      onChange={(e) => setCouponCode(e.target.value)}
+                      className="w-full pl-9 pr-3 py-2 bg-white border border-[#D5BE9B] rounded-xl text-xs font-semibold uppercase placeholder-stone-400 focus:outline-none focus:ring-1 focus:ring-[#8C5628]"
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    className="px-4 py-2 bg-[#8C5628] text-white rounded-xl text-xs font-bold hover:bg-[#5B3314]"
+                  >
+                    Apply
+                  </button>
+                </form>
+
+                {appliedCoupon && (
+                  <div className="p-2.5 bg-emerald-50 border border-emerald-200 rounded-xl text-xs text-emerald-800 font-semibold flex justify-between items-center">
+                    <span>🎉 Coupon {appliedCoupon} applied!</span>
+                    <button
+                      onClick={() => { setAppliedCoupon(''); setCouponCode(''); }}
+                      className="text-emerald-700 underline text-[10px]"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                )}
               </div>
             )}
           </div>
 
-          {/* Drawer Bottom Controls & Checkout */}
+          {/* Drawer Bottom Order Summary */}
           {trayItems.length > 0 && (
-            <div className="p-5 border-t border-[#E3D4C0] bg-[#FFFDF9] space-y-4">
+            <div className="p-5 border-t border-[#E3D4C0] bg-[#F4ECDC] space-y-4">
               
-              {/* Order Service Selection */}
-              <div className="space-y-2">
-                <span className="text-[11px] font-bold uppercase tracking-wider text-[#5A3D20]">
-                  Order Method
-                </span>
-                <div className="grid grid-cols-2 gap-2 text-xs">
+              {/* Service Type Selection */}
+              <div className="grid grid-cols-3 gap-2">
+                {[
+                  { id: 'dine_in', label: 'Dine-In' },
+                  { id: 'takeaway', label: 'Takeaway' },
+                  { id: 'delivery', label: 'Delivery' }
+                ].map((type) => (
                   <button
-                    type="button"
-                    onClick={() => setOrderType('dine_in')}
-                    className={`py-2 px-3 rounded-xl font-semibold border text-center transition-all ${
-                      orderType === 'dine_in'
-                        ? 'bg-[#5B3314] text-white border-[#5B3314]'
-                        : 'bg-[#FAF5EB] text-[#5A3D20] border-[#D5BE9B]'
+                    key={type.id}
+                    onClick={() => setOrderType(type.id)}
+                    className={`py-2 text-xs font-bold rounded-xl border transition-all ${
+                      orderType === type.id
+                        ? 'bg-[#5B3314] text-white border-[#3D2512] shadow-xs'
+                        : 'bg-white text-stone-700 border-[#D5BE9B] hover:bg-[#EAE0D0]'
                     }`}
                   >
-                    📖 Table Delivery
+                    {type.label}
                   </button>
-                  <button
-                    type="button"
-                    onClick={() => setOrderType('pickup')}
-                    className={`py-2 px-3 rounded-xl font-semibold border text-center transition-all ${
-                      orderType === 'pickup'
-                        ? 'bg-[#5B3314] text-white border-[#5B3314]'
-                        : 'bg-[#FAF5EB] text-[#5A3D20] border-[#D5BE9B]'
-                    }`}
-                  >
-                    ☕ Counter Pickup
-                  </button>
-                </div>
+                ))}
               </div>
 
-              {orderType === 'dine_in' && (
+              {/* Table or Contact Inputs */}
+              {orderType === 'dine_in' ? (
                 <div className="space-y-1">
-                  <label className="text-[11px] font-medium text-[#7B5A34]">Your Table or Nook:</label>
+                  <label className="text-[11px] font-bold text-[#5B3314]">Select Your Table:</label>
                   <select
                     value={tableNumber}
                     onChange={(e) => setTableNumber(e.target.value)}
-                    className="w-full text-xs px-3 py-1.5 rounded-lg bg-[#FAF5EB] border border-[#D5BE9B] text-[#3D2512]"
+                    className="w-full p-2 bg-white border border-[#D5BE9B] rounded-xl text-xs font-semibold text-[#2B1607]"
                   >
-                    <option value="Table 1 (Window Nook)">Table 1 (Window Nook)</option>
-                    <option value="Table 4 (Fireplace Hearth)">Table 4 (Fireplace Hearth)</option>
-                    <option value="Table 7 (Grand Library Wall)">Table 7 (Grand Library Wall)</option>
-                    <option value="Table 12 (Patio Garden)">Table 12 (Patio Garden)</option>
-                    <option value="Communal Table (Seat 3)">Communal Table (Seat 3)</option>
+                    <option value="Table 1 (Indoor AC Lounge)">Table 1 (Indoor AC Lounge)</option>
+                    <option value="Table 2 (Window Seat)">Table 2 (Window Seat)</option>
+                    <option value="Table 3 (Outdoor Garden Patio)">Table 3 (Outdoor Garden Patio)</option>
+                    <option value="Table 4 (Cozy Reading Nook)">Table 4 (Cozy Reading Nook)</option>
+                    <option value="Table 5 (Couple Booth)">Table 5 (Couple Booth)</option>
                   </select>
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 gap-2">
+                  <input
+                    type="text"
+                    placeholder="Your Name"
+                    value={customerName}
+                    onChange={(e) => setCustomerName(e.target.value)}
+                    className="p-2 bg-white border border-[#D5BE9B] rounded-xl text-xs font-semibold"
+                  />
+                  <input
+                    type="tel"
+                    placeholder="Mobile Number"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    className="p-2 bg-white border border-[#D5BE9B] rounded-xl text-xs font-semibold"
+                  />
                 </div>
               )}
 
-              {/* Cost Summary */}
-              <div className="space-y-1.5 text-xs text-[#5A3D20] pt-2 border-t border-[#F2E8D7]">
+              {/* Financial Breakdown */}
+              <div className="space-y-1.5 text-xs text-[#5B3314] pt-1 border-t border-[#E3D4C0]">
                 <div className="flex justify-between">
-                  <span>Subtotal:</span>
-                  <span className="font-semibold text-[#2B1607]">${subtotal.toFixed(2)}</span>
+                  <span>Items Subtotal:</span>
+                  <span className="font-bold text-[#2B1607]">₹{subtotal.toFixed(0)}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span>Estimated Tax (8.25%):</span>
-                  <span className="font-semibold text-[#2B1607]">${tax.toFixed(2)}</span>
+                  <span>Cafe GST (5%):</span>
+                  <span className="font-bold text-[#2B1607]">₹{tax.toFixed(0)}</span>
                 </div>
-                <div className="flex justify-between text-sm font-bold text-[#2B1607] pt-1 border-t border-[#F2E8D7]">
+                {discount > 0 && (
+                  <div className="flex justify-between text-emerald-700 font-bold">
+                    <span>Discount:</span>
+                    <span>-₹{discount.toFixed(0)}</span>
+                  </div>
+                )}
+                <div className="flex justify-between text-sm font-bold text-[#2B1607] pt-2 border-t border-[#D5BE9B]">
                   <span>Total Amount:</span>
-                  <span className="font-serif text-base text-[#8C5628]">${total.toFixed(2)}</span>
+                  <span className="font-serif text-lg font-extrabold text-[#8C5628]">
+                    ₹{total.toFixed(0)}
+                  </span>
                 </div>
               </div>
 
-              {/* Submit Order Action */}
+              {/* Place Order CTA */}
               <button
                 onClick={handleCheckout}
-                className="w-full py-3.5 rounded-full bg-[#5B3314] text-[#FAF5EB] font-serif font-bold text-sm hover:bg-[#3D2512] shadow-warm flex items-center justify-center gap-2 transition-all"
+                className="w-full py-3.5 bg-[#5B3314] hover:bg-[#3D2512] text-white font-bold rounded-2xl text-xs sm:text-sm shadow-md transition-all flex items-center justify-center gap-2 group"
               >
-                <span>Send Order to Barista</span>
-                <ArrowRight className="w-4 h-4 text-[#D7BA89]" />
+                <span>Place Order &amp; Generate Barista Ticket</span>
+                <ArrowRight className="w-4 h-4 text-amber-300 group-hover:translate-x-1 transition-transform" />
               </button>
 
             </div>
@@ -232,53 +313,44 @@ export default function OrderTrayDrawer({ isOpen, onClose, trayItems = [], onUpd
         </div>
       </div>
 
-      {/* Stamped Receipt Confirmation Modal */}
+      {/* Stamped Barista Receipt Modal */}
       {receiptModal && (
-        <div className="fixed inset-0 z-60 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="bg-[#FAF5EB] rounded-3xl max-w-sm w-full p-6 border-2 border-dashed border-[#BA8748] shadow-2xl space-y-4 text-center">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in">
+          <div className="bg-[#FFFDF9] max-w-sm w-full p-6 rounded-3xl border-2 border-[#8C5628] shadow-2xl space-y-4 text-center relative font-mono text-xs text-[#2B1607]">
             
-            <div className="w-12 h-12 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center mx-auto">
-              <Check className="w-6 h-6" />
+            <div className="flex items-center justify-center gap-2 text-emerald-700 font-bold text-sm">
+              <Check className="w-5 h-5 bg-emerald-100 p-0.5 rounded-full" />
+              <span>Order Received in Kitchen!</span>
             </div>
 
-            <div className="space-y-0.5">
-              <span className="text-[10px] uppercase font-bold tracking-widest text-[#BA8748]">
-                Order Sent to Barista Station
-              </span>
-              <h4 className="font-serif text-xl font-bold text-[#2B1607]">
-                Books &amp; Brews Ticket
-              </h4>
-              <p className="text-xs text-[#7B5A34]">
-                Ticket #{receiptModal.orderId} • Placed at {receiptModal.time}
-              </p>
+            <div className="border-b-2 border-dashed border-[#D5BE9B] pb-3">
+              <h3 className="font-serif text-lg font-bold">Brew &amp; Bites Cafe</h3>
+              <p className="text-[11px] text-stone-500">KOT ID: {receiptModal.orderId} • {receiptModal.time}</p>
+              <p className="text-xs font-bold text-[#8C5628] mt-1">{receiptModal.orderType}</p>
             </div>
 
-            <div className="p-3.5 rounded-xl bg-white border border-[#E3D4C0] text-left text-xs space-y-2">
-              <div className="flex justify-between font-semibold text-[#3D2512] border-b pb-1">
-                <span>{receiptModal.orderType}</span>
-                <span>${receiptModal.total.toFixed(2)}</span>
-              </div>
-              <div className="space-y-1 text-stone-600">
-                {receiptModal.items.map((it, idx) => (
-                  <div key={idx} className="flex justify-between">
-                    <span>{it.quantity}x {it.name}</span>
-                    <span>${(it.price * it.quantity).toFixed(2)}</span>
-                  </div>
-                ))}
+            <div className="space-y-1.5 text-left max-h-48 overflow-y-auto">
+              {receiptModal.items.map((it) => (
+                <div key={it.id} className="flex justify-between text-xs">
+                  <span className="truncate max-w-[200px]">{it.name} x{it.quantity}</span>
+                  <span className="font-bold">₹{it.price * it.quantity}</span>
+                </div>
+              ))}
+            </div>
+
+            <div className="border-t-2 border-dashed border-[#D5BE9B] pt-3 space-y-1 text-right font-bold">
+              <div className="flex justify-between text-xs">
+                <span>Total Bill (Incl. GST):</span>
+                <span className="text-base text-[#8C5628]">₹{receiptModal.total.toFixed(0)}</span>
               </div>
             </div>
-
-            <p className="text-xs text-[#5A3D20] italic font-serif">
-              "Your barista is preparing your drinks. Relax, turn the page, and we will bring everything to you shortly."
-            </p>
 
             <button
               onClick={handleFinishOrder}
-              className="w-full py-2.5 rounded-full bg-[#5B3314] text-white text-xs font-semibold hover:bg-[#3D2512]"
+              className="w-full py-3 bg-[#5B3314] text-white rounded-xl text-xs font-bold hover:bg-[#3D2512] transition-colors"
             >
-              Done &amp; Enjoy Reading
+              Done / Back to Cafe
             </button>
-
           </div>
         </div>
       )}

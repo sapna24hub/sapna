@@ -1,21 +1,28 @@
 import React, { useState, useEffect } from 'react';
-import { BookOpen, Coffee, Clock, ShoppingBag, Menu, X, Sparkles, MapPin, Phone } from 'lucide-react';
+import { 
+  Coffee, 
+  Pizza, 
+  Clock, 
+  ShoppingBag, 
+  Menu, 
+  X, 
+  Sparkles, 
+  MapPin, 
+  Phone,
+  Calendar
+} from 'lucide-react';
 
 export default function Navbar({ trayItems = [], onOpenTray, onOpenReservation }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isOpenNow, setIsOpenNow] = useState(true);
 
-  // Check if cafe is currently open based on local time
+  // Check if cafe is currently open (9:00 AM - 11:00 PM)
   useEffect(() => {
     const checkOpenStatus = () => {
       const now = new Date();
       const hour = now.getHours();
-      const day = now.getDay(); // 0 is Sunday, 6 is Saturday
-      const isWeekend = day === 0 || day === 6;
-      const openHour = isWeekend ? 8 : 7;
-      const closeHour = isWeekend ? 22 : 21;
-      setIsOpenNow(hour >= openHour && hour < closeHour);
+      setIsOpenNow(hour >= 9 && hour < 23);
     };
 
     checkOpenStatus();
@@ -32,185 +39,195 @@ export default function Navbar({ trayItems = [], onOpenTray, onOpenReservation }
   }, []);
 
   const totalTrayCount = (trayItems || []).reduce((sum, item) => sum + (item.quantity || 1), 0);
+  const totalTrayAmount = (trayItems || []).reduce((sum, item) => sum + ((item.price || 0) * (item.quantity || 1)), 0);
+
+  const scrollTo = (id) => {
+    setMobileMenuOpen(false);
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   return (
     <>
-      {/* Top micro announcement bar */}
+      {/* Top announcement bar */}
       <div className="bg-[#2E180B] text-[#E8D7C3] text-xs py-2 px-4 border-b border-[#4A2E1B] transition-all">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-left">
           <div className="flex items-center gap-3">
             <span className="flex items-center gap-1.5 text-[#D7BA89]">
               <span className={`w-2 h-2 rounded-full ${isOpenNow ? 'bg-emerald-400 animate-pulse' : 'bg-amber-500'}`} />
-              <strong className="font-medium">{isOpenNow ? 'We Are Open Today!' : 'Opens Tomorrow at 7:00 AM'}</strong>
+              <strong className="font-semibold">{isOpenNow ? 'Cafe Open Now (9:00 AM – 11:00 PM)' : 'Opens at 9:00 AM Tomorrow'}</strong>
             </span>
             <span className="hidden md:inline text-stone-500">•</span>
-            <span className="hidden md:inline text-stone-300">Mon–Fri: 7 AM – 9 PM | Sat–Sun: 8 AM – 10 PM</span>
+            <span className="hidden md:inline text-stone-300">Fresh Wood-Fired Pizzas, Smash Burgers &amp; Cold Frappes</span>
           </div>
 
           <div className="flex items-center gap-4 text-stone-300">
-            <a href="tel:5553827397" className="flex items-center gap-1 hover:text-[#D7BA89] transition-colors">
+            <a href="tel:+919876543210" className="flex items-center gap-1 hover:text-[#D7BA89] transition-colors font-medium">
               <Phone className="w-3 h-3 text-[#BA8748]" />
-              <span>(555) 382-7397</span>
+              <span>+91 98765 43210</span>
             </a>
             <span className="text-stone-600">|</span>
             <span className="flex items-center gap-1">
               <MapPin className="w-3 h-3 text-[#BA8748]" />
-              <span className="hidden sm:inline">422 Paperbark Lane, Old Town</span>
+              <span>Dine-in, Takeaway &amp; Delivery</span>
             </span>
           </div>
         </div>
       </div>
 
-      {/* Main Navigation Bar */}
-      <header
-        className={`sticky top-0 z-40 transition-all duration-300 ${
-          isScrolled
-            ? 'bg-[#FAF5EB]/95 backdrop-blur-md shadow-warm py-3 border-b border-[#E3D4C0]'
-            : 'bg-[#FAF5EB] py-4 border-b border-[#EFE3D0]'
-        }`}
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between">
-            {/* Brand Logo */}
-            <a href="#" className="flex items-center gap-3 group">
-              <div className="relative w-11 h-11 rounded-xl bg-gradient-to-br from-[#5A3D20] via-[#3D2512] to-[#2B1607] flex items-center justify-center text-[#FAF5EB] shadow-md group-hover:scale-105 transition-transform duration-300">
-                <Coffee className="w-5 h-5 text-[#D7BA89]" />
-                <BookOpen className="w-3.5 h-3.5 text-[#EFE3D0] absolute -bottom-1 -right-1 bg-[#8C5628] rounded-md p-0.5 shadow-sm" />
-              </div>
-              <div className="flex flex-col">
-                <div className="flex items-baseline gap-1.5">
-                  <span className="font-serif text-2xl font-bold tracking-tight text-[#331D10] group-hover:text-[#8C5628] transition-colors">
-                    Books &amp; Brews
-                  </span>
-                </div>
-                <span className="text-[11px] font-medium uppercase tracking-widest text-[#8C5628]">
-                  Literary Cafe &amp; Roastery
+      {/* Main Navbar */}
+      <header className={`sticky top-0 z-40 transition-all duration-300 ${
+        isScrolled
+          ? 'bg-white/95 backdrop-blur-md shadow-md border-b border-[#E8DCB8] py-3'
+          : 'bg-[#FAF6EE]/95 backdrop-blur-md border-b border-[#E8DCB8] py-4'
+      }`}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+          
+          {/* Logo */}
+          <div
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            className="cursor-pointer flex items-center gap-3 group"
+          >
+            <div className="w-11 h-11 rounded-2xl bg-[#5B3314] text-amber-300 flex items-center justify-center shadow-md group-hover:scale-105 transition-transform">
+              <Coffee className="w-6 h-6" />
+            </div>
+            <div>
+              <div className="flex items-center gap-1.5">
+                <span className="font-serif text-2xl font-bold tracking-tight text-[#2B1607]">
+                  Brew &amp; <span className="text-[#8C5628]">Bites</span>
+                </span>
+                <span className="bg-[#EAE0D0] text-[#5B3314] text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border border-[#D5BE9B]">
+                  Cafe
                 </span>
               </div>
-            </a>
-
-            {/* Desktop Navigation Links */}
-            <nav className="hidden lg:flex items-center gap-7 text-[15px] font-medium text-[#4A2E1B]">
-              <a href="#about" className="hover:text-[#BA8748] transition-colors relative py-1">
-                Our Story
-              </a>
-              <a href="#menu" className="hover:text-[#BA8748] transition-colors relative py-1">
-                Artisan Menu
-              </a>
-              <a href="#pairing" className="hover:text-[#BA8748] transition-colors relative py-1 flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5 text-[#BA8748]" />
-                <span>Pairing of the Month</span>
-              </a>
-              <a href="#testimonials" className="hover:text-[#BA8748] transition-colors relative py-1">
-                Patron Reviews
-              </a>
-              <a href="#reservation" className="hover:text-[#BA8748] transition-colors relative py-1">
-                Reserve a Table
-              </a>
-              <a href="#visit" className="hover:text-[#BA8748] transition-colors relative py-1">
-                Visit Us
-              </a>
-            </nav>
-
-            {/* Action Buttons */}
-            <div className="flex items-center gap-3">
-              {/* Table Reservation Button */}
-              <button
-                onClick={onOpenReservation}
-                className="hidden sm:inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-full bg-[#5B3314] text-[#FAF5EB] hover:bg-[#3D2512] shadow-sm hover:shadow-warm transition-all duration-200"
-              >
-                <BookOpen className="w-4 h-4 text-[#D7BA89]" />
-                <span>Book a Table</span>
-              </button>
-
-              {/* Order Tray Button */}
-              <button
-                onClick={onOpenTray}
-                aria-label="View Order Tray"
-                className="relative inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-full bg-[#EAE0D0] text-[#3D2512] hover:bg-[#DFD3C0] border border-[#D5BE9B] transition-all duration-200"
-              >
-                <ShoppingBag className="w-4 h-4 text-[#8C5628]" />
-                <span className="hidden sm:inline">Tray</span>
-                {totalTrayCount > 0 && (
-                  <span className="w-5 h-5 flex items-center justify-center text-xs font-bold text-white bg-[#8C5628] rounded-full animate-bounce">
-                    {totalTrayCount}
-                  </span>
-                )}
-              </button>
-
-              {/* Mobile Menu Hamburger */}
-              <button
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="p-2 lg:hidden text-[#4A2E1B] hover:text-[#BA8748] focus:outline-none"
-                aria-label="Toggle menu"
-              >
-                {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-              </button>
+              <p className="text-[11px] text-[#7B5A34] tracking-wide font-medium">
+                Pizzas • Burgers • Cold Coffee • Shakes
+              </p>
             </div>
+          </div>
+
+          {/* Desktop Navigation Links */}
+          <nav className="hidden lg:flex items-center gap-7 font-bold text-xs xl:text-sm text-[#4A260F]">
+            <button
+              onClick={() => scrollTo('menu')}
+              className="hover:text-[#8C5628] transition-colors flex items-center gap-1"
+            >
+              <Pizza className="w-4 h-4 text-amber-600" />
+              <span>Full Menu</span>
+            </button>
+            <button
+              onClick={() => scrollTo('spotlight')}
+              className="hover:text-[#8C5628] transition-colors flex items-center gap-1"
+            >
+              <Sparkles className="w-4 h-4 text-amber-600" />
+              <span>Bestseller Combos</span>
+            </button>
+            <button
+              onClick={() => scrollTo('reservation')}
+              className="hover:text-[#8C5628] transition-colors flex items-center gap-1"
+            >
+              <Calendar className="w-4 h-4 text-amber-600" />
+              <span>Table Reservation</span>
+            </button>
+            <button
+              onClick={() => scrollTo('testimonials')}
+              className="hover:text-[#8C5628] transition-colors"
+            >
+              Reviews
+            </button>
+            <button
+              onClick={() => scrollTo('contact')}
+              className="hover:text-[#8C5628] transition-colors"
+            >
+              Location &amp; Hours
+            </button>
+          </nav>
+
+          {/* Right Action: Table Book & Order Tray Button */}
+          <div className="flex items-center gap-3">
+            
+            <button
+              onClick={onOpenReservation}
+              className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2.5 rounded-2xl bg-[#EAE0D0] hover:bg-[#DFD1BD] text-[#3D2512] font-bold text-xs border border-[#CBB595] transition-all"
+            >
+              <Calendar className="w-4 h-4 text-[#8C5628]" />
+              <span>Book a Table</span>
+            </button>
+
+            {/* Order Tray Button */}
+            <button
+              onClick={onOpenTray}
+              className="relative flex items-center gap-2.5 bg-[#5B3314] hover:bg-[#3D2512] text-white px-4 py-2.5 rounded-2xl shadow-md transition-all font-semibold text-xs sm:text-sm group"
+            >
+              <ShoppingBag className="w-4 h-4 text-amber-300 group-hover:scale-110 transition-transform" />
+              <div className="flex flex-col text-left">
+                <span className="text-[10px] text-amber-200 leading-tight">Order Tray</span>
+                <span className="font-bold text-xs text-[#FFF5EA]">₹{totalTrayAmount.toFixed(0)}</span>
+              </div>
+              {totalTrayCount > 0 && (
+                <span className="absolute -top-1.5 -right-1.5 bg-amber-500 text-stone-950 text-[11px] font-extrabold w-5 h-5 rounded-full flex items-center justify-center border-2 border-white shadow-sm animate-bounce">
+                  {totalTrayCount}
+                </span>
+              )}
+            </button>
+
+            {/* Mobile Hamburger Menu */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="lg:hidden p-2 text-[#4A260F] hover:text-[#8C5628]"
+            >
+              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
           </div>
         </div>
 
         {/* Mobile Dropdown Menu */}
         {mobileMenuOpen && (
-          <div className="lg:hidden border-t border-[#E3D4C0] bg-[#FAF5EB] px-4 pt-4 pb-6 shadow-xl animate-in slide-in-from-top duration-200">
-            <nav className="flex flex-col gap-3 font-medium text-[#4A2E1B]">
-              <a
-                href="#about"
-                onClick={() => setMobileMenuOpen(false)}
-                className="py-2 px-3 rounded-lg hover:bg-[#EFE3D0] transition-colors"
+          <div className="lg:hidden bg-white border-b border-[#E8DCB8] px-4 pt-3 pb-6 space-y-3 shadow-xl">
+            <button
+              onClick={() => scrollTo('menu')}
+              className="block w-full text-left py-2 font-bold text-[#4A260F] border-b border-stone-100 flex items-center gap-2"
+            >
+              <Pizza className="w-4 h-4 text-amber-600" />
+              <span>Full Menu (Pizzas, Burgers, Frappes)</span>
+            </button>
+            <button
+              onClick={() => scrollTo('spotlight')}
+              className="block w-full text-left py-2 font-bold text-[#4A260F] border-b border-stone-100 flex items-center gap-2"
+            >
+              <Sparkles className="w-4 h-4 text-amber-600" />
+              <span>Bestseller Cafe Combos</span>
+            </button>
+            <button
+              onClick={() => scrollTo('reservation')}
+              className="block w-full text-left py-2 font-bold text-[#4A260F] border-b border-stone-100 flex items-center gap-2"
+            >
+              <Calendar className="w-4 h-4 text-amber-600" />
+              <span>Reserve a Table</span>
+            </button>
+            <button
+              onClick={() => scrollTo('testimonials')}
+              className="block w-full text-left py-2 font-medium text-stone-700 border-b border-stone-100"
+            >
+              Guest Reviews
+            </button>
+            <button
+              onClick={() => scrollTo('contact')}
+              className="block w-full text-left py-2 font-medium text-stone-700 border-b border-stone-100"
+            >
+              Hours &amp; Location
+            </button>
+            <div className="pt-2">
+              <button
+                onClick={() => { setMobileMenuOpen(false); onOpenTray(); }}
+                className="w-full text-center py-3 bg-[#5B3314] text-amber-300 rounded-2xl text-xs font-bold flex items-center justify-center gap-2"
               >
-                Our Story
-              </a>
-              <a
-                href="#menu"
-                onClick={() => setMobileMenuOpen(false)}
-                className="py-2 px-3 rounded-lg hover:bg-[#EFE3D0] transition-colors"
-              >
-                Artisan Menu
-              </a>
-              <a
-                href="#pairing"
-                onClick={() => setMobileMenuOpen(false)}
-                className="py-2 px-3 rounded-lg hover:bg-[#EFE3D0] transition-colors flex items-center gap-2"
-              >
-                <Sparkles className="w-4 h-4 text-[#BA8748]" />
-                <span>Pairing of the Month</span>
-              </a>
-              <a
-                href="#testimonials"
-                onClick={() => setMobileMenuOpen(false)}
-                className="py-2 px-3 rounded-lg hover:bg-[#EFE3D0] transition-colors"
-              >
-                Patron Reviews
-              </a>
-              <a
-                href="#reservation"
-                onClick={() => setMobileMenuOpen(false)}
-                className="py-2 px-3 rounded-lg hover:bg-[#EFE3D0] transition-colors"
-              >
-                Reserve a Table
-              </a>
-              <a
-                href="#visit"
-                onClick={() => setMobileMenuOpen(false)}
-                className="py-2 px-3 rounded-lg hover:bg-[#EFE3D0] transition-colors"
-              >
-                Hours &amp; Location
-              </a>
-
-              <div className="pt-2 border-t border-[#E3D4C0]">
-                <button
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    onOpenReservation();
-                  }}
-                  className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-[#5B3314] text-[#FAF5EB] font-semibold shadow-sm"
-                >
-                  <BookOpen className="w-4 h-4 text-[#D7BA89]" />
-                  <span>Reserve a Table</span>
-                </button>
-              </div>
-            </nav>
+                <ShoppingBag className="w-4 h-4 text-amber-300" />
+                <span>Open Order Tray ({totalTrayCount} items) • ₹{totalTrayAmount.toFixed(0)}</span>
+              </button>
+            </div>
           </div>
         )}
       </header>
