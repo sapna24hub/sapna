@@ -10,7 +10,7 @@ import {
   Utensils 
 } from 'lucide-react';
 
-export default function Hero({ onOpenReservation, onExploreMenu }) {
+export default function Hero({ onExploreCombos, onExploreMenu }) {
   return (
     <section className="relative overflow-hidden pt-8 pb-16 md:py-20 lg:py-24 bg-gradient-to-b from-[#F5EDE1] via-[#FAF6EE] to-[#FCF8F2]">
       {/* Background ambient warm glows */}
@@ -70,11 +70,11 @@ export default function Hero({ onOpenReservation, onExploreMenu }) {
               </button>
 
               <button
-                onClick={onOpenReservation}
-                className="inline-flex items-center justify-center gap-2 px-7 py-4 rounded-2xl bg-white text-[#3D2512] font-bold border-2 border-[#CBB595] hover:bg-[#F2E8DC] transition-all duration-200 shadow-sm text-sm sm:text-base"
+                onClick={onExploreCombos}
+                className="inline-flex items-center justify-center gap-2 px-7 py-4 rounded-2xl bg-white text-[#3D2512] font-bold border-2 border-[#CBB595] hover:bg-[#F2E8DC] transition-all duration-200 shadow-sm text-sm sm:text-base group"
               >
-                <Coffee className="w-5 h-5 text-[#8C5628]" />
-                <span>Reserve a Table</span>
+                <Sparkles className="w-5 h-5 text-amber-600 group-hover:scale-110 transition-transform" />
+                <span>View Bestseller Combos</span>
               </button>
             </div>
 
@@ -90,7 +90,7 @@ export default function Hero({ onOpenReservation, onExploreMenu }) {
               </div>
               <div className="flex flex-col">
                 <span className="font-serif text-2xl font-bold text-[#3D2512]">15 Mins</span>
-                <span className="text-[11px] text-[#7B5A34] uppercase tracking-wider font-bold">Quick Table Prep</span>
+                <span className="text-[11px] text-[#7B5A34] uppercase tracking-wider font-bold">Fast Kitchen Prep</span>
               </div>
               <div className="flex flex-col">
                 <span className="font-serif text-2xl font-bold text-[#3D2512] flex items-center gap-1">

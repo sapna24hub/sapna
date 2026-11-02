@@ -10,7 +10,7 @@ export default function Footer() {
     <footer className="bg-[#231307] text-[#E8D7C3] pt-16 pb-12 border-t border-[#3D2512]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Literary / Foodie Quote Banner */}
+        {/* Quote Banner */}
         <div className="text-center max-w-2xl mx-auto pb-12 border-b border-[#3D2512] space-y-2">
           <p className="font-serif text-lg sm:text-xl italic text-[#D7BA89] leading-relaxed">
             "Good food is all the sweeter when shared with great friends."
@@ -56,16 +56,16 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Table Bookings */}
+          {/* Highlights & Specials */}
           <div className="space-y-3">
             <h4 className="font-serif text-sm font-bold text-white uppercase tracking-wider">
-              Dine-In &amp; Events
+              Specials &amp; Offers
             </h4>
             <ul className="space-y-2 text-xs text-[#A68864]">
-              <li><a href="#reservation" className="hover:text-[#D7BA89] transition-colors">Table Reservations</a></li>
-              <li><a href="#reservation" className="hover:text-[#D7BA89] transition-colors">Birthday &amp; Party Bookings</a></li>
-              <li><a href="#spotlight" className="hover:text-[#D7BA89] transition-colors">Value Combo Deals</a></li>
-              <li><a href="#testimonials" className="hover:text-[#D7BA89] transition-colors">Customer Reviews</a></li>
+              <li><a href="#spotlight" className="hover:text-[#D7BA89] transition-colors">🔥 Value Combo Deals</a></li>
+              <li><a href="#menu" className="hover:text-[#D7BA89] transition-colors">⚡ Fast Kitchen Orders</a></li>
+              <li><a href="#testimonials" className="hover:text-[#D7BA89] transition-colors">⭐ Customer Reviews</a></li>
+              <li><a href="#contact" className="hover:text-[#D7BA89] transition-colors">📍 Location &amp; Directions</a></li>
             </ul>
           </div>
 

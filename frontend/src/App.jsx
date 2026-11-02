@@ -5,7 +5,6 @@ import VibeFeatures from './components/VibeFeatures';
 import MenuSection from './components/MenuSection';
 import BookSpotlight from './components/BookSpotlight';
 import TestimonialSection from './components/TestimonialSection';
-import ReservationSection from './components/ReservationSection';
 import ContactAndLocation from './components/ContactAndLocation';
 import OrderTrayDrawer from './components/OrderTrayDrawer';
 import Footer from './components/Footer';
@@ -72,14 +71,13 @@ export default function App() {
       <Navbar
         trayItems={trayItems}
         onOpenTray={() => setTrayOpen(true)}
-        onOpenReservation={() => scrollToSection('reservation')}
       />
 
       <main className="flex-1">
-        {/* Prominent Hero Section with coffee cup next to open book */}
+        {/* Prominent Hero Section */}
         <Hero
           onExploreMenu={() => scrollToSection('menu')}
-          onOpenReservation={() => scrollToSection('reservation')}
+          onExploreCombos={() => scrollToSection('spotlight')}
         />
 
         {/* 4 Cozy Philosophy & Vibe Cards */}
@@ -91,16 +89,13 @@ export default function App() {
           trayItems={trayItems}
         />
 
-        {/* Feature Spotlight: Book & Brew Pairing of the Month */}
+        {/* Feature Spotlight: Bestseller Cafe Combos */}
         <BookSpotlight
           onAddToCart={handleAddToCart}
         />
 
-        {/* Guest Reviews & Testimonials with Interactive Submission */}
+        {/* Guest Reviews & Testimonials */}
         <TestimonialSection />
-
-        {/* Simple Contact / Table Reservation Form */}
-        <ReservationSection />
 
         {/* Location, Hours, Contact Message & FAQ */}
         <ContactAndLocation />
@@ -115,7 +110,7 @@ export default function App() {
         onClearTray={handleClearTray}
       />
 
-      {/* Cozy Literary Footer */}
+      {/* Footer */}
       <Footer />
     </div>
   );

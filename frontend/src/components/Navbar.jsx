@@ -8,11 +8,10 @@ import {
   X, 
   Sparkles, 
   MapPin, 
-  Phone,
-  Calendar
+  Phone
 } from 'lucide-react';
 
-export default function Navbar({ trayItems = [], onOpenTray, onOpenReservation }) {
+export default function Navbar({ trayItems = [], onOpenTray }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isOpenNow, setIsOpenNow] = useState(true);
@@ -60,11 +59,13 @@ export default function Navbar({ trayItems = [], onOpenTray, onOpenReservation }
               <strong className="font-semibold">{isOpenNow ? 'Cafe Open Now (9:00 AM – 11:00 PM)' : 'Opens at 9:00 AM Tomorrow'}</strong>
             </span>
             <span className="hidden md:inline text-stone-500">•</span>
-            <span className="hidden md:inline text-stone-300">Fresh Wood-Fired Pizzas, Smash Burgers &amp; Cold Frappes</span>
+            <span className="hidden md:inline text-amber-200/90 font-medium">
+              🔥 Free Cheesy Garlic Bread on orders above ₹499 (Use: CAFE50)
+            </span>
           </div>
 
-          <div className="flex items-center gap-4 text-stone-300">
-            <a href="tel:+919876543210" className="flex items-center gap-1 hover:text-[#D7BA89] transition-colors font-medium">
+          <div className="flex items-center gap-4 text-[#D7BA89] text-[11px] font-medium">
+            <a href="tel:+919876543210" className="flex items-center gap-1 hover:text-white transition-colors">
               <Phone className="w-3 h-3 text-[#BA8748]" />
               <span>+91 98765 43210</span>
             </a>
@@ -125,13 +126,6 @@ export default function Navbar({ trayItems = [], onOpenTray, onOpenReservation }
               <span>Bestseller Combos</span>
             </button>
             <button
-              onClick={() => scrollTo('reservation')}
-              className="hover:text-[#8C5628] transition-colors flex items-center gap-1"
-            >
-              <Calendar className="w-4 h-4 text-amber-600" />
-              <span>Table Reservation</span>
-            </button>
-            <button
               onClick={() => scrollTo('testimonials')}
               className="hover:text-[#8C5628] transition-colors"
             >
@@ -145,21 +139,11 @@ export default function Navbar({ trayItems = [], onOpenTray, onOpenReservation }
             </button>
           </nav>
 
-          {/* Right Action: Table Book & Order Tray Button */}
+          {/* Right Action: Order Tray Button */}
           <div className="flex items-center gap-3">
-            
-            <button
-              onClick={onOpenReservation}
-              className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2.5 rounded-2xl bg-[#EAE0D0] hover:bg-[#DFD1BD] text-[#3D2512] font-bold text-xs border border-[#CBB595] transition-all"
-            >
-              <Calendar className="w-4 h-4 text-[#8C5628]" />
-              <span>Book a Table</span>
-            </button>
-
-            {/* Order Tray Button */}
             <button
               onClick={onOpenTray}
-              className="relative flex items-center gap-2.5 bg-[#5B3314] hover:bg-[#3D2512] text-white px-4 py-2.5 rounded-2xl shadow-md transition-all font-semibold text-xs sm:text-sm group"
+              className="relative flex items-center gap-2.5 bg-[#5B3314] hover:bg-[#3D2512] text-white px-5 py-2.5 rounded-2xl shadow-md transition-all font-semibold text-xs sm:text-sm group"
             >
               <ShoppingBag className="w-4 h-4 text-amber-300 group-hover:scale-110 transition-transform" />
               <div className="flex flex-col text-left">
@@ -199,13 +183,6 @@ export default function Navbar({ trayItems = [], onOpenTray, onOpenReservation }
             >
               <Sparkles className="w-4 h-4 text-amber-600" />
               <span>Bestseller Cafe Combos</span>
-            </button>
-            <button
-              onClick={() => scrollTo('reservation')}
-              className="block w-full text-left py-2 font-bold text-[#4A260F] border-b border-stone-100 flex items-center gap-2"
-            >
-              <Calendar className="w-4 h-4 text-amber-600" />
-              <span>Reserve a Table</span>
             </button>
             <button
               onClick={() => scrollTo('testimonials')}

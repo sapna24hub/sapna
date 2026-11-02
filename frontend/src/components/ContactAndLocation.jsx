@@ -16,20 +16,20 @@ export default function ContactAndLocation() {
 
   const faqs = [
     {
-      q: "Can I read books from the shelves without buying them?",
-      a: "Absolutely! Every book on our curated shelves is meant to be browsed and read while enjoying your coffee. If you fall in love with a title, you're welcome to purchase it at the counter."
+      q: "Do you offer pure vegetarian choices?",
+      a: "Yes! We have an extensive 100% Pure Veg menu with separate preparation, fresh mozzarella pizzas, crispy paneer burgers, and grilled toasties."
     },
     {
-      q: "Do you offer vegan, oat, and gluten-free choices?",
-      a: "Yes! We stock organic oat, almond, and soy milks at no extra charge. We also have gluten-free brownies, vegan scones, and vegetarian tartines baked fresh daily."
+      q: "How long does it take for orders to be prepared?",
+      a: "Our kitchen prepares fresh hand-tossed pizzas, gourmet burgers, and artisan cold brews in just 12-15 minutes."
     },
     {
-      q: "Can we host our private book club or study group here?",
-      a: "Yes! Our long oak community table or the leather armchair nook can be reserved ahead of time. Use our reservation form above or send us an inquiry."
+      q: "Can we host birthday parties or group hangouts here?",
+      a: "Yes! You can call us directly or drop us a message below for birthday celebrations, farewells, or student group hangouts."
     },
     {
-      q: "Is there high-speed WiFi and power outlets for working?",
-      a: "Yes, we provide 300 Mbps fiber WiFi and power outlets along all study tables and select wall nooks. We ask patrons to keep audio on headphones to maintain our quiet reading sanctuary."
+      q: "Is there high-speed WiFi and comfortable seating available?",
+      a: "Yes, we provide complimentary 300 Mbps high-speed WiFi, plenty of charging sockets, and cozy air-conditioned seating for work and hanging out."
     }
   ];
 
