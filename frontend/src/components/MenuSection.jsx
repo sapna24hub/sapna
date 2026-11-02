@@ -1,6 +1,6 @@
 import { API_BASE } from '../apiConfig';
 import React, { useState, useEffect } from 'react';
-import { Coffee, CupSoda, Croissant, UtensilsCrossed, Sparkles, Search, Plus, Check, Heart, Bookmark, Filter } from 'lucide-react';
+import { Coffee, CupSoda, Croissant, UtensilsCrossed, Sparkles, Search, Plus, Check, Heart, Bookmark, Filter, BookOpen } from 'lucide-react';
 
 export default function MenuSection({ onAddToCart, trayItems = [] }) {
   const [categories, setCategories] = useState([]);
