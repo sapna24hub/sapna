@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BookOpen, Coffee, Clock, ShoppingBag, Menu, X, Sparkles, MapPin, Phone } from 'lucide-react';
 
-export default function Navbar({ trayItems, onOpenTray, onOpenReservation }) {
+export default function Navbar({ trayItems = [], onOpenTray, onOpenReservation }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isOpenNow, setIsOpenNow] = useState(true);
@@ -31,7 +31,7 @@ export default function Navbar({ trayItems, onOpenTray, onOpenReservation }) {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const totalTrayCount = trayItems.reduce((sum, item) => sum + item.quantity, 0);
+  const totalTrayCount = (trayItems || []).reduce((sum, item) => sum + (item.quantity || 1), 0);
 
   return (
     <>

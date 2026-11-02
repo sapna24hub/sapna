@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { X, Plus, Minus, Trash2, ShoppingBag, Coffee, Check, ArrowRight } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
-export default function OrderTrayDrawer({ isOpen, onClose, trayItems, onUpdateQuantity, onClearTray }) {
+export default function OrderTrayDrawer({ isOpen, onClose, trayItems = [], onUpdateQuantity, onClearTray }) {
   const [orderType, setOrderType] = useState('dine_in'); // dine_in or pickup
   const [tableNumber, setTableNumber] = useState('Table 4 (Window Nook)');
   const [customerName, setCustomerName] = useState('');

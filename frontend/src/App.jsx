@@ -14,7 +14,8 @@ export default function App() {
   const [trayItems, setTrayItems] = useState(() => {
     try {
       const saved = localStorage.getItem('bnb_tray_items');
-      return saved ? JSON.parse(saved) : [];
+      const parsed = saved ? JSON.parse(saved) : [];
+      return Array.isArray(parsed) ? parsed : [];
     } catch {
       return [];
     }
