@@ -1,23 +1,20 @@
 from django.urls import path
 from .views import (
-    CategoryListView, ServiceListView, ConsultantListView,
-    BookingCreateView, BookingDetailView, BookingListView,
-    BookingSimulateStepView, BookingUpdateStatusView,
-    ReviewListCreateView, LocationCheckView, StatsView,
-    ProductListView
+    CategoryListView,
+    MenuItemListView,
+    ReservationCreateListView,
+    ReviewCreateListView,
+    ContactMessageCreateView,
+    NewsletterSubscribeView,
+    CafeStatsView
 )
 
 urlpatterns = [
     path('categories/', CategoryListView.as_view(), name='category-list'),
-    path('services/', ServiceListView.as_view(), name='service-list'),
-    path('products/', ProductListView.as_view(), name='product-list'),
-    path('consultants/', ConsultantListView.as_view(), name='consultant-list'),
-    path('bookings/', BookingCreateView.as_view(), name='booking-create'),
-    path('bookings/all/', BookingListView.as_view(), name='booking-list-all'),
-    path('bookings/<str:booking_ref>/', BookingDetailView.as_view(), name='booking-detail'),
-    path('bookings/<str:booking_ref>/simulate-step/', BookingSimulateStepView.as_view(), name='booking-simulate-step'),
-    path('bookings/<str:booking_ref>/update-status/', BookingUpdateStatusView.as_view(), name='booking-update-status'),
-    path('reviews/', ReviewListCreateView.as_view(), name='review-list-create'),
-    path('locations/check/', LocationCheckView.as_view(), name='location-check'),
-    path('stats/', StatsView.as_view(), name='stats-overview'),
+    path('menu/', MenuItemListView.as_view(), name='menu-list'),
+    path('reservations/', ReservationCreateListView.as_view(), name='reservation-create-list'),
+    path('reviews/', ReviewCreateListView.as_view(), name='review-create-list'),
+    path('contact/', ContactMessageCreateView.as_view(), name='contact-create'),
+    path('newsletter/', NewsletterSubscribeView.as_view(), name='newsletter-subscribe'),
+    path('stats/', CafeStatsView.as_view(), name='cafe-stats'),
 ]

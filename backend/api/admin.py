@@ -1,48 +1,48 @@
 from django.contrib import admin
-from .models import Category, Consultant, Service, Booking, BookingItem, Review, ServiceLocation, Product
+from .models import Category, MenuItem, Reservation, Review, ContactMessage, NewsletterSubscriber
 
-class BookingItemInline(admin.TabularInline):
-    model = BookingItem
-    extra = 0
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'slug', 'order')
+    list_display = ('name', 'slug', 'icon', 'display_order')
     prepopulated_fields = {'slug': ('name',)}
+    search_fields = ('name',)
 
-@admin.register(Consultant)
-class ConsultantAdmin(admin.ModelAdmin):
-    list_display = ('name', 'role', 'phone', 'rating', 'total_consultations', 'is_available')
-    list_filter = ('is_available',)
-    search_fields = ('name', 'role', 'phone')
 
-@admin.register(Service)
-class ServiceAdmin(admin.ModelAdmin):
-    list_display = ('name', 'category', 'price', 'discounted_price', 'duration_minutes', 'is_popular')
-    list_filter = ('category', 'is_popular')
-    search_fields = ('name', 'description')
+@admin.register(MenuItem)
+class MenuItemAdmin(admin.ModelAdmin):
+    list_display = ('name', 'category', 'price', 'is_bestseller', 'is_available', 'literary_pairing')
+    list_filter = ('category', 'is_bestseller', 'is_available')
+    search_fields = ('name', 'description', 'literary_pairing', 'tags')
+    list_editable = ('price', 'is_bestseller', 'is_available')
 
-@admin.register(Booking)
-class BookingAdmin(admin.ModelAdmin):
-    list_display = ('booking_ref', 'customer_name', 'scheduled_date', 'time_slot', 'consultant', 'status', 'total_cost', 'created_at')
-    list_filter = ('status', 'scheduled_date', 'city')
-    search_fields = ('booking_ref', 'customer_name', 'customer_phone', 'customer_address')
-    inlines = [BookingItemInline]
+
+@admin.register(Reservation)
+class ReservationAdmin(admin.ModelAdmin):
+    list_display = ('booking_code', 'full_name', 'date', 'time', 'guests_count', 'nook_preference', 'status')
+    list_filter = ('status', 'date', 'nook_preference')
+    search_fields = ('booking_code', 'full_name', 'email', 'phone')
+    list_editable = ('status',)
+    readonly_fields = ('booking_code', 'created_at')
+
 
 @admin.register(Review)
 class ReviewAdmin(admin.ModelAdmin):
-    list_display = ('customer_name', 'rating', 'service_name', 'is_verified', 'created_at')
-    list_filter = ('rating', 'is_verified')
-    search_fields = ('customer_name', 'comment')
+    list_display = ('author_name', 'rating', 'author_role', 'favorite_item', 'is_featured', 'created_at')
+    list_filter = ('rating', 'is_featured', 'created_at')
+    search_fields = ('author_name', 'comment', 'book_recommendation')
+    list_editable = ('is_featured',)
 
-@admin.register(ServiceLocation)
-class ServiceLocationAdmin(admin.ModelAdmin):
-    list_display = ('pincode', 'area_name', 'city', 'is_serviceable', 'estimated_arrival_minutes')
-    list_filter = ('city', 'is_serviceable')
-    search_fields = ('pincode', 'area_name', 'city')
 
-@admin.register(Product)
-class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'brand', 'category', 'price', 'discounted_price', 'size_or_weight', 'in_stock', 'is_bestseller')
-    list_filter = ('category', 'brand', 'in_stock', 'is_bestseller')
-    search_fields = ('name', 'brand', 'description')
+@admin.register(ContactMessage)
+class ContactMessageAdmin(admin.ModelAdmin):
+    list_display = ('name', 'email', 'subject', 'created_at')
+    search_fields = ('name', 'email', 'subject', 'message')
+    readonly_fields = ('created_at',)
+
+
+@admin.register(NewsletterSubscriber)
+class NewsletterSubscriberAdmin(admin.ModelAdmin):
+    list_display = ('email', 'created_at')
+    search_fields = ('email',)
+    readonly_fields = ('created_at',)

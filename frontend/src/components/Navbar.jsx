@@ -1,257 +1,216 @@
-import React, { useState } from 'react';
-import { 
-  Sparkles, 
-  ShoppingBag, 
-  MapPin, 
-  PhoneCall, 
-  Clock, 
-  Menu, 
-  X, 
-  ShieldCheck, 
-  Navigation2, 
-  Settings,
-  LayoutDashboard,
-  Crown,
-  HelpCircle
-} from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { BookOpen, Coffee, Clock, ShoppingBag, Menu, X, Sparkles, MapPin, Phone } from 'lucide-react';
 
-export default function Navbar({ 
-  cartCount, 
-  cartTotal, 
-  onOpenCart, 
-  onOpenTracker, 
-  onOpenAdmin,
-  onOpenDashboard,
-  onOpenQuiz
-}) {
+export default function Navbar({ trayItems, onOpenTray, onOpenReservation }) {
+  const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isOpenNow, setIsOpenNow] = useState(true);
 
-  const scrollTo = (id) => {
-    setMobileMenuOpen(false);
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
+  // Check if cafe is currently open based on local time
+  useEffect(() => {
+    const checkOpenStatus = () => {
+      const now = new Date();
+      const hour = now.getHours();
+      const day = now.getDay(); // 0 is Sunday, 6 is Saturday
+      const isWeekend = day === 0 || day === 6;
+      const openHour = isWeekend ? 8 : 7;
+      const closeHour = isWeekend ? 22 : 21;
+      setIsOpenNow(hour >= openHour && hour < closeHour);
+    };
+
+    checkOpenStatus();
+    const interval = setInterval(checkOpenStatus, 60000);
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const totalTrayCount = trayItems.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
     <>
-      {/* Top Notification Bar */}
-      <div className="bg-gradient-to-r from-parlour-900 via-parlour-800 to-parlour-900 text-rose-100 text-xs py-2 px-4 shadow-sm border-b border-parlour-700/40">
-        <div className="max-w-7xl mx-auto flex justify-between items-center flex-wrap gap-2">
+      {/* Top micro announcement bar */}
+      <div className="bg-[#2E180B] text-[#E8D7C3] text-xs py-2 px-4 border-b border-[#4A2E1B] transition-all">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-left">
           <div className="flex items-center gap-3">
-            <span className="flex items-center gap-1 font-medium bg-rose-500/20 px-2 py-0.5 rounded-full text-gold-200">
-              <ShieldCheck className="w-3.5 h-3.5 text-gold-300" /> Rohtak's #1 At-Home Salon
+            <span className="flex items-center gap-1.5 text-[#D7BA89]">
+              <span className={`w-2 h-2 rounded-full ${isOpenNow ? 'bg-emerald-400 animate-pulse' : 'bg-amber-500'}`} />
+              <strong className="font-medium">{isOpenNow ? 'We Are Open Today!' : 'Opens Tomorrow at 7:00 AM'}</strong>
             </span>
-            <span className="hidden sm:inline text-rose-200/80">
-              • Model Town, D-Park & All HUDA Sectors
-            </span>
+            <span className="hidden md:inline text-stone-500">•</span>
+            <span className="hidden md:inline text-stone-300">Mon–Fri: 7 AM – 9 PM | Sat–Sun: 8 AM – 10 PM</span>
           </div>
-          <div className="flex items-center gap-4 text-rose-200 text-xs">
-            <span className="flex items-center gap-1">
-              <Clock className="w-3.5 h-3.5 text-gold-300" /> 9:00 AM - 7:00 PM (All 7 Days)
-            </span>
-            <a 
-              href="https://wa.me/919876543210?text=Hello%20GlowAura!%20I%20want%20to%20consult%20for%20home%20beauty%20services%20in%20Rohtak" 
-              target="_blank" 
-              rel="noreferrer"
-              className="flex items-center gap-1 text-emerald-300 font-semibold hover:underline"
-            >
-              <PhoneCall className="w-3.5 h-3.5" /> WhatsApp Support
+
+          <div className="flex items-center gap-4 text-stone-300">
+            <a href="tel:5553827397" className="flex items-center gap-1 hover:text-[#D7BA89] transition-colors">
+              <Phone className="w-3 h-3 text-[#BA8748]" />
+              <span>(555) 382-7397</span>
             </a>
+            <span className="text-stone-600">|</span>
+            <span className="flex items-center gap-1">
+              <MapPin className="w-3 h-3 text-[#BA8748]" />
+              <span className="hidden sm:inline">422 Paperbark Lane, Old Town</span>
+            </span>
           </div>
         </div>
       </div>
 
-      {/* Main Navigation */}
-      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md shadow-sm border-b border-rose-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-          
-          {/* Logo */}
-          <div 
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="cursor-pointer flex items-center gap-3"
-          >
-            <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-parlour-700 via-rose-500 to-gold-400 p-0.5 shadow-md flex items-center justify-center">
-              <div className="w-full h-full bg-parlour-900 rounded-[14px] flex items-center justify-center">
-                <Sparkles className="w-6 h-6 text-gold-300" />
+      {/* Main Navigation Bar */}
+      <header
+        className={`sticky top-0 z-40 transition-all duration-300 ${
+          isScrolled
+            ? 'bg-[#FAF5EB]/95 backdrop-blur-md shadow-warm py-3 border-b border-[#E3D4C0]'
+            : 'bg-[#FAF5EB] py-4 border-b border-[#EFE3D0]'
+        }`}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between">
+            {/* Brand Logo */}
+            <a href="#" className="flex items-center gap-3 group">
+              <div className="relative w-11 h-11 rounded-xl bg-gradient-to-br from-[#5A3D20] via-[#3D2512] to-[#2B1607] flex items-center justify-center text-[#FAF5EB] shadow-md group-hover:scale-105 transition-transform duration-300">
+                <Coffee className="w-5 h-5 text-[#D7BA89]" />
+                <BookOpen className="w-3.5 h-3.5 text-[#EFE3D0] absolute -bottom-1 -right-1 bg-[#8C5628] rounded-md p-0.5 shadow-sm" />
               </div>
+              <div className="flex flex-col">
+                <div className="flex items-baseline gap-1.5">
+                  <span className="font-serif text-2xl font-bold tracking-tight text-[#331D10] group-hover:text-[#8C5628] transition-colors">
+                    Books &amp; Brews
+                  </span>
+                </div>
+                <span className="text-[11px] font-medium uppercase tracking-widest text-[#8C5628]">
+                  Literary Cafe &amp; Roastery
+                </span>
+              </div>
+            </a>
+
+            {/* Desktop Navigation Links */}
+            <nav className="hidden lg:flex items-center gap-7 text-[15px] font-medium text-[#4A2E1B]">
+              <a href="#about" className="hover:text-[#BA8748] transition-colors relative py-1">
+                Our Story
+              </a>
+              <a href="#menu" className="hover:text-[#BA8748] transition-colors relative py-1">
+                Artisan Menu
+              </a>
+              <a href="#pairing" className="hover:text-[#BA8748] transition-colors relative py-1 flex items-center gap-1.5">
+                <Sparkles className="w-3.5 h-3.5 text-[#BA8748]" />
+                <span>Pairing of the Month</span>
+              </a>
+              <a href="#testimonials" className="hover:text-[#BA8748] transition-colors relative py-1">
+                Patron Reviews
+              </a>
+              <a href="#reservation" className="hover:text-[#BA8748] transition-colors relative py-1">
+                Reserve a Table
+              </a>
+              <a href="#visit" className="hover:text-[#BA8748] transition-colors relative py-1">
+                Visit Us
+              </a>
+            </nav>
+
+            {/* Action Buttons */}
+            <div className="flex items-center gap-3">
+              {/* Table Reservation Button */}
+              <button
+                onClick={onOpenReservation}
+                className="hidden sm:inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-full bg-[#5B3314] text-[#FAF5EB] hover:bg-[#3D2512] shadow-sm hover:shadow-warm transition-all duration-200"
+              >
+                <BookOpen className="w-4 h-4 text-[#D7BA89]" />
+                <span>Book a Table</span>
+              </button>
+
+              {/* Order Tray Button */}
+              <button
+                onClick={onOpenTray}
+                aria-label="View Order Tray"
+                className="relative inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-full bg-[#EAE0D0] text-[#3D2512] hover:bg-[#DFD3C0] border border-[#D5BE9B] transition-all duration-200"
+              >
+                <ShoppingBag className="w-4 h-4 text-[#8C5628]" />
+                <span className="hidden sm:inline">Tray</span>
+                {totalTrayCount > 0 && (
+                  <span className="w-5 h-5 flex items-center justify-center text-xs font-bold text-white bg-[#8C5628] rounded-full animate-bounce">
+                    {totalTrayCount}
+                  </span>
+                )}
+              </button>
+
+              {/* Mobile Menu Hamburger */}
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="p-2 lg:hidden text-[#4A2E1B] hover:text-[#BA8748] focus:outline-none"
+                aria-label="Toggle menu"
+              >
+                {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              </button>
             </div>
-            <div>
-              <div className="flex items-center gap-1.5">
-                <span className="font-serif text-2xl font-bold tracking-tight text-gray-900">
-                  Glow<span className="text-parlour-600">Aura</span>
-                </span>
-                <span className="bg-rose-100 text-parlour-700 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full">
-                  Rohtak
-                </span>
-              </div>
-              <p className="text-[11px] text-gray-500 tracking-wide">
-                Luxury Salon & Beauty Consultant
-              </p>
-            </div>
-          </div>
-
-          {/* Desktop Nav Links */}
-          <nav className="hidden lg:flex items-center gap-6 font-medium text-xs xl:text-sm text-gray-700">
-            <button 
-              onClick={() => scrollTo('services')} 
-              className="hover:text-parlour-600 transition-colors"
-            >
-              Services & Pricing
-            </button>
-            <button 
-              onClick={() => scrollTo('bridal-builder')} 
-              className="hover:text-parlour-600 transition-colors flex items-center gap-1 font-semibold text-rose-700"
-            >
-              <Crown className="w-3.5 h-3.5 text-gold-600" /> Bridal Studio
-            </button>
-            <button 
-              onClick={() => scrollTo('shop')} 
-              className="hover:text-parlour-600 transition-colors flex items-center gap-1"
-            >
-              <ShoppingBag className="w-3.5 h-3.5" /> Shop Products
-            </button>
-            <button 
-              onClick={() => scrollTo('transformations')} 
-              className="hover:text-parlour-600 transition-colors"
-            >
-              Real Results
-            </button>
-            <button 
-              onClick={onOpenTracker} 
-              className="flex items-center gap-1 text-parlour-600 hover:text-parlour-800 font-semibold transition-colors bg-rose-50 px-2.5 py-1 rounded-full border border-rose-200"
-            >
-              <Navigation2 className="w-3.5 h-3.5 text-parlour-600 animate-pulse" />
-              Live Tracking
-            </button>
-            <button 
-              onClick={() => scrollTo('coverage')} 
-              className="hover:text-parlour-600 transition-colors flex items-center gap-1"
-            >
-              <MapPin className="w-3.5 h-3.5 text-gray-400" /> Rohtak Hubs
-            </button>
-          </nav>
-
-          {/* Right Action Buttons */}
-          <div className="flex items-center gap-2">
-            
-            {/* Skin AI Quiz Button */}
-            <button
-              onClick={onOpenQuiz}
-              className="hidden sm:flex items-center gap-1 px-2.5 py-2 bg-rose-50 hover:bg-rose-100 text-parlour-800 rounded-xl text-xs font-bold transition-all border border-rose-200"
-              title="Take 2-Minute Skin Diagnosis Quiz"
-            >
-              <Sparkles className="w-3.5 h-3.5 text-parlour-600" />
-              <span>Skin Quiz</span>
-            </button>
-
-            {/* Dashboard Button */}
-            <button
-              onClick={onOpenDashboard}
-              className="flex items-center gap-1.5 px-3 py-2 bg-parlour-900 hover:bg-parlour-950 text-gold-300 rounded-xl text-xs font-bold transition-all border border-parlour-800 shadow-xs"
-              title="Open Full Business Dashboard"
-            >
-              <LayoutDashboard className="w-3.5 h-3.5 text-gold-300" />
-              <span className="hidden xl:inline">Dashboard</span>
-            </button>
-
-            {/* Admin quick toggle button */}
-            <button
-              onClick={onOpenAdmin}
-              title="Open Admin & Consultant Manager"
-              className="p-2 text-gray-500 hover:text-parlour-700 hover:bg-rose-50 rounded-xl transition-all border border-gray-200"
-            >
-              <Settings className="w-4 h-4" />
-            </button>
-
-            {/* Cart & Total Cost button */}
-            <button
-              onClick={onOpenCart}
-              className="relative flex items-center gap-2 bg-gradient-to-r from-parlour-700 to-parlour-600 hover:from-parlour-800 hover:to-parlour-700 text-white px-3.5 py-2 rounded-2xl shadow-sm hover:shadow-md transition-all font-medium text-xs sm:text-sm"
-            >
-              <ShoppingBag className="w-4 h-4" />
-              <div className="flex flex-col text-left">
-                <span className="text-[9px] text-rose-200 leading-tight">Total Cost</span>
-                <span className="font-bold text-xs">₹{cartTotal.toFixed(0)}</span>
-              </div>
-              {cartCount > 0 && (
-                <span className="absolute -top-1.5 -right-1.5 bg-gold-400 text-parlour-950 text-[11px] font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-white shadow-sm">
-                  {cartCount}
-                </span>
-              )}
-            </button>
-
-            {/* Mobile hamburger menu toggle */}
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 text-gray-700 hover:text-parlour-700"
-            >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
           </div>
         </div>
 
         {/* Mobile Dropdown Menu */}
         {mobileMenuOpen && (
-          <div className="lg:hidden bg-white border-b border-rose-100 px-4 pt-3 pb-6 space-y-3 shadow-xl">
-            <button 
-              onClick={() => scrollTo('services')} 
-              className="block w-full text-left py-2 font-medium text-gray-800 border-b border-gray-100"
-            >
-              Services & Pricing Catalog
-            </button>
-            <button 
-              onClick={() => scrollTo('bridal-builder')} 
-              className="block w-full text-left py-2 font-bold text-parlour-700 border-b border-gray-100 flex items-center gap-1.5"
-            >
-              <Crown className="w-4 h-4 text-gold-600" /> Bridal Studio & Package Builder
-            </button>
-            <button 
-              onClick={() => scrollTo('shop')} 
-              className="block w-full text-left py-2 font-bold text-gray-800 border-b border-gray-100"
-            >
-              🛍️ Shop Beauty Products
-            </button>
-            <button 
-              onClick={() => scrollTo('transformations')} 
-              className="block w-full text-left py-2 font-medium text-gray-800 border-b border-gray-100"
-            >
-              ✨ Real Before/After Results
-            </button>
-            <button 
-              onClick={() => { setMobileMenuOpen(false); onOpenTracker(); }} 
-              className="flex items-center gap-2 w-full text-left py-2 font-semibold text-parlour-600 border-b border-gray-100"
-            >
-              <Navigation2 className="w-4 h-4" /> Live Tracking
-            </button>
-            <button 
-              onClick={() => { setMobileMenuOpen(false); onOpenQuiz(); }} 
-              className="flex items-center gap-2 w-full text-left py-2 font-semibold text-rose-700 border-b border-gray-100"
-            >
-              <Sparkles className="w-4 h-4" /> 2-Min Skin AI Diagnostic
-            </button>
-            <button 
-              onClick={() => scrollTo('coverage')} 
-              className="block w-full text-left py-2 font-medium text-gray-800 border-b border-gray-100"
-            >
-              📍 Rohtak Neighborhoods
-            </button>
-            <div className="pt-2 space-y-2">
-              <button
-                onClick={() => { setMobileMenuOpen(false); onOpenDashboard(); }}
-                className="w-full text-center py-2.5 bg-parlour-900 text-gold-300 rounded-xl text-xs font-bold flex items-center justify-center gap-2"
+          <div className="lg:hidden border-t border-[#E3D4C0] bg-[#FAF5EB] px-4 pt-4 pb-6 shadow-xl animate-in slide-in-from-top duration-200">
+            <nav className="flex flex-col gap-3 font-medium text-[#4A2E1B]">
+              <a
+                href="#about"
+                onClick={() => setMobileMenuOpen(false)}
+                className="py-2 px-3 rounded-lg hover:bg-[#EFE3D0] transition-colors"
               >
-                <LayoutDashboard className="w-4 h-4 text-gold-300" />
-                <span>Open Business Dashboard</span>
-              </button>
-              <button
-                onClick={() => { setMobileMenuOpen(false); onOpenAdmin(); }}
-                className="w-full text-center py-2 bg-gray-100 text-gray-700 rounded-xl text-xs font-medium"
+                Our Story
+              </a>
+              <a
+                href="#menu"
+                onClick={() => setMobileMenuOpen(false)}
+                className="py-2 px-3 rounded-lg hover:bg-[#EFE3D0] transition-colors"
               >
-                Quick Dispatch Drawer
-              </button>
-            </div>
+                Artisan Menu
+              </a>
+              <a
+                href="#pairing"
+                onClick={() => setMobileMenuOpen(false)}
+                className="py-2 px-3 rounded-lg hover:bg-[#EFE3D0] transition-colors flex items-center gap-2"
+              >
+                <Sparkles className="w-4 h-4 text-[#BA8748]" />
+                <span>Pairing of the Month</span>
+              </a>
+              <a
+                href="#testimonials"
+                onClick={() => setMobileMenuOpen(false)}
+                className="py-2 px-3 rounded-lg hover:bg-[#EFE3D0] transition-colors"
+              >
+                Patron Reviews
+              </a>
+              <a
+                href="#reservation"
+                onClick={() => setMobileMenuOpen(false)}
+                className="py-2 px-3 rounded-lg hover:bg-[#EFE3D0] transition-colors"
+              >
+                Reserve a Table
+              </a>
+              <a
+                href="#visit"
+                onClick={() => setMobileMenuOpen(false)}
+                className="py-2 px-3 rounded-lg hover:bg-[#EFE3D0] transition-colors"
+              >
+                Hours &amp; Location
+              </a>
+
+              <div className="pt-2 border-t border-[#E3D4C0]">
+                <button
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    onOpenReservation();
+                  }}
+                  className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-[#5B3314] text-[#FAF5EB] font-semibold shadow-sm"
+                >
+                  <BookOpen className="w-4 h-4 text-[#D7BA89]" />
+                  <span>Reserve a Table</span>
+                </button>
+              </div>
+            </nav>
           </div>
         )}
       </header>
