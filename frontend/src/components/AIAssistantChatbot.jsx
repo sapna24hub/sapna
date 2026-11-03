@@ -11,7 +11,7 @@ export default function AIAssistantChatbot({ onAddToCart, onOpenTray }) {
     {
       id: 1,
       sender: 'bot',
-      text: "Meow! 🐾 Welcome to The Black Cat Cafe! I'm Luna, your personal AI Barista. How can I tempt your tastebuds today?",
+      text: "Meow! 🐾 Welcome to The Black Cat Cafe! 'Come hungry, leave happy' — great taste every time, because good food means good mood! How can Luna tempt your tastebuds today?",
       quickReplies: [
         '🛵 Free Delivery (Above ₹300)',
         '🍕 Recommend a Pizza',

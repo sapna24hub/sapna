@@ -54,10 +54,22 @@ export default function Hero({ onExploreCombos, onExploreMenu }) {
             </h1>
 
             {/* Subtitle */}
-            <p className="text-base sm:text-lg text-[#5A3D20] leading-relaxed max-w-2xl font-normal">
-              Step into <strong>The Black Cat Cafe</strong>! Dig into <strong>wood-fired hand-tossed pizzas</strong>,
-              crispy smash burgers, grilled club sandwiches, and ice-cold frappes made fresh to order in a cozy aesthetic ambiance.
+            <p className="text-base sm:text-lg text-stone-300 leading-relaxed max-w-2xl font-normal">
+              Step into <strong>The Black Cat Cafe</strong>! <em>Come hungry, leave happy</em> with <strong>great taste every time</strong>. Savor wood-fired pizzas, smash burgers, golden fries, and chilled artisan frappes — because <strong>good food means good mood!</strong> 🐾
             </p>
+
+            {/* Slogans Pill Badges */}
+            <div className="flex flex-wrap items-center gap-2 pt-1">
+              <span className="px-3.5 py-1.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-400 font-extrabold text-xs shadow-sm flex items-center gap-1.5">
+                <span>🍽️</span> Come Hungry, Leave Happy
+              </span>
+              <span className="px-3.5 py-1.5 rounded-xl bg-white/5 border border-white/10 text-stone-200 font-bold text-xs flex items-center gap-1.5">
+                <span>✨</span> Great Taste Every Time
+              </span>
+              <span className="px-3.5 py-1.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-bold text-xs flex items-center gap-1.5">
+                <span>😊</span> Good Food, Good Mood
+              </span>
+            </div>
 
             {/* CTAs */}
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full sm:w-auto pt-2">
@@ -154,6 +166,27 @@ export default function Hero({ onExploreCombos, onExploreMenu }) {
             </div>
           </div>
 
+        </div>
+      </div>
+
+      {/* Slogans Marquee Ticker Ribbon */}
+      <div className="mt-14 w-full bg-[#111111] border-y border-white/10 py-3.5 overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 flex flex-wrap items-center justify-around gap-4 text-xs sm:text-sm font-extrabold uppercase tracking-wider">
+          <span className="flex items-center gap-2 text-amber-400">
+            <span>🍽️</span> Come Hungry, Leave Happy
+          </span>
+          <span className="text-stone-600 hidden sm:inline">•</span>
+          <span className="flex items-center gap-2 text-white">
+            <span>✨</span> Great Taste Every Time
+          </span>
+          <span className="text-stone-600 hidden sm:inline">•</span>
+          <span className="flex items-center gap-2 text-emerald-400">
+            <span>😊</span> Good Food, Good Mood
+          </span>
+          <span className="text-stone-600 hidden md:inline">•</span>
+          <span className="hidden md:flex items-center gap-2 text-amber-300">
+            <span>🐾</span> The Black Cat Cafe
+          </span>
         </div>
       </div>
     </section>

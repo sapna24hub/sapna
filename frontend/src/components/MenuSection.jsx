@@ -435,15 +435,15 @@ export default function MenuSection({ onAddToCart, trayItems = [] }) {
         <div className="text-center max-w-3xl mx-auto space-y-3">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#1A1A1A] text-amber-400 text-xs font-bold tracking-wide border border-amber-500/20 shadow-inner">
             <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-            <span>Handcrafted Kitchen &amp; Barista Menu • Transparent ₹ Pricing</span>
+            <span>Come Hungry, Leave Happy • Great Taste Every Time</span>
           </div>
 
           <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight">
             The Black Cat <span className="text-amber-500">Menu</span>
           </h2>
 
-          <p className="text-sm sm:text-base text-stone-400 leading-relaxed font-normal">
-            Wood-fired pizzas, smash burgers, grilled sandwiches, crispy French fries, hot brews &amp; chilled cold coffees.
+          <p className="text-sm sm:text-base text-stone-300 leading-relaxed font-normal">
+            <strong>Good Food, Good Mood!</strong> Fresh wood-fired pizzas, gourmet smash burgers, crispy French fries, grilled sandwiches &amp; artisan cold brews.
           </p>
         </div>
 

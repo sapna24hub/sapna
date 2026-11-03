@@ -12,11 +12,13 @@ export default function Footer() {
         
         {/* Quote Banner */}
         <div className="text-center max-w-2xl mx-auto pb-12 border-b border-[#262626] space-y-2">
-          <p className="font-serif text-lg sm:text-xl italic text-amber-300 leading-relaxed">
-            "Warm coffee, crispy artisan pizzas, and the cozy aesthetic comfort of The Black Cat."
+          <p className="font-serif text-lg sm:text-2xl font-bold italic text-amber-300 leading-relaxed">
+            "Come Hungry, Leave Happy — Great Taste Every Time!"
           </p>
-          <span className="text-xs uppercase tracking-widest text-amber-500 font-bold">
-            — The Black Cat Cafe • Handcrafted with Passion 🐾
+          <span className="text-xs uppercase tracking-widest text-emerald-400 font-extrabold flex items-center justify-center gap-2">
+            <span>😊 Good Food, Good Mood</span>
+            <span>•</span>
+            <span>The Black Cat Cafe 🐾</span>
           </span>
         </div>
 
