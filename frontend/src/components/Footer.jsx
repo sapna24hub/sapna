@@ -84,7 +84,7 @@ export default function Footer() {
                 <span className="text-amber-300 font-semibold">9:00 AM – 11:30 PM</span>
               </div>
               <div className="pt-2 text-[11px] text-emerald-400 font-semibold">
-                ✓ Dine-In, Takeaway &amp; Online Orders Available
+                ✓ Dine-In, Takeaway &amp; FREE Delivery Above ₹300
               </div>
             </div>
           </div>

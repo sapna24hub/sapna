@@ -57,11 +57,15 @@ export default function Navbar({ trayItems = [], onOpenTray }) {
           <div className="flex items-center gap-3">
             <span className="flex items-center gap-1.5 text-amber-300">
               <span className={`w-2 h-2 rounded-full ${isOpenNow ? 'bg-emerald-400 animate-pulse' : 'bg-amber-500'}`} />
-              <strong className="font-semibold">{isOpenNow ? '🐾 Black Cat Cafe Open Now (9:00 AM – 11:00 PM)' : 'Opens at 9:00 AM Tomorrow'}</strong>
+              <strong className="font-semibold">{isOpenNow ? '🐾 Black Cat Cafe Open' : 'Opens at 9:00 AM'}</strong>
             </span>
             <span className="hidden md:inline text-stone-600">•</span>
-            <span className="hidden md:inline text-amber-200/90 font-medium">
-              🔥 Free Cheesy Garlic Bread on orders above ₹499 (Use: BLACKCAT50)
+            <span className="inline-flex items-center gap-1 text-emerald-400 font-extrabold bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/25">
+              🛵 FREE Delivery on orders above ₹300!
+            </span>
+            <span className="hidden lg:inline text-stone-600">•</span>
+            <span className="hidden lg:inline text-amber-200/90 font-medium">
+              🔥 Free Garlic Bread above ₹499 (Code: BLACKCAT50)
             </span>
           </div>
 

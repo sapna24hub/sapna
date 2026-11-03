@@ -13,12 +13,11 @@ export default function AIAssistantChatbot({ onAddToCart, onOpenTray }) {
       sender: 'bot',
       text: "Meow! 🐾 Welcome to The Black Cat Cafe! I'm Luna, your personal AI Barista. How can I tempt your tastebuds today?",
       quickReplies: [
+        '🛵 Free Delivery (Above ₹300)',
         '🍕 Recommend a Pizza',
         '🍔 Best Burger',
         '🧋 Cold Coffee Picks',
-        '🍟 French Fries & Sides',
-        '🎟️ Discount Coupon',
-        '⏰ Timings & Location'
+        '🎟️ Discount Coupon'
       ]
     }
   ]);
@@ -70,12 +69,17 @@ export default function AIAssistantChatbot({ onAddToCart, onOpenTray }) {
     },
     veg: {
       text: "Yes! 80% of our menu is 100% Pure Vegetarian with separate kitchen prep. You can toggle the 'Pure Veg' filter in our menu section to view all veg delights!"
+    },
+    delivery: {
+      text: "🛵 Purr-fect news! We offer **100% FREE Home Delivery on all orders above ₹300**! For orders below ₹300, delivery fee is just ₹40. Packed in thermal bags so pizzas stay fresh and hot!",
+      quickReplies: ['🍕 View Pizzas', '🍔 View Burgers', '🎟️ Discount Coupon', '🛒 Open Cart']
     }
   };
 
   const generateReply = (userText) => {
     const query = userText.toLowerCase();
 
+    if (query.includes('delivery') || query.includes('deliver') || query.includes('shipping')) return knowledgeBase.delivery;
     if (query.includes('pizza')) return knowledgeBase.pizza;
     if (query.includes('burger')) return knowledgeBase.burger;
     if (query.includes('cold coffee') || query.includes('frappe') || query.includes('brew') || query.includes('shake')) return knowledgeBase.cold_coffee;

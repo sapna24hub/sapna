@@ -28,7 +28,7 @@ export default function Hero({ onExploreCombos, onExploreMenu }) {
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#181818] border border-amber-600/30 text-amber-300 text-xs sm:text-sm font-bold shadow-xs">
               <span className="flex h-2 w-2 rounded-full bg-amber-400 animate-ping" />
               <Cat className="w-4 h-4 text-amber-400" />
-              <span>The Black Cat Cafe • Dine-in, Takeaway &amp; Delivery 🐾</span>
+              <span>The Black Cat Cafe • 🛵 Free Delivery on orders above ₹300 🐾</span>
             </div>
 
             {/* Main Headline */}
@@ -86,8 +86,8 @@ export default function Hero({ onExploreCombos, onExploreMenu }) {
                 <span className="text-[11px] text-[#7B5A34] uppercase tracking-wider font-bold">Fresh Daily Dough</span>
               </div>
               <div className="flex flex-col">
-                <span className="font-serif text-2xl font-bold text-[#181818]">₹99+</span>
-                <span className="text-[11px] text-[#7B5A34] uppercase tracking-wider font-bold">Budget Friendly</span>
+                <span className="font-serif text-2xl font-bold text-amber-400">FREE</span>
+                <span className="text-[11px] text-[#7B5A34] uppercase tracking-wider font-bold">Delivery Above ₹300</span>
               </div>
               <div className="flex flex-col">
                 <span className="font-serif text-2xl font-bold text-[#181818]">15 Mins</span>

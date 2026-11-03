@@ -12,7 +12,8 @@ import {
   Receipt,
   Sparkles,
   Tag,
-  Cat
+  Cat,
+  Truck
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
@@ -30,12 +31,20 @@ export default function OrderTrayDrawer({ isOpen, onClose, trayItems = [], onUpd
 
   const subtotal = (trayItems || []).reduce((acc, item) => acc + (item.price || 0) * (item.quantity || 1), 0);
   const tax = subtotal * 0.05; // 5% Cafe GST
+
+  // Free delivery on orders above ₹300 logic
+  const isDelivery = orderType === 'delivery';
+  const freeDeliveryThreshold = 300;
+  const isFreeDelivery = subtotal >= freeDeliveryThreshold;
+  const deliveryFee = isDelivery ? (isFreeDelivery ? 0 : 40) : 0;
+  const amountToFreeDelivery = Math.max(0, freeDeliveryThreshold - subtotal);
+  const progressPercent = Math.min(100, Math.round((subtotal / freeDeliveryThreshold) * 100));
   
   let discount = 0;
   if (appliedCoupon === 'BLACKCAT50' || appliedCoupon === 'CAFE50') discount = Math.min(50, subtotal);
   else if (appliedCoupon === 'BLACKCAT20' || appliedCoupon === 'BREW20') discount = subtotal * 0.20;
 
-  const total = Math.max(0, subtotal + tax - discount);
+  const total = Math.max(0, subtotal + tax + deliveryFee - discount);
 
   const handleApplyCoupon = (e) => {
     e.preventDefault();
@@ -62,6 +71,9 @@ export default function OrderTrayDrawer({ isOpen, onClose, trayItems = [], onUpd
         : `Home Delivery (${deliveryAddress || 'Address on file'})`,
       items: [...trayItems],
       subtotal,
+      deliveryFee,
+      isDelivery,
+      isFreeDelivery,
       tax,
       discount,
       total,
@@ -125,6 +137,44 @@ export default function OrderTrayDrawer({ isOpen, onClose, trayItems = [], onUpd
 
           {/* Drawer Scrollable Items */}
           <div className="flex-1 overflow-y-auto p-5 space-y-4">
+            
+            {/* Free Delivery Bar on top of cart */}
+            {trayItems.length > 0 && (
+              <div className="p-3.5 rounded-2xl bg-[#1A1A1A] border border-amber-500/20 space-y-2">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="flex items-center gap-1.5 font-bold text-white">
+                    <Truck className="w-4 h-4 text-emerald-400" />
+                    <span>
+                      {isFreeDelivery 
+                        ? '🎉 FREE Delivery Unlocked!' 
+                        : `Add ₹${amountToFreeDelivery} more for FREE Delivery!`}
+                    </span>
+                  </span>
+                  <span className="text-[11px] font-extrabold text-amber-400">
+                    ₹300 Target
+                  </span>
+                </div>
+                
+                <div className="w-full bg-[#262626] h-2 rounded-full overflow-hidden">
+                  <div 
+                    className={`h-full transition-all duration-500 rounded-full ${
+                      isFreeDelivery 
+                        ? 'bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.6)]' 
+                        : 'bg-gradient-to-r from-amber-500 to-amber-400'
+                    }`}
+                    style={{ width: `${progressPercent}%` }}
+                  />
+                </div>
+
+                <div className="flex items-center justify-between text-[11px] text-stone-400 pt-0.5">
+                  <span>Cart: ₹{subtotal}</span>
+                  <span className={isFreeDelivery ? 'text-emerald-400 font-bold' : 'text-stone-400'}>
+                    {isFreeDelivery ? 'Delivery: ₹0' : `Need ₹${amountToFreeDelivery} more`}
+                  </span>
+                </div>
+              </div>
+            )}
+
             {trayItems.length === 0 ? (
               <div className="text-center py-20 space-y-4">
                 <div className="w-16 h-16 rounded-full bg-white/5 text-amber-400 flex items-center justify-center mx-auto border border-white/10">
@@ -134,6 +184,12 @@ export default function OrderTrayDrawer({ isOpen, onClose, trayItems = [], onUpd
                 <p className="text-xs text-stone-400 max-w-xs mx-auto leading-relaxed">
                   Add wood-fired pizzas, smash burgers, golden French fries, and chilled cold coffee to get started!
                 </p>
+                <div className="pt-2">
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-xs font-semibold border border-emerald-500/20">
+                    <Truck className="w-3.5 h-3.5" />
+                    <span>Free delivery on orders above ₹300</span>
+                  </span>
+                </div>
                 <button
                   onClick={onClose}
                   className="mt-3 px-6 py-2.5 rounded-2xl bg-amber-500 hover:bg-amber-400 text-black text-xs font-extrabold shadow-md transition-all"
@@ -292,6 +348,18 @@ export default function OrderTrayDrawer({ isOpen, onClose, trayItems = [], onUpd
 
               {orderType === 'delivery' && (
                 <div className="space-y-2">
+                  <div className="flex items-center justify-between text-xs px-1">
+                    <span className="text-stone-400">Delivery Status:</span>
+                    {isFreeDelivery ? (
+                      <span className="text-emerald-400 font-extrabold flex items-center gap-1">
+                        <Truck className="w-3.5 h-3.5" /> FREE (Order &gt; ₹300)
+                      </span>
+                    ) : (
+                      <span className="text-amber-400 font-semibold">
+                        ₹40 (Add ₹{amountToFreeDelivery} for Free Delivery)
+                      </span>
+                    )}
+                  </div>
                   <div className="grid grid-cols-2 gap-2">
                     <input
                       type="text"
@@ -324,6 +392,20 @@ export default function OrderTrayDrawer({ isOpen, onClose, trayItems = [], onUpd
                   <span>Items Subtotal:</span>
                   <span className="font-semibold text-white">₹{subtotal.toFixed(0)}</span>
                 </div>
+
+                {isDelivery && (
+                  <div className="flex justify-between items-center">
+                    <span>Delivery Fee:</span>
+                    {isFreeDelivery ? (
+                      <span className="text-emerald-400 font-extrabold flex items-center gap-1">
+                        <s className="text-stone-500 font-normal">₹40</s> FREE (Above ₹300)
+                      </span>
+                    ) : (
+                      <span className="text-amber-400 font-bold">+₹40</span>
+                    )}
+                  </div>
+                )}
+
                 <div className="flex justify-between text-stone-400">
                   <span>Cafe GST (5%):</span>
                   <span>+₹{tax.toFixed(0)}</span>
@@ -382,6 +464,14 @@ export default function OrderTrayDrawer({ isOpen, onClose, trayItems = [], onUpd
             </div>
 
             <div className="border-t-2 border-dashed border-white/20 pt-3 space-y-1 text-right font-bold">
+              {receiptModal.isDelivery && (
+                <div className="flex justify-between text-xs text-stone-300">
+                  <span>Delivery Charge:</span>
+                  <span className={receiptModal.deliveryFee === 0 ? "text-emerald-400" : "text-white"}>
+                    {receiptModal.deliveryFee === 0 ? "FREE (Orders > ₹300)" : "₹40"}
+                  </span>
+                </div>
+              )}
               <div className="flex justify-between text-xs text-stone-300">
                 <span>Total Bill (Incl. GST):</span>
                 <span className="text-base text-amber-400">₹{receiptModal.total.toFixed(0)}</span>
@@ -389,7 +479,7 @@ export default function OrderTrayDrawer({ isOpen, onClose, trayItems = [], onUpd
             </div>
 
             <p className="text-[11px] text-stone-400 italic">
-              "Fresh hot bites will be ready in 12-15 minutes. Show this ticket number at the counter!"
+              "Fresh hot bites will be ready in 12-15 minutes. {receiptModal.isDelivery ? 'Rider will deliver right to your door!' : 'Show this ticket number at the counter!'}"
             </p>
 
             <button
