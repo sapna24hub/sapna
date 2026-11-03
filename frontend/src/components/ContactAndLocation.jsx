@@ -93,7 +93,7 @@ export default function ContactAndLocation() {
         <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#EAE0D0] text-[#7B5A34] text-xs font-semibold uppercase tracking-wider">
             <MapPin className="w-3.5 h-3.5 text-[#BA8748]" />
-            <span>Find Your Way to Books &amp; Brews</span>
+            <span>Find Your Way to The Black Cat Cafe 🐾</span>
           </div>
 
           <h2 className="font-serif text-3xl sm:text-5xl font-bold text-[#2B1607]">
@@ -136,7 +136,7 @@ export default function ContactAndLocation() {
               <div className="pt-2">
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 text-xs font-semibold border border-emerald-200">
                   <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                  Currently Open for Fresh Brews &amp; Reading
+                  Currently Open for Hot Food &amp; Chilled Frappes
                 </span>
               </div>
             </div>
@@ -149,7 +149,7 @@ export default function ContactAndLocation() {
                 <div className="flex items-start gap-3">
                   <MapPin className="w-4 h-4 text-[#BA8748] shrink-0 mt-0.5" />
                   <div>
-                    <strong className="block text-[#2B1607]">Books &amp; Brews Cafe</strong>
+                    <strong className="block text-[#2B1607]">The Black Cat Cafe</strong>
                     <span>422 Paperbark Lane, Historic Old Town</span>
                     <span className="block text-stone-500 text-[11px]">Free bicycle parking &amp; 2-hour street parking</span>
                   </div>
@@ -157,15 +157,15 @@ export default function ContactAndLocation() {
 
                 <div className="flex items-center gap-3">
                   <Phone className="w-4 h-4 text-[#BA8748] shrink-0" />
-                  <a href="tel:5553827397" className="hover:text-[#BA8748] font-medium text-[#2B1607]">
-                    (555) 382-7397
+                  <a href="tel:+919876543210" className="hover:text-[#BA8748] font-medium text-[#2B1607]">
+                    +91 98765 43210
                   </a>
                 </div>
 
                 <div className="flex items-center gap-3">
                   <Mail className="w-4 h-4 text-[#BA8748] shrink-0" />
-                  <a href="mailto:hello@booksandbrewscafe.com" className="hover:text-[#BA8748] font-medium text-[#2B1607]">
-                    hello@booksandbrewscafe.com
+                  <a href="mailto:hello@blackcatcafe.com" className="hover:text-[#BA8748] font-medium text-[#2B1607]">
+                    hello@blackcatcafe.com
                   </a>
                 </div>
               </div>

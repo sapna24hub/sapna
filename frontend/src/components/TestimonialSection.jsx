@@ -25,7 +25,7 @@ export default function TestimonialSection() {
       author_name: "Eleanor Vance",
       author_role: "Historical Fiction Novelist",
       rating: 5,
-      comment: "Books & Brews is pure magic. I drafted three entire chapters of my latest novel sitting in their window nook sipping the Smoked Honey Latte. The gentle jazz, the scent of vintage paperbacks, and the friendly baristas make it an irreplaceable second home.",
+      comment: "The Black Cat Cafe is pure magic! The wood-fired pizza and Hazelnut cold coffee are incredible. I drafted three entire chapters of my latest novel sitting in their window nook sipping the Smoked Honey Latte. The gentle jazz, the scent of vintage paperbacks, and the friendly baristas make it an irreplaceable second home.",
       favorite_item: "Sherlock's Smoked Honey Latte",
       book_recommendation: "'The Shadow of the Wind' by Carlos Ruiz Zafón",
       avatar_url: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80",
@@ -55,7 +55,7 @@ export default function TestimonialSection() {
       author_name: "Dr. Julian Croft",
       author_role: "Philosophy Professor",
       rating: 5,
-      comment: "In a world moving too quickly, Books & Brews is a deliberate refuge for slow contemplation. The 'Blind Date with a Book' bundle introduced me to a Japanese mystery novel I never would have picked up otherwise.",
+      comment: "In a world moving too quickly, The Black Cat Cafe is a deliberate refuge for slow contemplation. The 'Blind Date with a Book' bundle introduced me to a Japanese mystery novel I never would have picked up otherwise.",
       favorite_item: "Blind Date with a Book & Brew",
       book_recommendation: "'Before the Coffee Gets Cold' by Toshikazu Kawaguchi",
       avatar_url: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&q=80",
@@ -266,7 +266,7 @@ export default function TestimonialSection() {
 
             <div className="mb-6 space-y-1">
               <span className="text-xs font-semibold uppercase tracking-wider text-[#BA8241]">Community Guestbook</span>
-              <h3 className="font-serif text-2xl font-bold text-[#2B1607]">Share Your Books &amp; Brews Experience</h3>
+              <h3 className="font-serif text-2xl font-bold text-[#2B1607]">Share Your Black Cat Cafe Experience 🐾</h3>
               <p className="text-xs text-[#5A3D20]">Tell other readers about your favorite drink and book pairing.</p>
             </div>
 

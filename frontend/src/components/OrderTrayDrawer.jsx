@@ -30,18 +30,18 @@ export default function OrderTrayDrawer({ isOpen, onClose, trayItems = [], onUpd
   const tax = subtotal * 0.05; // 5% Cafe GST
   
   let discount = 0;
-  if (appliedCoupon === 'CAFE50') discount = Math.min(50, subtotal);
-  else if (appliedCoupon === 'BREW20') discount = subtotal * 0.20;
+  if (appliedCoupon === 'CAFE50' || appliedCoupon === 'BLACKCAT50') discount = Math.min(50, subtotal);
+  else if (appliedCoupon === 'BREW20' || appliedCoupon === 'BLACKCAT20') discount = subtotal * 0.20;
 
   const total = Math.max(0, subtotal + tax - discount);
 
   const handleApplyCoupon = (e) => {
     e.preventDefault();
     const code = couponCode.trim().toUpperCase();
-    if (code === 'CAFE50' || code === 'BREW20') {
+    if (code === 'CAFE50' || code === 'BREW20' || code === 'BLACKCAT50' || code === 'BLACKCAT20') {
       setAppliedCoupon(code);
     } else {
-      alert('Invalid coupon code. Try CAFE50 (Flat ₹50 OFF) or BREW20 (20% OFF)!');
+      alert('Invalid coupon code. Try BLACKCAT50 (Flat ₹50 OFF) or BLACKCAT20 (20% OFF)!');
     }
   };
 
@@ -324,7 +324,7 @@ export default function OrderTrayDrawer({ isOpen, onClose, trayItems = [], onUpd
             </div>
 
             <div className="border-b-2 border-dashed border-[#D5BE9B] pb-3">
-              <h3 className="font-serif text-lg font-bold">Brew &amp; Bites Cafe</h3>
+              <h3 className="font-serif text-lg font-bold">The Black Cat Cafe 🐾</h3>
               <p className="text-[11px] text-stone-500">KOT ID: {receiptModal.orderId} • {receiptModal.time}</p>
               <p className="text-xs font-bold text-[#8C5628] mt-1">{receiptModal.orderType}</p>
             </div>
