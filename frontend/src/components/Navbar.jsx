@@ -77,7 +77,7 @@ export default function Navbar({ trayItems = [], onOpenTray }) {
             <span className="text-stone-600">|</span>
             <span className="flex items-center gap-1">
               <MapPin className="w-3 h-3 text-amber-400" />
-              <span>Dine-in, Takeaway &amp; Online Orders</span>
+              <span>Kabulpur / Ritauli, Rohtak</span>
             </span>
           </div>
         </div>

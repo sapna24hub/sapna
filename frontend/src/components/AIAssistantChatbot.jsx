@@ -65,7 +65,7 @@ export default function AIAssistantChatbot({ onAddToCart, onOpenTray }) {
       text: "Purr-fect! Use coupon **BLACKCAT50** for Flat ₹50 OFF + Free Cheesy Garlic Bread on orders above ₹499. Or use **BLACKCAT20** for 20% OFF your total bill! 🐾"
     },
     timing: {
-      text: "We are open daily from **9:00 AM to 11:00 PM** (until 11:30 PM on weekends). Located at **422 Paperbark Lane, Model Town**. Dine-in, Takeaway & Delivery available!"
+      text: "We are open daily from **9:00 AM to 11:00 PM** (until 11:30 PM on weekends). Located at **Kabulpur / Ritauli, Near Senior Secondary School, Rohtak, Haryana**. Dine-in, Takeaway & Delivery available!"
     },
     veg: {
       text: "Yes! 80% of our menu is 100% Pure Vegetarian with separate kitchen prep. You can toggle the 'Pure Veg' filter in our menu section to view all veg delights!"

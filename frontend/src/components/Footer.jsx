@@ -38,7 +38,7 @@ export default function Footer() {
             </p>
             <div className="text-xs text-amber-300 flex items-center gap-1.5">
               <MapPin className="w-3.5 h-3.5 text-amber-500" />
-              <span>422 Paperbark Lane, Model Town</span>
+              <span>Kabulpur / Ritauli, Near Senior Secondary School, Rohtak, Haryana</span>
             </div>
           </div>
 

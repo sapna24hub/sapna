@@ -65,7 +65,7 @@ export default function ContactAndLocation() {
           </h2>
 
           <p className="text-stone-400 text-base sm:text-lg font-normal leading-relaxed">
-            Conveniently located in Model Town with convenient street parking, outdoor patio, and aesthetic indoor AC lounge.
+            Conveniently located at Kabulpur / Ritauli, Near Senior Secondary School, Rohtak, Haryana with easy parking, outdoor seating, and aesthetic indoor AC lounge.
           </p>
         </div>
 
@@ -110,8 +110,8 @@ export default function ContactAndLocation() {
                   <MapPin className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
                   <div>
                     <strong className="block text-white">The Black Cat Cafe</strong>
-                    <span>422 Paperbark Lane, Model Town</span>
-                    <span className="block text-stone-500 text-[11px]">Free bicycle &amp; car parking available</span>
+                    <span>Kabulpur / Ritauli, Near Senior Secondary School, Rohtak, Haryana</span>
+                    <span className="block text-stone-500 text-[11px]">Free parking &amp; easy highway access</span>
                   </div>
                 </div>
 
