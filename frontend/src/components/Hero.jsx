@@ -90,7 +90,7 @@ export default function Hero({ onExploreCombos, onExploreMenu }) {
                 <span className="text-[11px] text-[#7B5A34] uppercase tracking-wider font-bold">Delivery Above ₹300</span>
               </div>
               <div className="flex flex-col">
-                <span className="font-serif text-2xl font-bold text-[#181818]">15 Mins</span>
+                <span className="font-serif text-2xl font-bold text-amber-400">30 Mins</span>
                 <span className="text-[11px] text-[#7B5A34] uppercase tracking-wider font-bold">Fast Kitchen Prep</span>
               </div>
               <div className="flex flex-col">

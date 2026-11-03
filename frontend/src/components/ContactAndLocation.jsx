@@ -20,7 +20,7 @@ export default function ContactAndLocation() {
     },
     {
       q: "How long does it take for orders to be prepared?",
-      a: "Our kitchen prepares fresh hand-tossed pizzas, gourmet burgers, and artisan cold brews in just 12-15 minutes."
+      a: "Our kitchen prepares fresh hand-tossed pizzas, gourmet burgers, and artisan cold brews in just 25-30 minutes."
     },
     {
       q: "Can we host birthday parties or group hangouts here?",

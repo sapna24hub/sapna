@@ -72,7 +72,7 @@ export default function TestimonialSection() {
       author_name: "Sameer Khan",
       author_role: "Gourmet Snack Lover",
       rating: 5,
-      comment: "Loaded Cheesy Truffle Fries + Belgian Dark Chocolate Thickshake after college is pure bliss. Everything comes out blazing hot and fresh in under 15 minutes.",
+      comment: "Loaded Cheesy Truffle Fries + Belgian Dark Chocolate Thickshake after college is pure bliss. Everything comes out blazing hot and fresh in under 30 minutes.",
       favorite_item: "Loaded Truffle Fries & Thickshake",
       avatar_url: "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=300&q=80",
       date: "1 month ago"

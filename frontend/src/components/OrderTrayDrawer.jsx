@@ -479,7 +479,7 @@ export default function OrderTrayDrawer({ isOpen, onClose, trayItems = [], onUpd
             </div>
 
             <p className="text-[11px] text-stone-400 italic">
-              "Fresh hot bites will be ready in 12-15 minutes. {receiptModal.isDelivery ? 'Rider will deliver right to your door!' : 'Show this ticket number at the counter!'}"
+              "Fresh hot bites will be ready in 25-30 minutes. {receiptModal.isDelivery ? 'Rider will deliver right to your door!' : 'Show this ticket number at the counter!'}"
             </p>
 
             <button
