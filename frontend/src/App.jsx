@@ -7,6 +7,7 @@ import BookSpotlight from './components/BookSpotlight';
 import TestimonialSection from './components/TestimonialSection';
 import ContactAndLocation from './components/ContactAndLocation';
 import OrderTrayDrawer from './components/OrderTrayDrawer';
+import AIAssistantChatbot from './components/AIAssistantChatbot';
 import Footer from './components/Footer';
 
 export default function App() {
@@ -66,7 +67,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FAF5EB] text-[#331D10]">
+    <div className="min-h-screen flex flex-col bg-[#0A0A0A] text-[#EDEDED] font-sans selection:bg-amber-500 selection:text-black">
       {/* Top Navbar */}
       <Navbar
         trayItems={trayItems}
@@ -80,26 +81,32 @@ export default function App() {
           onExploreCombos={() => scrollToSection('spotlight')}
         />
 
-        {/* 4 Cozy Philosophy & Vibe Cards */}
+        {/* 4 Sleek Philosophy & Vibe Cards */}
         <VibeFeatures />
 
-        {/* Interactive Clean Food Menu with Realistic Pricing */}
+        {/* Interactive Food Menu with 6 Required Categories & Prices */}
         <MenuSection
           onAddToCart={handleAddToCart}
           trayItems={trayItems}
         />
 
-        {/* Feature Spotlight: Bestseller Cafe Combos */}
+        {/* Midnight Feast Bestseller Combos */}
         <BookSpotlight
           onAddToCart={handleAddToCart}
         />
 
-        {/* Guest Reviews & Testimonials */}
+        {/* 5-Star Customer Reviews & Interactive Leave a Review Form */}
         <TestimonialSection />
 
         {/* Location, Hours, Contact Message & FAQ */}
         <ContactAndLocation />
       </main>
+
+      {/* Floating AI Assistant Chatbot (Luna) */}
+      <AIAssistantChatbot
+        onAddToCart={handleAddToCart}
+        onOpenTray={() => setTrayOpen(true)}
+      />
 
       {/* Slide-over Tray / Order Cart Drawer */}
       <OrderTrayDrawer
@@ -110,7 +117,7 @@ export default function App() {
         onClearTray={handleClearTray}
       />
 
-      {/* Footer */}
+      {/* Modern Dark Footer */}
       <Footer />
     </div>
   );

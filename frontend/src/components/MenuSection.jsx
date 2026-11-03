@@ -3,7 +3,6 @@ import {
   Pizza, 
   Coffee, 
   Sandwich, 
-  UtensilsCrossed, 
   Sparkles, 
   Search, 
   Plus, 
@@ -11,403 +10,403 @@ import {
   Heart, 
   Filter, 
   Flame, 
-  IceCream, 
   CheckCircle2,
   Clock,
-  Tag
+  Tag,
+  ShoppingBag,
+  UtensilsCrossed
 } from 'lucide-react';
 import { API_BASE } from '../apiConfig';
 
 export default function MenuSection({ onAddToCart, trayItems = [] }) {
-  const [categories, setCategories] = useState([]);
-  const [menuItems, setMenuItems] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [vegOnly, setVegOnly] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [recentlyAddedId, setRecentlyAddedId] = useState(null);
 
-  // Modern Cafe Categories
-  const defaultCategories = [
-    { id: 'all', slug: 'all', name: 'All Items', icon: 'Sparkles', count: 26 },
-    { id: 'pizzas', slug: 'pizzas', name: 'Pizzas', icon: 'Pizza', count: 5 },
-    { id: 'burgers', slug: 'burgers', name: 'Burgers', icon: 'Flame', count: 4 },
-    { id: 'cold-coffee', slug: 'cold-coffee', name: 'Cold Coffee & Shakes', icon: 'Coffee', count: 5 },
-    { id: 'sandwiches', slug: 'sandwiches', name: 'Sandwiches', icon: 'Sandwich', count: 4 },
-    { id: 'sides', slug: 'sides', name: 'Fries & Sides', icon: 'UtensilsCrossed', count: 3 },
-    { id: 'hot-brews', slug: 'hot-brews', name: 'Hot Brews & Teas', icon: 'Coffee', count: 3 },
-    { id: 'desserts', slug: 'desserts', name: 'Waffles & Desserts', icon: 'IceCream', count: 2 },
+  // 6 Core Required Categories for Black Cat Cafe
+  const categories = [
+    { id: 'all', slug: 'all', name: 'All Items', icon: Sparkles, count: 32 },
+    { id: 'pizza', slug: 'pizza', name: 'Pizza', icon: Pizza, count: 6 },
+    { id: 'burger', slug: 'burger', name: 'Burger', icon: Flame, count: 5 },
+    { id: 'sandwich', slug: 'sandwich', name: 'Sandwich', icon: Sandwich, count: 5 },
+    { id: 'fries', slug: 'fries', name: 'French Fries', icon: UtensilsCrossed, count: 5 },
+    { id: 'hot-coffee', slug: 'hot-coffee', name: 'Hot Coffee', icon: Coffee, count: 6 },
+    { id: 'cold-coffee', slug: 'cold-coffee', name: 'Cold Coffee', icon: Coffee, count: 5 },
   ];
 
-  // Complete Mouthwatering Menu Items
-  const defaultItems = [
-    // PIZZAS
+  const menuItems = [
+    // 🍕 PIZZAS
     {
       id: 1,
-      category_slug: 'pizzas',
-      name: "Paneer Makhani Cheese Burst Pizza",
-      description: "Tandoori marinated cottage cheese, crunchy bell peppers, rich makhani gravy sauce, loaded with 100% mozzarella cheese.",
-      price: 279,
-      image_url: "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=800&q=80",
-      tags: "Chef's Special, Cheese Burst",
+      category_slug: 'pizza',
+      name: "Black Cat Truffle Mushroom Pizza",
+      description: "Charcoal hand-stretched dough, wild sauteed mushrooms, black truffle oil drizzle, fresh thyme, and 100% whole milk mozzarella.",
+      price: 319,
       is_veg: true,
-      prep_time: "15-20 min",
-      is_bestseller: true
+      badge: "Chef's Signature",
+      prep_time: "15-18 mins",
+      image_url: "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=700&q=80",
     },
     {
       id: 2,
-      category_slug: 'pizzas',
-      name: "Classic Margherita with Fresh Basil",
-      description: "San Marzano tomato herb sauce, extra gooey double mozzarella, olive oil drizzle & fresh garden basil leaves.",
-      price: 199,
-      image_url: "https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?auto=format&fit=crop&w=800&q=80",
-      tags: "Authentic Crust, Classic",
+      category_slug: 'pizza',
+      name: "Paneer Makhani Cheese Burst Pizza",
+      description: "Tandoori marinated cottage cheese, crunchy bell peppers, rich makhani gravy drizzle, and oozing cheese-burst crust.",
+      price: 279,
       is_veg: true,
-      prep_time: "12-15 min",
-      is_bestseller: true
+      badge: "Bestseller",
+      prep_time: "15 mins",
+      image_url: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=700&q=80",
     },
     {
       id: 3,
-      category_slug: 'pizzas',
-      name: "Farmhouse Garden Supreme Pizza",
-      description: "Golden sweet corn, crisp capsicum, button mushrooms, red onions, sliced black olives & oregano seasoning.",
-      price: 249,
-      image_url: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=800&q=80",
-      tags: "Loaded Veggies, Healthy",
+      category_slug: 'pizza',
+      name: "Classic Margherita Basil Crunch",
+      description: "San Marzano plum tomato sauce, fresh creamy buffalo mozzarella, sweet Italian basil leaves, and extra virgin olive oil.",
+      price: 199,
       is_veg: true,
-      prep_time: "15 min",
-      is_bestseller: false
+      badge: "Classic",
+      prep_time: "12 mins",
+      image_url: "https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?auto=format&fit=crop&w=700&q=80",
     },
     {
       id: 4,
-      category_slug: 'pizzas',
-      name: "Fiery Peri-Peri Paneer & Jalapeno",
-      description: "Spicy peri peri glaze, tandoori paneer cubes, spicy pickled jalapenos & golden corn on a crispy thin crust.",
-      price: 289,
-      image_url: "https://images.unsplash.com/photo-1593560708920-61dd98c46a4e?auto=format&fit=crop&w=800&q=80",
-      tags: "Spicy, Customer Favorite",
+      category_slug: 'pizza',
+      name: "Farmhouse Fresh Veggie Supreme",
+      description: "Crispy button mushrooms, black Spanish olives, sweet corn kernels, capsicum, red paprika, and aromatic oregano.",
+      price: 249,
       is_veg: true,
-      prep_time: "15 min",
-      is_bestseller: true
+      badge: "Healthy Pick",
+      prep_time: "14 mins",
+      image_url: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=700&q=80",
     },
     {
       id: 5,
-      category_slug: 'pizzas',
-      name: "Smoky Barbecue Chicken Pizza",
-      description: "Char-grilled BBQ chicken chunks, caramelized onions, smoked mozzarella & roasted bell peppers.",
-      price: 329,
-      image_url: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=800&q=80",
-      tags: "Non-Veg, Smoky BBQ",
-      is_veg: false,
-      prep_time: "18-20 min",
-      is_bestseller: true
+      category_slug: 'pizza',
+      name: "Peri-Peri Spicy Paneer Feast",
+      description: "Fiery African bird's eye peri-peri rubbed paneer cubes, pickled jalapeños, red onions, and hot garlic crust.",
+      price: 289,
+      is_veg: true,
+      badge: "Spicy",
+      prep_time: "15 mins",
+      image_url: "https://images.unsplash.com/photo-1593560708920-61dd98c46a4e?auto=format&fit=crop&w=700&q=80",
     },
-
-    // BURGERS
     {
       id: 6,
-      category_slug: 'burgers',
-      name: "Crispy Paneer Supreme Burger",
-      description: "Thick panko-crusted cottage cheese patty, creamy thousand island spread, crunchy iceberg lettuce & melted cheese slice.",
-      price: 149,
-      image_url: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=800&q=80",
-      tags: "Crispy Patty, Bestseller",
-      is_veg: true,
-      prep_time: "10-12 min",
-      is_bestseller: true
+      category_slug: 'pizza',
+      name: "Smoky BBQ Chicken Loaded Pizza",
+      description: "Tender shredded hickory BBQ smoked chicken breast, caramelized onions, mozzarella cheese, and fresh coriander.",
+      price: 329,
+      is_veg: false,
+      badge: "Meat Lovers",
+      prep_time: "16 mins",
+      image_url: "https://images.unsplash.com/photo-1628840042765-356cda07504e?auto=format&fit=crop&w=700&q=80",
     },
+
+    // 🍔 BURGERS
     {
       id: 7,
-      category_slug: 'burgers',
-      name: "Double Cheese Smash Veggie Burger",
-      description: "Golden spiced potato-peas herb patty, double cheddar cheese slices, pickled gherkins & signature cafe sauce in a toasted brioche bun.",
-      price: 129,
-      image_url: "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=800&q=80",
-      tags: "Double Cheese, Value Pick",
+      category_slug: 'burger',
+      name: "Black Cat Charcoal Brioche Smash Burger",
+      description: "Artisanal black charcoal brioche bun, double crispy herb patty, smoked cheddar melt, caramel onions, and secret spicy cat sauce.",
+      price: 189,
       is_veg: true,
-      prep_time: "10 min",
-      is_bestseller: true
+      badge: "Signature Bun",
+      prep_time: "12 mins",
+      image_url: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=700&q=80",
     },
     {
       id: 8,
-      category_slug: 'burgers',
-      name: "Peri-Peri Crispy Chicken Zinger",
-      description: "Juicy fried chicken breast fillet coated in fiery peri-peri crunch with house ranch sauce and pickles.",
-      price: 179,
-      image_url: "https://images.unsplash.com/photo-1625813506062-0aeb1d7a094b?auto=format&fit=crop&w=800&q=80",
-      tags: "Non-Veg, Crunchy Zinger",
-      is_veg: false,
-      prep_time: "12-15 min",
-      is_bestseller: true
+      category_slug: 'burger',
+      name: "Crispy Paneer Supreme Burger",
+      description: "Jumbo panko-crusted fresh cottage cheese slab tossed in peri-peri seasoning, mint mayo, crunchy lettuce, and sliced tomatoes.",
+      price: 149,
+      is_veg: true,
+      badge: "Top Seller",
+      prep_time: "10 mins",
+      image_url: "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=700&q=80",
     },
     {
       id: 9,
-      category_slug: 'burgers',
-      name: "Garlic Butter Mushroom Melt Burger",
-      description: "Butter-sauteed garlic mushrooms, melted Swiss cheese, crisp caramelized onions & herb mayo.",
-      price: 159,
-      image_url: "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=800&q=80",
-      tags: "Gourmet, Cheesy",
+      category_slug: 'burger',
+      name: "Double Cheese Smash Veggie Burger",
+      description: "Two seasoned golden potato-veggie smash patties, double layer English cheddar cheese, tangy dill gherkins, and burger relish.",
+      price: 129,
       is_veg: true,
-      prep_time: "12 min",
-      is_bestseller: false
+      badge: "Value Favorite",
+      prep_time: "10 mins",
+      image_url: "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=700&q=80",
     },
-
-    // COLD COFFEE & SHAKES
     {
       id: 10,
-      category_slug: 'cold-coffee',
-      name: "Classic Creamy Cafe Frappe",
-      description: "Bold double espresso shot blended with vanilla cream, rich chilled milk and crushed ice, topped with dark cocoa powder.",
-      price: 129,
-      image_url: "https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?auto=format&fit=crop&w=800&q=80",
-      tags: "Chilled, Cafe Classic",
-      is_veg: true,
-      prep_time: "5 min",
-      is_bestseller: true
+      category_slug: 'burger',
+      name: "Peri-Peri Crispy Chicken Zinger",
+      description: "Thick whole chicken breast marinated in spiced buttermilk, fried till ultra crunchy, topped with garlic aioli and crunchy slaw.",
+      price: 179,
+      is_veg: false,
+      badge: "Hot & Crispy",
+      prep_time: "12 mins",
+      image_url: "https://images.unsplash.com/photo-1625813506062-0aeb1d7a094b?auto=format&fit=crop&w=700&q=80",
     },
     {
       id: 11,
-      category_slug: 'cold-coffee',
-      name: "Hazelnut Iced Cold Coffee",
-      description: "Slow-roasted espresso with roasted hazelnut syrup, chilled thick milk and Hershey's chocolate drizzle.",
-      price: 149,
-      image_url: "https://images.unsplash.com/photo-1461023058943-07fcbe16d735?auto=format&fit=crop&w=800&q=80",
-      tags: "Nutty Hazelnut, Top Rated",
+      category_slug: 'burger',
+      name: "Garlic Butter Mushroom Melt Burger",
+      description: "Caramelized button mushrooms sautéed in roasted garlic butter, melted Swiss cheese, caramelized onions, and truffle aioli.",
+      price: 159,
       is_veg: true,
-      prep_time: "5 min",
-      is_bestseller: true
+      badge: "Gourmet",
+      prep_time: "12 mins",
+      image_url: "https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?auto=format&fit=crop&w=700&q=80",
     },
+
+    // 🥪 SANDWICHES
     {
       id: 12,
-      category_slug: 'cold-coffee',
-      name: "Belgian Dark Chocolate Thickshake",
-      description: "Thick gourmet milkshake made with pure Belgian cocoa, vanilla ice cream scoop, and chocolate fudge.",
-      price: 169,
-      image_url: "https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&w=800&q=80",
-      tags: "Thickshake, Pure Belgian",
+      category_slug: 'sandwich',
+      name: "Bombay Masala Grilled Club Toastie",
+      description: "Three layers of butter-toasted jumbo bread with spicy potato masala, beetroot, cucumber, tomato, amul cheese, and mint chutney.",
+      price: 119,
       is_veg: true,
-      prep_time: "6 min",
-      is_bestseller: true
+      badge: "Street Legend",
+      prep_time: "8 mins",
+      image_url: "https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=700&q=80",
     },
     {
       id: 13,
-      category_slug: 'cold-coffee',
-      name: "KitKat & Oreo Crumble Shake",
-      description: "Loaded thickshake blended with crunchy Oreo biscuits, crushed KitKat fingers and topped with whipped cream.",
-      price: 179,
-      image_url: "https://images.unsplash.com/photo-1579954115545-a95591f28bfc?auto=format&fit=crop&w=800&q=80",
-      tags: "Loaded Sweet Tooth, Must Try",
+      category_slug: 'sandwich',
+      name: "Cheesy Sweet Corn & Spinach Panini",
+      description: "Creamy garlic spinach blend, tender sweet corn, shredded mozzarella, and cheddar grilled in Italian panini bread.",
+      price: 139,
       is_veg: true,
-      prep_time: "6 min",
-      is_bestseller: true
+      badge: "Cafe Classic",
+      prep_time: "10 mins",
+      image_url: "https://images.unsplash.com/photo-1554433607-66b5efe9d304?auto=format&fit=crop&w=700&q=80",
     },
     {
       id: 14,
-      category_slug: 'cold-coffee',
-      name: "Caramel Biscoff Iced Frappe",
-      description: "Espresso blended with Lotus Biscoff biscuit spread, creamy vanilla milk, crowned with crunchy biscuit crumbs.",
-      price: 169,
-      image_url: "https://images.unsplash.com/photo-1541167760496-1628856ab772?auto=format&fit=crop&w=800&q=80",
-      tags: "Biscoff Crunch, Trending",
+      category_slug: 'sandwich',
+      name: "Tandoori Paneer Tikka Herb Panini",
+      description: "Char-grilled tandoori paneer slices, crunchy onion rings, capsicum, mint mayonnaise, and melted mozzarella inside ciabatta.",
+      price: 159,
       is_veg: true,
-      prep_time: "5 min",
-      is_bestseller: false
+      badge: "Most Loved",
+      prep_time: "10 mins",
+      image_url: "https://images.unsplash.com/photo-1619860860774-1e2e17343432?auto=format&fit=crop&w=700&q=80",
     },
-
-    // SANDWICHES & PANINIS
     {
       id: 15,
-      category_slug: 'sandwiches',
-      name: "Bombay Masala Club Grilled Sandwich",
-      description: "Triple-decker sandwich loaded with spiced potato masala, sliced cucumbers, tomatoes, mint chutney & melted cheese.",
-      price: 119,
-      image_url: "https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=800&q=80",
-      tags: "Desi Favorite, Crispy",
-      is_veg: true,
-      prep_time: "10 min",
-      is_bestseller: true
+      category_slug: 'sandwich',
+      name: "Smoky Chicken Mayo Toastie",
+      description: "Slow-roasted pulled chicken breast tossed in black pepper herb mayo, roasted peppers, and grilled golden on sourdough.",
+      price: 169,
+      is_veg: false,
+      badge: "High Protein",
+      prep_time: "10 mins",
+      image_url: "https://images.unsplash.com/photo-1509722747041-616f39b57569?auto=format&fit=crop&w=700&q=80",
     },
     {
       id: 16,
-      category_slug: 'sandwiches',
-      name: "Cheesy Corn & Spinach Grilled Sandwich",
-      description: "Golden sweet corn kernels tossed with baby spinach, garlic cream and mozzarella in butter-toasted jumbo bread.",
-      price: 139,
-      image_url: "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=800&q=80",
-      tags: "Super Cheesy, Healthy Twist",
+      category_slug: 'sandwich',
+      name: "Triple Layer Cheese Melt Sandwich",
+      description: "A decadent combination of sharp cheddar, creamy mozzarella, and parmesan cheese with a hint of garlic herb butter.",
+      price: 149,
       is_veg: true,
-      prep_time: "10 min",
-      is_bestseller: false
+      badge: "Cheesy Goodness",
+      prep_time: "8 mins",
+      image_url: "https://images.unsplash.com/photo-1475090169767-40ed8d18f67d?auto=format&fit=crop&w=700&q=80",
     },
+
+    // 🍟 FRENCH FRIES & SIDES
     {
       id: 17,
-      category_slug: 'sandwiches',
-      name: "Tandoori Paneer Tikka Panini",
-      description: "Charcoal-spiced cottage cheese cubes, bell peppers, mint mayo grilled crisp inside Italian herb focaccia bread.",
-      price: 159,
-      image_url: "https://images.unsplash.com/photo-1509722747041-616f39b57569?auto=format&fit=crop&w=800&q=80",
-      tags: "Tandoori Fusion, Bestseller",
+      category_slug: 'fries',
+      name: "Peri-Peri Crinkle French Fries",
+      description: "Thick crinkle-cut golden potatoes tossed vigorously in hot African peri-peri spice dust. Served with creamy garlic dip.",
+      price: 99,
       is_veg: true,
-      prep_time: "12 min",
-      is_bestseller: true
+      badge: "Bestseller Side",
+      prep_time: "6 mins",
+      image_url: "https://images.unsplash.com/photo-1576107232684-1279f3908594?auto=format&fit=crop&w=700&q=80",
     },
     {
       id: 18,
-      category_slug: 'sandwiches',
-      name: "Smoky Chicken Mayo Toastie",
-      description: "Shredded herb chicken breast, garlic mayo, cheese slice grilled golden in buttered artisanal sourdough.",
-      price: 169,
-      image_url: "https://images.unsplash.com/photo-1553909489-cd47e0907980?auto=format&fit=crop&w=800&q=80",
-      tags: "Non-Veg, High Protein",
-      is_veg: false,
-      prep_time: "12 min",
-      is_bestseller: true
+      category_slug: 'fries',
+      name: "Loaded Cheesy Truffle Fries",
+      description: "Golden crispy fries smothered in hot warm cheddar cheese sauce, black truffle oil aroma, and fresh chopped parsley.",
+      price: 149,
+      is_veg: true,
+      badge: "Chef's Decadence",
+      prep_time: "8 mins",
+      image_url: "https://images.unsplash.com/photo-1585109649139-366815a0d713?auto=format&fit=crop&w=700&q=80",
     },
-
-    // FRIES & SIDES
     {
       id: 19,
-      category_slug: 'sides',
-      name: "Peri-Peri Crinkle French Fries",
-      description: "Golden fried crinkle-cut potatoes generously dusted with African bird's eye peri-peri spice. Served with cheesy dip.",
-      price: 99,
-      image_url: "https://images.unsplash.com/photo-1576107232684-1279f3908594?auto=format&fit=crop&w=800&q=80",
-      tags: "Crispy Crunch, Spicy Dip",
+      category_slug: 'fries',
+      name: "Classic Salted Golden Crisps",
+      description: "Crispy double-fried shoestring potatoes sprinkled with fine sea salt. The timeless accompaniment to burgers and cold brews.",
+      price: 89,
       is_veg: true,
-      prep_time: "8 min",
-      is_bestseller: true
+      badge: "Classic",
+      prep_time: "5 mins",
+      image_url: "https://images.unsplash.com/photo-1630384060421-cb20d0e0649d?auto=format&fit=crop&w=700&q=80",
     },
     {
       id: 20,
-      category_slug: 'sides',
-      name: "Loaded Cheesy Mexican Nachos",
-      description: "Crispy corn tortilla chips smothered in warm cheese sauce, tomato salsa, refried beans & spicy jalapenos.",
-      price: 149,
-      image_url: "https://images.unsplash.com/photo-1513456852971-30c0b8199d4d?auto=format&fit=crop&w=800&q=80",
-      tags: "Party Platter, Cheese Dip",
+      category_slug: 'fries',
+      name: "Cheesy Stuffed Garlic Breadsticks",
+      description: "Freshly baked herb baguette stuffed with rich molten mozzarella cheese, brushed with aromatic garlic herb butter.",
+      price: 139,
       is_veg: true,
-      prep_time: "10 min",
-      is_bestseller: true
+      badge: "Warm & Cheesy",
+      prep_time: "10 mins",
+      image_url: "https://images.unsplash.com/photo-1619895092538-128341789043?auto=format&fit=crop&w=700&q=80",
     },
     {
       id: 21,
-      category_slug: 'sides',
-      name: "Cheesy Stuffed Garlic Bread",
-      description: "Freshly baked baguette stuffed with mozzarella, sweet corn and oregano garlic butter. Served with dip.",
-      price: 139,
-      image_url: "https://images.unsplash.com/photo-1619895092538-128341789043?auto=format&fit=crop&w=800&q=80",
-      tags: "Garlic Butter, Pull Apart",
+      category_slug: 'fries',
+      name: "Loaded Mexican Cheesy Nachos",
+      description: "Crispy stone-ground corn tortilla chips drenched in warm salsa, pickled jalapenos, sour cream, and spiced cheese blend.",
+      price: 149,
       is_veg: true,
-      prep_time: "12 min",
-      is_bestseller: true
+      badge: "Snack Favorite",
+      prep_time: "7 mins",
+      image_url: "https://images.unsplash.com/photo-1513456852971-30c0b8199d4d?auto=format&fit=crop&w=700&q=80",
     },
 
-    // HOT BREWS & TEAS
+    // ☕ HOT COFFEE
     {
       id: 22,
-      category_slug: 'hot-brews',
-      name: "Velvety Cappuccino with Foam Art",
-      description: "Rich espresso shot topped with velvety steamed whole milk foam and dusted with aromatic cinnamon.",
+      category_slug: 'hot-coffee',
+      name: "Italian Velvet Cappuccino",
+      description: "Rich dark roast Arabica espresso topped with thick micro-textured steamed milk foam and Belgian cocoa powder dusting.",
       price: 99,
-      image_url: "https://images.unsplash.com/photo-1572442388796-11668a67e53d?auto=format&fit=crop&w=800&q=80",
-      tags: "Barista Art, Steaming",
       is_veg: true,
-      prep_time: "5 min",
-      is_bestseller: true
+      badge: "Barista Favorite",
+      prep_time: "4 mins",
+      image_url: "https://images.unsplash.com/photo-1534778101976-62847782c213?auto=format&fit=crop&w=700&q=80",
     },
     {
       id: 23,
-      category_slug: 'hot-brews',
-      name: "Cafe Mocha with Belgian Cocoa",
-      description: "Rich espresso layered with Belgian dark chocolate ganache and warm steamed milk with whipped swirl.",
-      price: 129,
-      image_url: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=800&q=80",
-      tags: "Rich Chocolate, Warm",
+      category_slug: 'hot-coffee',
+      name: "Single Origin Black Cat Espresso",
+      description: "Double shot of bold medium-dark roasted South Indian Arabica beans with a thick golden hazelnut crema.",
+      price: 79,
       is_veg: true,
-      prep_time: "5 min",
-      is_bestseller: false
+      badge: "Bold Kick",
+      prep_time: "3 mins",
+      image_url: "https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?auto=format&fit=crop&w=700&q=80",
     },
     {
       id: 24,
-      category_slug: 'hot-brews',
-      name: "Traditional Kullad Masala Chai",
-      description: "Freshly brewed Assam tea leaves infused with crushed ginger, green cardamom and whole spices in a rustic clay cup.",
-      price: 69,
-      image_url: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?auto=format&fit=crop&w=800&q=80",
-      tags: "Desi Kulhad, Ginger Spice",
+      category_slug: 'hot-coffee',
+      name: "Creamy Dark Chocolate Cafe Mocha",
+      description: "Bold espresso blended with rich melted Swiss dark chocolate syrup, steamed milk, and crowned with chocolate curls.",
+      price: 129,
       is_veg: true,
-      prep_time: "5 min",
-      is_bestseller: true
+      badge: "Chocolate & Coffee",
+      prep_time: "5 mins",
+      image_url: "https://images.unsplash.com/photo-1578314675249-a6910f80cc4e?auto=format&fit=crop&w=700&q=80",
     },
-
-    // DESSERTS & WAFFLES
     {
       id: 25,
-      category_slug: 'desserts',
-      name: "Sizzling Choco Brownie with Ice Cream",
-      description: "Warm walnut fudge brownie served on a sizzling hot cast-iron plate with melting vanilla scoop & dark chocolate drizzle.",
-      price: 169,
-      image_url: "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=800&q=80",
-      tags: "Sizzling Hot, Must Try",
+      category_slug: 'hot-coffee',
+      name: "Hazelnut Vanilla Roasted Latte",
+      description: "Silky smooth steamed whole milk poured over espresso infused with roasted hazelnut and French Madagascar vanilla extract.",
+      price: 139,
       is_veg: true,
-      prep_time: "8 min",
-      is_bestseller: true
+      badge: "Sweet Aroma",
+      prep_time: "4 mins",
+      image_url: "https://images.unsplash.com/photo-1461023058943-07fcbe16d735?auto=format&fit=crop&w=700&q=80",
     },
     {
       id: 26,
-      category_slug: 'desserts',
-      name: "Belgian Nutella Waffle with Roasted Nuts",
-      description: "Crisp golden waffle drizzled generously with warm Nutella spread, chocolate chips and roasted crushed almonds.",
-      price: 189,
-      image_url: "https://images.unsplash.com/photo-1562376552-0d160a2f238d?auto=format&fit=crop&w=800&q=80",
-      tags: "Nutella Overload, Freshly Baked",
+      category_slug: 'hot-coffee',
+      name: "Irish Cream Velvet Americano",
+      description: "Smooth double espresso diluted with hot water and flavored with non-alcoholic Irish cream syrup for a deep roasted profile.",
+      price: 119,
       is_veg: true,
-      prep_time: "10 min",
-      is_bestseller: true
-    }
+      badge: "Aromatic",
+      prep_time: "4 mins",
+      image_url: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=700&q=80",
+    },
+    {
+      id: 27,
+      category_slug: 'hot-coffee',
+      name: "Signature Hot Belgian Chocolate",
+      description: "Pure melted Belgian dark chocolate whisked with rich steamed milk and topped with fluffy mini marshmallows.",
+      price: 129,
+      is_veg: true,
+      badge: "Pure Comfort",
+      prep_time: "5 mins",
+      image_url: "https://images.unsplash.com/photo-1542990253-0d0f5be5f0ed?auto=format&fit=crop&w=700&q=80",
+    },
+
+    // 🧋 COLD COFFEE
+    {
+      id: 28,
+      category_slug: 'cold-coffee',
+      name: "Signature Black Cat Cold Brew",
+      description: "Coarsely ground beans steeped in cold mountain spring water for 18 slow hours. Velvety smooth, ultra-low acidity, served on clear ice.",
+      price: 139,
+      is_veg: true,
+      badge: "Signature Brew",
+      prep_time: "3 mins",
+      image_url: "https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?auto=format&fit=crop&w=700&q=80",
+    },
+    {
+      id: 29,
+      category_slug: 'cold-coffee',
+      name: "Classic Creamy Frothy Frappe",
+      description: "Thick chilled milk, strong espresso shot, and vanilla ice cream blended with crushed ice and dusted with bittersweet cocoa.",
+      price: 129,
+      is_veg: true,
+      badge: "All-Time Hit",
+      prep_time: "4 mins",
+      image_url: "https://images.unsplash.com/photo-1572442388796-11668a67e53d?auto=format&fit=crop&w=700&q=80",
+    },
+    {
+      id: 30,
+      category_slug: 'cold-coffee',
+      name: "Hazelnut Iced Cold Coffee",
+      description: "Double espresso shot poured over chilled milk, roasted hazelnut syrup, and crushed ice, topped with a scoop of vanilla cream.",
+      price: 149,
+      is_veg: true,
+      badge: "Nutty Bliss",
+      prep_time: "4 mins",
+      image_url: "https://images.unsplash.com/photo-1497636577773-f1231844b336?auto=format&fit=crop&w=700&q=80",
+    },
+    {
+      id: 31,
+      category_slug: 'cold-coffee',
+      name: "Belgian Dark Chocolate Thickshake",
+      description: "Extra thick shake churned with Belgian dark chocolate ganache, chocolate fudge ice cream, and chocolate cookie crumbles.",
+      price: 169,
+      is_veg: true,
+      badge: "Ultra Thick",
+      prep_time: "5 mins",
+      image_url: "https://images.unsplash.com/photo-1579954115545-a95591f28bfc?auto=format&fit=crop&w=700&q=80",
+    },
+    {
+      id: 32,
+      category_slug: 'cold-coffee',
+      name: "Caramel Biscoff Cream Frappe",
+      description: "Lotus Biscoff cookie spread whipped with chilled espresso, creamy whole milk, salted caramel drizzle, and biscuit crunch.",
+      price: 169,
+      is_veg: true,
+      badge: "Sweet Indulgence",
+      prep_time: "5 mins",
+      image_url: "https://images.unsplash.com/photo-1541167760496-1628856ab772?auto=format&fit=crop&w=700&q=80",
+    },
   ];
-
-  // Fetch or fallback
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const [catRes, menuRes] = await Promise.all([
-          fetch(`${API_BASE}/categories/`),
-          fetch(`${API_BASE}/menu/`)
-        ]);
-
-        if (catRes.ok && menuRes.ok) {
-          const catData = await catRes.json();
-          const menuData = await menuRes.json();
-
-          if (menuData && menuData.length > 0) {
-            setMenuItems(menuData);
-            setCategories([{ id: 'all', slug: 'all', name: 'All Items', icon: 'Sparkles' }, ...catData]);
-            return;
-          }
-        }
-        // Fallback to rich cafe menu
-        setCategories(defaultCategories);
-        setMenuItems(defaultItems);
-      } catch (err) {
-        setCategories(defaultCategories);
-        setMenuItems(defaultItems);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
 
   const handleAdd = (item) => {
     onAddToCart(item);
     setRecentlyAddedId(item.id);
     setTimeout(() => {
       setRecentlyAddedId(null);
-    }, 1400);
+    }, 1200);
   };
 
   const getTrayQuantity = (itemId) => {
@@ -416,191 +415,200 @@ export default function MenuSection({ onAddToCart, trayItems = [] }) {
   };
 
   // Filter items
-  const displayItems = (menuItems.length > 0 ? menuItems : defaultItems).filter((item) => {
+  const displayItems = menuItems.filter((item) => {
     const matchCategory = selectedCategory === 'all' || item.category_slug === selectedCategory;
     const matchSearch =
       searchQuery === '' ||
       item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (item.tags && item.tags.toLowerCase().includes(searchQuery.toLowerCase()));
+      (item.badge && item.badge.toLowerCase().includes(searchQuery.toLowerCase()));
     const matchVeg = !vegOnly || item.is_veg === true;
 
     return matchCategory && matchSearch && matchVeg;
   });
 
   return (
-    <section id="menu" className="py-16 sm:py-24 bg-[#FCF8F2] border-t border-[#EAE0D0]">
+    <section id="menu" className="py-16 sm:py-24 bg-[#0D0D0D] border-t border-white/10 text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto space-y-3">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#EAE0D0] text-[#5B3314] text-xs font-semibold tracking-wide border border-[#D5BE9B] shadow-xs">
-            <Sparkles className="w-3.5 h-3.5 text-[#BA8748]" />
-            <span>Freshly Made Upon Order • Realistic Indian Cafe Pricing</span>
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#1A1A1A] text-amber-400 text-xs font-bold tracking-wide border border-amber-500/20 shadow-inner">
+            <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+            <span>Handcrafted Kitchen &amp; Barista Menu • Transparent ₹ Pricing</span>
           </div>
 
-          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-[#2B1607] tracking-tight">
-            Our Handcrafted Cafe Menu
+          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight">
+            The Black Cat <span className="text-amber-500">Menu</span>
           </h2>
 
-          <p className="text-sm sm:text-base text-[#6E4F32] leading-relaxed">
-            From bubbling hot wood-fired pizzas and crispy smash burgers to chilled frappes and grilled triple-decker sandwiches — freshly prepared for you!
+          <p className="text-sm sm:text-base text-stone-400 leading-relaxed font-normal">
+            Wood-fired pizzas, smash burgers, grilled sandwiches, crispy French fries, hot brews &amp; chilled cold coffees.
           </p>
         </div>
 
-        {/* Search & Veg Filter Bar */}
-        <div className="mt-10 max-w-4xl mx-auto flex flex-col sm:flex-row items-center gap-3">
-          <div className="relative flex-1 w-full">
-            <Search className="w-5 h-5 text-[#8C6B4B] absolute left-4 top-1/2 -translate-y-1/2" />
+        {/* Filter Controls: Search & Pure Veg Toggle */}
+        <div className="mt-10 max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 bg-[#141414] p-3 rounded-2xl border border-white/10 shadow-lg">
+          
+          {/* Search Bar */}
+          <div className="relative w-full sm:w-80">
+            <Search className="w-4 h-4 text-stone-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
-              placeholder="Search pizzas, burgers, cold coffee, fries, sandwiches..."
+              placeholder="Search Pizza, Burger, Fries, Coffee..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-3.5 bg-white border border-[#DAC9B2] rounded-2xl text-sm font-medium text-[#2B1607] placeholder-[#A08568] focus:outline-none focus:ring-2 focus:ring-[#BA8748] shadow-sm transition-all"
+              className="w-full pl-9 pr-4 py-2.5 bg-[#1F1F1F] border border-white/10 focus:border-amber-500/50 rounded-xl text-xs sm:text-sm text-white placeholder-stone-400 focus:outline-none transition-all"
             />
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery('')}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-semibold text-[#8C6B4B] hover:text-[#2B1607]"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 hover:text-white text-xs font-bold"
               >
-                Clear
+                ✕
               </button>
             )}
           </div>
 
-          {/* Pure Veg Toggle */}
-          <button
-            onClick={() => setVegOnly(!vegOnly)}
-            className={`w-full sm:w-auto px-5 py-3.5 rounded-2xl text-xs sm:text-sm font-bold flex items-center justify-center gap-2 border transition-all ${
-              vegOnly
-                ? 'bg-emerald-700 text-white border-emerald-800 shadow-sm ring-2 ring-emerald-500/30'
-                : 'bg-white text-emerald-800 border-emerald-300 hover:bg-emerald-50'
-            }`}
-          >
-            <span className="w-3.5 h-3.5 rounded-full border-2 border-current flex items-center justify-center p-0.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-current block" />
+          {/* Pure Veg Toggle Switch */}
+          <div className="flex items-center gap-3">
+            <span className="text-xs sm:text-sm font-semibold text-stone-300 flex items-center gap-1.5">
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block shadow-sm shadow-emerald-500/50" />
+              Pure Veg Only
             </span>
-            <span>{vegOnly ? 'Showing Pure Veg Only' : 'Filter Pure Veg'}</span>
-          </button>
+            <button
+              onClick={() => setVegOnly(!vegOnly)}
+              className={`w-12 h-6 flex items-center rounded-full p-1 transition-colors duration-300 ${
+                vegOnly ? 'bg-emerald-500' : 'bg-[#2A2A2A]'
+              }`}
+            >
+              <div
+                className={`bg-white w-4 h-4 rounded-full shadow-md transform transition-transform duration-300 ${
+                  vegOnly ? 'translate-x-6' : 'translate-x-0'
+                }`}
+              />
+            </button>
+          </div>
+
         </div>
 
-        {/* Category Pills Slider */}
-        <div className="mt-8 flex items-center gap-2 overflow-x-auto pb-3 scrollbar-none justify-start sm:justify-center">
-          {(categories.length > 0 ? categories : defaultCategories).map((cat) => {
+        {/* Category Pills Tabs */}
+        <div className="mt-8 flex items-center gap-2 overflow-x-auto pb-4 scrollbar-none justify-start sm:justify-center">
+          {categories.map((cat) => {
+            const IconComponent = cat.icon;
             const isSelected = selectedCategory === cat.slug;
             return (
               <button
-                key={cat.id || cat.slug}
+                key={cat.id}
                 onClick={() => setSelectedCategory(cat.slug)}
-                className={`whitespace-nowrap px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold transition-all flex items-center gap-2 ${
+                className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold whitespace-nowrap transition-all duration-200 border ${
                   isSelected
-                    ? 'bg-[#4A260F] text-[#FAF5EB] shadow-md -translate-y-0.5'
-                    : 'bg-white text-[#5B3314] hover:bg-[#EAE0D0] border border-[#E3D4C0]'
+                    ? 'bg-amber-500 text-black border-amber-400 shadow-[0_4px_20px_rgba(245,158,11,0.3)] scale-105'
+                    : 'bg-[#181818] text-stone-300 border-white/10 hover:border-white/20 hover:text-white'
                 }`}
               >
+                <IconComponent className={`w-4 h-4 ${isSelected ? 'text-black' : 'text-amber-400'}`} />
                 <span>{cat.name}</span>
+                <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-extrabold ${
+                  isSelected ? 'bg-black/20 text-black' : 'bg-white/10 text-stone-400'
+                }`}>
+                  {cat.count}
+                </span>
               </button>
             );
           })}
         </div>
 
         {/* Menu Cards Grid */}
-        <div className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
           {displayItems.map((item) => {
-            const inTrayQty = getTrayQuantity(item.id);
-            const isRecentlyAdded = recentlyAddedId === item.id;
+            const inCartQty = getTrayQuantity(item.id);
+            const isJustAdded = recentlyAddedId === item.id;
 
             return (
               <div
                 key={item.id}
-                className="bg-white rounded-3xl border border-[#E8DCB8] overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col justify-between group"
+                className="group bg-[#161616] rounded-3xl border border-white/10 hover:border-amber-500/40 shadow-xl hover:shadow-[0_12px_36px_rgba(245,158,11,0.12)] transition-all duration-300 overflow-hidden flex flex-col justify-between"
               >
-                <div>
-                  {/* Item Image */}
-                  <div className="relative h-48 w-full overflow-hidden bg-stone-100">
-                    <img
-                      src={item.image_url}
-                      alt={item.name}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      loading="lazy"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
+                {/* Food Image with Badges */}
+                <div className="relative aspect-[16/10] overflow-hidden bg-black">
+                  <img
+                    src={item.image_url}
+                    alt={item.name}
+                    loading="lazy"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 brightness-95 group-hover:brightness-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
 
-                    {/* Veg / Non-Veg Indicator */}
-                    <div className="absolute top-3 left-3 bg-white/95 backdrop-blur-xs px-2.5 py-1 rounded-xl shadow-md flex items-center gap-1.5 text-[11px] font-bold">
-                      <span className={`w-3.5 h-3.5 rounded-sm border-2 flex items-center justify-center p-0.5 ${
-                        item.is_veg !== false ? 'border-emerald-600' : 'border-rose-600'
-                      }`}>
-                        <span className={`w-1.5 h-1.5 rounded-full block ${
-                          item.is_veg !== false ? 'bg-emerald-600' : 'bg-rose-600'
-                        }`} />
-                      </span>
-                      <span className={item.is_veg !== false ? 'text-emerald-800' : 'text-rose-800'}>
-                        {item.is_veg !== false ? 'Veg' : 'Non-Veg'}
-                      </span>
-                    </div>
+                  {/* Top Badges */}
+                  <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
+                    <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-black/75 backdrop-blur-md text-[11px] font-bold border border-white/10 text-white">
+                      <span className={`w-2 h-2 rounded-full ${item.is_veg ? 'bg-emerald-400 shadow-sm shadow-emerald-400/50' : 'bg-rose-500 shadow-sm shadow-rose-500/50'}`} />
+                      <span>{item.is_veg ? 'Veg' : 'Non-Veg'}</span>
+                    </span>
 
-                    {/* Tags pill */}
-                    {item.tags && (
-                      <div className="absolute top-3 right-3 bg-black/70 backdrop-blur-xs text-amber-200 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border border-amber-300/30">
-                        {item.tags.split(',')[0]}
-                      </div>
+                    {item.badge && (
+                      <span className="px-2.5 py-1 rounded-xl bg-amber-500 text-black font-extrabold text-[10px] uppercase tracking-wider shadow-md">
+                        {item.badge}
+                      </span>
                     )}
-
-                    {/* Price Tag Overlay */}
-                    <div className="absolute bottom-3 left-3 right-3 flex items-baseline justify-between text-white">
-                      <span className="font-serif text-2xl font-bold drop-shadow-md text-[#FFF5EA]">
-                        ₹{item.price}
-                      </span>
-                      {item.prep_time && (
-                        <span className="text-[11px] font-medium text-amber-200 flex items-center gap-1">
-                          <Clock className="w-3 h-3" /> {item.prep_time}
-                        </span>
-                      )}
-                    </div>
                   </div>
 
-                  {/* Card Content */}
-                  <div className="p-5 space-y-2.5">
-                    <h3 className="font-serif text-lg font-bold text-[#2B1607] group-hover:text-[#8C5628] transition-colors leading-snug">
-                      {item.name}
-                    </h3>
-                    <p className="text-xs text-[#6B4E33] leading-relaxed line-clamp-2">
-                      {item.description}
-                    </p>
+                  {/* Prep Time Tag */}
+                  <div className="absolute bottom-3 left-3 flex items-center gap-1 text-[11px] font-medium text-stone-300 bg-black/60 backdrop-blur-xs px-2 py-0.5 rounded-lg border border-white/5">
+                    <Clock className="w-3 h-3 text-amber-400" />
+                    <span>{item.prep_time}</span>
                   </div>
                 </div>
 
-                {/* Card Action Footer */}
-                <div className="p-5 pt-0">
-                  <button
-                    onClick={() => handleAdd(item)}
-                    className={`w-full py-3 rounded-2xl font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all ${
-                      isRecentlyAdded
-                        ? 'bg-emerald-600 text-white shadow-md'
-                        : inTrayQty > 0
-                        ? 'bg-[#3D2512] text-amber-300 hover:bg-[#2B1607] shadow-sm'
-                        : 'bg-[#5B3314] text-[#FAF5EB] hover:bg-[#3D2512] shadow-sm hover:shadow-md'
-                    }`}
-                  >
-                    {isRecentlyAdded ? (
-                      <>
-                        <Check className="w-4 h-4" />
-                        <span>Added to Order Tray!</span>
-                      </>
-                    ) : inTrayQty > 0 ? (
-                      <>
-                        <Plus className="w-4 h-4" />
-                        <span>Add Another (In Tray: {inTrayQty})</span>
-                      </>
-                    ) : (
-                      <>
-                        <Plus className="w-4 h-4 text-amber-300" />
-                        <span>Add to Order Tray • ₹{item.price}</span>
-                      </>
-                    )}
-                  </button>
+                {/* Card Content */}
+                <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
+                  <div className="space-y-1.5">
+                    <h3 className="font-bold text-base sm:text-lg text-white group-hover:text-amber-400 transition-colors line-clamp-1">
+                      {item.name}
+                    </h3>
+                    <p className="text-xs text-stone-400 leading-relaxed line-clamp-2">
+                      {item.description}
+                    </p>
+                  </div>
+
+                  {/* Price & Add to Cart Action */}
+                  <div className="pt-3 border-t border-white/10 flex items-center justify-between gap-3">
+                    <div className="flex flex-col">
+                      <span className="text-[10px] text-stone-400 uppercase font-semibold">Price</span>
+                      <span className="text-xl font-extrabold text-amber-400">
+                        ₹{item.price}
+                      </span>
+                    </div>
+
+                    <button
+                      onClick={() => handleAdd(item)}
+                      className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl font-bold text-xs sm:text-sm transition-all duration-200 active:scale-95 shadow-md ${
+                        isJustAdded
+                          ? 'bg-emerald-500 text-black'
+                          : inCartQty > 0
+                          ? 'bg-amber-500 text-black hover:bg-amber-400'
+                          : 'bg-[#242424] text-white hover:bg-amber-500 hover:text-black border border-white/10'
+                      }`}
+                    >
+                      {isJustAdded ? (
+                        <>
+                          <Check className="w-4 h-4 text-black animate-bounce" />
+                          <span>Added!</span>
+                        </>
+                      ) : inCartQty > 0 ? (
+                        <>
+                          <ShoppingBag className="w-4 h-4" />
+                          <span>Add More ({inCartQty})</span>
+                        </>
+                      ) : (
+                        <>
+                          <Plus className="w-4 h-4" />
+                          <span>Add to Cart</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
                 </div>
 
               </div>
@@ -608,19 +616,19 @@ export default function MenuSection({ onAddToCart, trayItems = [] }) {
           })}
         </div>
 
-        {/* Empty state */}
+        {/* Empty Search Feedback */}
         {displayItems.length === 0 && (
-          <div className="mt-16 text-center max-w-md mx-auto p-8 bg-white rounded-3xl border border-[#E8DCB8] space-y-3">
-            <Pizza className="w-12 h-12 text-[#9E7A50] mx-auto opacity-60" />
-            <h4 className="font-serif text-lg font-bold text-[#2B1607]">No items found</h4>
-            <p className="text-xs text-[#7B5A34]">
-              Try searching for something else like "pizza", "burger", "frappe", or clear the pure veg filter.
-            </p>
+          <div className="text-center py-16 space-y-4">
+            <p className="text-lg font-bold text-stone-400">No items match your search "{searchQuery}"</p>
             <button
-              onClick={() => { setSearchQuery(''); setSelectedCategory('all'); setVegOnly(false); }}
-              className="mt-2 px-5 py-2.5 rounded-full bg-[#5B3314] text-white text-xs font-semibold"
+              onClick={() => {
+                setSearchQuery('');
+                setSelectedCategory('all');
+                setVegOnly(false);
+              }}
+              className="px-5 py-2.5 rounded-2xl bg-amber-500 text-black font-bold text-xs hover:bg-amber-400 transition-all"
             >
-              Reset All Filters
+              Reset Filters
             </button>
           </div>
         )}

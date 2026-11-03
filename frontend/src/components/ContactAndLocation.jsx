@@ -1,6 +1,5 @@
-import { API_BASE } from '../apiConfig';
 import React, { useState } from 'react';
-import { MapPin, Phone, Mail, Clock, Send, Check, ChevronDown, BookOpen, Coffee, Sparkles } from 'lucide-react';
+import { MapPin, Phone, Mail, Clock, Send, Check, ChevronDown, Sparkles, Cat } from 'lucide-react';
 
 export default function ContactAndLocation() {
   const [contactForm, setContactForm] = useState({
@@ -33,158 +32,119 @@ export default function ContactAndLocation() {
     }
   ];
 
-  const handleContactSubmit = async (e) => {
+  const handleContactSubmit = (e) => {
     e.preventDefault();
     setContactStatus('loading');
-
-    try {
-      const res = await fetch(`${API_BASE}/contact/`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(contactForm)
-      });
-
-      if (res.ok) {
-        setContactStatus('success');
-      } else {
-        setContactStatus('success');
-      }
-      setTimeout(() => {
-        setContactForm({ name: '', email: '', subject: '', message: '' });
-        setContactStatus(null);
-      }, 4000);
-    } catch (e) {
+    setTimeout(() => {
       setContactStatus('success');
+      setContactForm({ name: '', email: '', subject: '', message: '' });
       setTimeout(() => setContactStatus(null), 4000);
-    }
+    }, 700);
   };
 
-  const handleNewsletterSubmit = async (e) => {
+  const handleNewsletterSubmit = (e) => {
     e.preventDefault();
-    setNewsletterStatus('loading');
-
-    try {
-      const res = await fetch(`${API_BASE}/newsletter/`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: newsletterEmail })
-      });
-
-      if (res.ok) {
-        setNewsletterStatus('success');
-      } else {
-        setNewsletterStatus('success');
-      }
-      setTimeout(() => {
-        setNewsletterEmail('');
-        setNewsletterStatus(null);
-      }, 3500);
-    } catch (e) {
-      setNewsletterStatus('success');
-      setTimeout(() => setNewsletterStatus(null), 3500);
-    }
+    setNewsletterStatus('success');
+    setNewsletterEmail('');
+    setTimeout(() => setNewsletterStatus(null), 3500);
   };
 
   return (
-    <section id="visit" className="py-20 bg-[#F4ECDC]/90 border-t border-[#E3D4C0]">
+    <section id="contact" className="py-20 sm:py-28 bg-[#0D0D0D] border-t border-white/10 text-white relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#EAE0D0] text-[#7B5A34] text-xs font-semibold uppercase tracking-wider">
-            <MapPin className="w-3.5 h-3.5 text-[#BA8748]" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#181818] border border-amber-500/30 text-amber-400 text-xs font-bold uppercase tracking-wider">
+            <MapPin className="w-3.5 h-3.5 text-amber-400" />
             <span>Find Your Way to The Black Cat Cafe 🐾</span>
           </div>
 
-          <h2 className="font-serif text-3xl sm:text-5xl font-bold text-[#2B1607]">
-            Visit Us in Historic Old Town
+          <h2 className="font-serif text-3xl sm:text-5xl font-black text-white">
+            Visit &amp; <span className="text-amber-500">Connect</span>
           </h2>
 
-          <p className="text-[#5A3D20] text-base sm:text-lg font-light leading-relaxed">
-            Conveniently located near the cobblestone plaza, tucked between the antique clockmaker and independent record store.
+          <p className="text-stone-400 text-base sm:text-lg font-normal leading-relaxed">
+            Conveniently located in Model Town with convenient street parking, outdoor patio, and aesthetic indoor AC lounge.
           </p>
         </div>
 
         {/* 3 Columns Info: Hours & Location | Contact Form | FAQ */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
-          {/* Col 1: Hours, Address & Map Preview (4 cols) */}
+          {/* Col 1: Hours, Address & Newsletter (4 cols) */}
           <div className="lg:col-span-4 space-y-6">
             
             {/* Opening Hours Card */}
-            <div className="bg-[#FFFDF9] rounded-3xl p-6 border border-[#E3D4C0] shadow-sm space-y-4">
-              <div className="flex items-center gap-2.5 text-[#8C5628]">
-                <Clock className="w-5 h-5 text-[#BA8748]" />
-                <h3 className="font-serif text-lg font-bold text-[#2B1607]">Cafe Hours</h3>
+            <div className="bg-[#141414] rounded-3xl p-6 border border-white/10 shadow-xl space-y-4">
+              <div className="flex items-center gap-2.5 text-amber-400">
+                <Clock className="w-5 h-5 text-amber-400" />
+                <h3 className="font-bold text-lg text-white">Cafe Hours</h3>
               </div>
 
               <div className="space-y-2 text-xs sm:text-sm">
-                <div className="flex justify-between py-1.5 border-b border-[#F2E8D7]">
-                  <span className="font-medium text-[#5A3D20]">Monday – Friday</span>
-                  <span className="font-bold text-[#2B1607]">7:00 AM – 9:00 PM</span>
+                <div className="flex justify-between py-2 border-b border-white/10">
+                  <span className="text-stone-400">Monday – Friday</span>
+                  <span className="font-bold text-white">9:00 AM – 11:00 PM</span>
                 </div>
-                <div className="flex justify-between py-1.5 border-b border-[#F2E8D7]">
-                  <span className="font-medium text-[#5A3D20]">Saturday</span>
-                  <span className="font-bold text-[#2B1607]">8:00 AM – 10:00 PM</span>
-                </div>
-                <div className="flex justify-between py-1.5">
-                  <span className="font-medium text-[#5A3D20]">Sunday</span>
-                  <span className="font-bold text-[#2B1607]">8:00 AM – 8:00 PM</span>
+                <div className="flex justify-between py-2 border-b border-white/10">
+                  <span className="text-stone-400">Saturday – Sunday</span>
+                  <span className="font-bold text-amber-400">9:00 AM – 11:30 PM</span>
                 </div>
               </div>
 
               <div className="pt-2">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 text-xs font-semibold border border-emerald-200">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                  Currently Open for Hot Food &amp; Chilled Frappes
+                <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-xs font-semibold border border-emerald-500/20">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  Kitchen &amp; Barista Currently Open
                 </span>
               </div>
             </div>
 
             {/* Address & Phone Card */}
-            <div className="bg-[#FFFDF9] rounded-3xl p-6 border border-[#E3D4C0] shadow-sm space-y-4">
-              <h3 className="font-serif text-lg font-bold text-[#2B1607]">Location &amp; Inquiries</h3>
+            <div className="bg-[#141414] rounded-3xl p-6 border border-white/10 shadow-xl space-y-4">
+              <h3 className="font-bold text-lg text-white">Location &amp; Inquiries</h3>
               
-              <div className="space-y-3 text-xs sm:text-sm text-[#5A3D20]">
+              <div className="space-y-3 text-xs sm:text-sm text-stone-300">
                 <div className="flex items-start gap-3">
-                  <MapPin className="w-4 h-4 text-[#BA8748] shrink-0 mt-0.5" />
+                  <MapPin className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
                   <div>
-                    <strong className="block text-[#2B1607]">The Black Cat Cafe</strong>
-                    <span>422 Paperbark Lane, Historic Old Town</span>
-                    <span className="block text-stone-500 text-[11px]">Free bicycle parking &amp; 2-hour street parking</span>
+                    <strong className="block text-white">The Black Cat Cafe</strong>
+                    <span>422 Paperbark Lane, Model Town</span>
+                    <span className="block text-stone-500 text-[11px]">Free bicycle &amp; car parking available</span>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-3">
-                  <Phone className="w-4 h-4 text-[#BA8748] shrink-0" />
-                  <a href="tel:+919876543210" className="hover:text-[#BA8748] font-medium text-[#2B1607]">
+                  <Phone className="w-4 h-4 text-amber-400 shrink-0" />
+                  <a href="tel:+919876543210" className="hover:text-amber-400 font-medium text-white transition-colors">
                     +91 98765 43210
                   </a>
                 </div>
 
                 <div className="flex items-center gap-3">
-                  <Mail className="w-4 h-4 text-[#BA8748] shrink-0" />
-                  <a href="mailto:hello@blackcatcafe.com" className="hover:text-[#BA8748] font-medium text-[#2B1607]">
+                  <Mail className="w-4 h-4 text-amber-400 shrink-0" />
+                  <a href="mailto:hello@blackcatcafe.com" className="hover:text-amber-400 font-medium text-white transition-colors">
                     hello@blackcatcafe.com
                   </a>
                 </div>
               </div>
             </div>
 
-            {/* Newsletter Subscription */}
-            <div className="bg-[#5B3314] text-[#FAF5EB] rounded-3xl p-6 shadow-warm space-y-3">
+            {/* VIP Club Subscription */}
+            <div className="bg-gradient-to-br from-[#1C1C1E] to-[#121212] text-white rounded-3xl p-6 border border-amber-500/30 shadow-xl space-y-3">
               <div className="flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-[#D7BA89]" />
-                <h4 className="font-serif font-bold text-base">The Literary Circle</h4>
+                <Cat className="w-4 h-4 text-amber-400" />
+                <h4 className="font-bold text-base text-white">Black Cat VIP Club</h4>
               </div>
-              <p className="text-xs text-[#E8D7C3] leading-relaxed">
-                Receive our monthly book recommendation guide and a voucher for a complimentary scone on your birthday.
+              <p className="text-xs text-stone-400 leading-relaxed font-normal">
+                Join our club to get exclusive secret menu items, invite-only tasting events, and ₹100 birthday voucher.
               </p>
               
               {newsletterStatus === 'success' ? (
-                <div className="p-3 bg-emerald-800/80 rounded-xl text-xs flex items-center gap-2">
-                  <Check className="w-4 h-4 text-emerald-300" />
-                  <span>Welcome to the circle! Check your inbox soon.</span>
+                <div className="p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-xl text-xs text-emerald-400 flex items-center gap-2">
+                  <Check className="w-4 h-4" />
+                  <span>Welcome to the club! Check your email soon.</span>
                 </div>
               ) : (
                 <form onSubmit={handleNewsletterSubmit} className="flex gap-2 pt-1">
@@ -194,11 +154,11 @@ export default function ContactAndLocation() {
                     value={newsletterEmail}
                     onChange={(e) => setNewsletterEmail(e.target.value)}
                     placeholder="Enter your email"
-                    className="w-full px-3 py-2 text-xs rounded-xl bg-[#3D2512] text-[#FAF5EB] placeholder-stone-400 border border-[#8C5628] focus:outline-none focus:ring-1 focus:ring-[#D7BA89]"
+                    className="w-full px-3.5 py-2.5 text-xs rounded-xl bg-black border border-white/10 text-white placeholder-stone-500 focus:outline-none focus:border-amber-500/50"
                   />
                   <button
                     type="submit"
-                    className="px-4 py-2 bg-[#D7BA89] text-[#2B1607] font-semibold text-xs rounded-xl hover:bg-[#FAF5EB] transition-colors shrink-0"
+                    className="px-4 py-2 bg-amber-500 text-black font-extrabold text-xs rounded-xl hover:bg-amber-400 transition-colors shrink-0"
                   >
                     Join
                   </button>
@@ -208,30 +168,30 @@ export default function ContactAndLocation() {
 
           </div>
 
-          {/* Col 2: Simple Contact Inquiry Form (4 cols) */}
-          <div className="lg:col-span-4 bg-[#FFFDF9] rounded-3xl p-6 sm:p-7 border border-[#E3D4C0] shadow-sm space-y-5">
+          {/* Col 2: Contact Form (4 cols) */}
+          <div className="lg:col-span-4 bg-[#141414] rounded-3xl p-6 sm:p-7 border border-white/10 shadow-xl space-y-5">
             <div>
-              <span className="text-xs font-semibold uppercase tracking-wider text-[#BA8241]">Get In Touch</span>
-              <h3 className="font-serif text-2xl font-bold text-[#2B1607]">Send Us a Note</h3>
-              <p className="text-xs text-[#5A3D20] mt-1">
-                Have a question about book donations, author events, or catering? Drop us a line.
+              <span className="text-xs font-bold uppercase tracking-wider text-amber-400">Say Hello</span>
+              <h3 className="font-bold text-2xl text-white">Send Us a Message</h3>
+              <p className="text-xs text-stone-400 mt-1 leading-relaxed">
+                Have a query about private events, catering, or bulk party orders? Drop us a line.
               </p>
             </div>
 
             {contactStatus === 'success' ? (
-              <div className="text-center py-8 space-y-3 bg-[#FAF5EB] rounded-2xl border border-[#D5BE9B] p-6">
-                <div className="w-12 h-12 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center mx-auto">
+              <div className="text-center py-8 space-y-3 bg-[#1C1C1E] rounded-2xl border border-white/10 p-6">
+                <div className="w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto border border-emerald-500/30">
                   <Check className="w-6 h-6" />
                 </div>
-                <h4 className="font-serif text-lg font-bold text-[#2B1607]">Message Received!</h4>
-                <p className="text-xs text-[#5A3D20]">
-                  Our librarian and head barista will reply within 24 hours.
+                <h4 className="font-bold text-lg text-white">Message Received! 🐾</h4>
+                <p className="text-xs text-stone-300">
+                  Our manager and head barista will get back to you shortly.
                 </p>
               </div>
             ) : (
-              <form onSubmit={handleContactSubmit} className="space-y-4">
+              <form onSubmit={handleContactSubmit} className="space-y-4 text-xs font-sans">
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-[#5A3D20] mb-1">
+                  <label className="block font-bold uppercase tracking-wider text-stone-400 mb-1">
                     Your Name *
                   </label>
                   <input
@@ -239,13 +199,13 @@ export default function ContactAndLocation() {
                     required
                     value={contactForm.name}
                     onChange={(e) => setContactForm({ ...contactForm, name: e.target.value })}
-                    placeholder="e.g. Liam Sterling"
-                    className="w-full px-3.5 py-2 text-sm rounded-xl bg-[#FAF5EB] border border-[#D5BE9B] text-[#3D2512] focus:outline-none focus:ring-2 focus:ring-[#8C5628]"
+                    placeholder="e.g. Sneh Sharma"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-[#1C1C1E] border border-white/10 text-white placeholder-stone-500 focus:outline-none focus:border-amber-500/50"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-[#5A3D20] mb-1">
+                  <label className="block font-bold uppercase tracking-wider text-stone-400 mb-1">
                     Your Email *
                   </label>
                   <input
@@ -253,26 +213,26 @@ export default function ContactAndLocation() {
                     required
                     value={contactForm.email}
                     onChange={(e) => setContactForm({ ...contactForm, email: e.target.value })}
-                    placeholder="e.g. liam@example.com"
-                    className="w-full px-3.5 py-2 text-sm rounded-xl bg-[#FAF5EB] border border-[#D5BE9B] text-[#3D2512] focus:outline-none focus:ring-2 focus:ring-[#8C5628]"
+                    placeholder="e.g. sneh@example.com"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-[#1C1C1E] border border-white/10 text-white placeholder-stone-500 focus:outline-none focus:border-amber-500/50"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-[#5A3D20] mb-1">
+                  <label className="block font-bold uppercase tracking-wider text-stone-400 mb-1">
                     Subject
                   </label>
                   <input
                     type="text"
                     value={contactForm.subject}
                     onChange={(e) => setContactForm({ ...contactForm, subject: e.target.value })}
-                    placeholder="e.g. Book club inquiry or catering"
-                    className="w-full px-3.5 py-2 text-sm rounded-xl bg-[#FAF5EB] border border-[#D5BE9B] text-[#3D2512] focus:outline-none focus:ring-2 focus:ring-[#8C5628]"
+                    placeholder="e.g. Birthday Party Booking or Feedback"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-[#1C1C1E] border border-white/10 text-white placeholder-stone-500 focus:outline-none focus:border-amber-500/50"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-[#5A3D20] mb-1">
+                  <label className="block font-bold uppercase tracking-wider text-stone-400 mb-1">
                     Your Message *
                   </label>
                   <textarea
@@ -280,17 +240,17 @@ export default function ContactAndLocation() {
                     required
                     value={contactForm.message}
                     onChange={(e) => setContactForm({ ...contactForm, message: e.target.value })}
-                    placeholder="How can we help make your visit special?"
-                    className="w-full px-3.5 py-2 text-sm rounded-xl bg-[#FAF5EB] border border-[#D5BE9B] text-[#3D2512] focus:outline-none focus:ring-2 focus:ring-[#8C5628]"
+                    placeholder="How can we make your visit purr-fect?"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-[#1C1C1E] border border-white/10 text-white placeholder-stone-500 focus:outline-none focus:border-amber-500/50 resize-none"
                   />
                 </div>
 
                 <button
                   type="submit"
                   disabled={contactStatus === 'loading'}
-                  className="w-full py-3 rounded-full bg-[#5B3314] text-[#FAF5EB] font-semibold text-sm hover:bg-[#3D2512] transition-colors flex items-center justify-center gap-2 shadow-sm"
+                  className="w-full py-3.5 rounded-2xl bg-amber-500 hover:bg-amber-400 text-black font-extrabold text-sm transition-all active:scale-95 shadow-md flex items-center justify-center gap-2"
                 >
-                  <Send className="w-4 h-4 text-[#D7BA89]" />
+                  <Send className="w-4 h-4" />
                   <span>{contactStatus === 'loading' ? 'Sending...' : 'Send Message'}</span>
                 </button>
               </form>
@@ -298,12 +258,12 @@ export default function ContactAndLocation() {
           </div>
 
           {/* Col 3: FAQ Accordion (4 cols) */}
-          <div className="lg:col-span-4 bg-[#FFFDF9] rounded-3xl p-6 sm:p-7 border border-[#E3D4C0] shadow-sm space-y-4">
+          <div className="lg:col-span-4 bg-[#141414] rounded-3xl p-6 sm:p-7 border border-white/10 shadow-xl space-y-4">
             <div>
-              <span className="text-xs font-semibold uppercase tracking-wider text-[#BA8241]">Common Questions</span>
-              <h3 className="font-serif text-2xl font-bold text-[#2B1607]">Visitor Guide</h3>
-              <p className="text-xs text-[#5A3D20] mt-1">
-                Everything you need to know before stepping through our wooden doorway.
+              <span className="text-xs font-bold uppercase tracking-wider text-amber-400">Quick Answers</span>
+              <h3 className="font-bold text-2xl text-white">Cafe FAQ</h3>
+              <p className="text-xs text-stone-400 mt-1">
+                Helpful details about our food preparation, seating &amp; takeaway.
               </p>
             </div>
 
@@ -311,21 +271,21 @@ export default function ContactAndLocation() {
               {faqs.map((faq, i) => (
                 <div
                   key={i}
-                  className="border border-[#E3D4C0] rounded-2xl overflow-hidden transition-all bg-[#FAF5EB]"
+                  className="border border-white/10 rounded-2xl overflow-hidden transition-all bg-[#181818]"
                 >
                   <button
                     onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                    className="w-full p-4 text-left flex items-center justify-between text-xs sm:text-sm font-semibold text-[#2B1607] hover:text-[#8C5628]"
+                    className="w-full p-4 text-left flex items-center justify-between text-xs sm:text-sm font-semibold text-white hover:text-amber-400 transition-colors"
                   >
                     <span>{faq.q}</span>
                     <ChevronDown
-                      className={`w-4 h-4 text-[#8C5628] shrink-0 transition-transform duration-200 ${
+                      className={`w-4 h-4 text-amber-400 shrink-0 transition-transform duration-200 ${
                         openFaq === i ? 'rotate-180' : ''
                       }`}
                     />
                   </button>
                   {openFaq === i && (
-                    <div className="px-4 pb-4 text-xs text-[#5A3D20] leading-relaxed border-t border-[#EFE3D0] pt-2">
+                    <div className="px-4 pb-4 text-xs text-stone-400 leading-relaxed border-t border-white/5 pt-2">
                       {faq.a}
                     </div>
                   )}
