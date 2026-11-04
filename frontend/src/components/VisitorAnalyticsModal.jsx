@@ -22,7 +22,9 @@ import {
   Radio,
   Cat,
   Share2,
-  SlidersHorizontal
+  SlidersHorizontal,
+  User,
+  Phone
 } from 'lucide-react';
 import { 
   getVisitorLogs, 
@@ -98,6 +100,7 @@ export default function VisitorAnalyticsModal({ isOpen, onClose }) {
   const stats = useMemo(() => {
     const totalVisits = logs.length;
     const uniqueIps = new Set(logs.map(l => l.ip)).size;
+    const identifiedCount = logs.filter(l => l.customerName || l.customerPhone).length;
     
     // Today's visits
     const today = new Date().toDateString();
@@ -128,7 +131,7 @@ export default function VisitorAnalyticsModal({ isOpen, onClose }) {
       }
     });
 
-    return { totalVisits, uniqueIps, todayVisits, mobilePercent, topCity };
+    return { totalVisits, uniqueIps, todayVisits, mobilePercent, topCity, identifiedCount };
   }, [logs]);
 
   // Filtered Logs
@@ -136,6 +139,9 @@ export default function VisitorAnalyticsModal({ isOpen, onClose }) {
     return logs.filter(log => {
       const matchesSearch = 
         !searchQuery ||
+        (log.customerName && log.customerName.toLowerCase().includes(searchQuery.toLowerCase())) ||
+        (log.customerPhone && log.customerPhone.includes(searchQuery)) ||
+        (log.customerEmail && log.customerEmail.toLowerCase().includes(searchQuery.toLowerCase())) ||
         (log.city && log.city.toLowerCase().includes(searchQuery.toLowerCase())) ||
         (log.region && log.region.toLowerCase().includes(searchQuery.toLowerCase())) ||
         (log.ip && log.ip.includes(searchQuery)) ||
@@ -146,6 +152,9 @@ export default function VisitorAnalyticsModal({ isOpen, onClose }) {
       if (!matchesSearch) return false;
 
       if (filterType === 'all') return true;
+      if (filterType === 'identified') {
+        return Boolean(log.customerName || log.customerPhone);
+      }
       if (filterType === 'today') {
         return new Date(log.timestamp).toDateString() === new Date().toDateString();
       }
@@ -339,14 +348,14 @@ export default function VisitorAnalyticsModal({ isOpen, onClose }) {
           <div className="flex-1 flex flex-col overflow-hidden">
             
             {/* Top KPI Metrics Bar */}
-            <div className="p-4 sm:p-6 bg-[#161616] border-b border-[#262626] grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+            <div className="p-4 sm:p-6 bg-[#161616] border-b border-[#262626] grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
               
               <div className="bg-[#1C1C1C] border border-[#2E2E2E] rounded-2xl p-3.5 flex items-center gap-3">
                 <div className="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center">
                   <Eye className="w-5 h-5" />
                 </div>
                 <div>
-                  <span className="text-[11px] uppercase tracking-wider text-stone-400 font-semibold block">
+                  <span className="text-[10px] uppercase tracking-wider text-stone-400 font-semibold block">
                     Total Visits
                   </span>
                   <span className="text-xl sm:text-2xl font-black text-white">
@@ -360,11 +369,26 @@ export default function VisitorAnalyticsModal({ isOpen, onClose }) {
                   <Users className="w-5 h-5" />
                 </div>
                 <div>
-                  <span className="text-[11px] uppercase tracking-wider text-stone-400 font-semibold block">
+                  <span className="text-[10px] uppercase tracking-wider text-stone-400 font-semibold block">
                     Unique Visitors
                   </span>
                   <span className="text-xl sm:text-2xl font-black text-white">
                     {stats.uniqueIps}
+                  </span>
+                </div>
+              </div>
+
+              {/* Identified Customers Card */}
+              <div className="bg-amber-500/10 border border-amber-500/40 rounded-2xl p-3.5 flex items-center gap-3 shadow-inner">
+                <div className="w-10 h-10 rounded-xl bg-amber-500 text-black flex items-center justify-center font-bold">
+                  <User className="w-5 h-5" />
+                </div>
+                <div>
+                  <span className="text-[10px] uppercase tracking-wider text-amber-400 font-bold block">
+                    Names &amp; Phones
+                  </span>
+                  <span className="text-xl sm:text-2xl font-black text-amber-300">
+                    {stats.identifiedCount}
                   </span>
                 </div>
               </div>
@@ -374,7 +398,7 @@ export default function VisitorAnalyticsModal({ isOpen, onClose }) {
                   <Clock className="w-5 h-5" />
                 </div>
                 <div>
-                  <span className="text-[11px] uppercase tracking-wider text-stone-400 font-semibold block">
+                  <span className="text-[10px] uppercase tracking-wider text-stone-400 font-semibold block">
                     Today's Visits
                   </span>
                   <span className="text-xl sm:text-2xl font-black text-emerald-400">
@@ -383,12 +407,12 @@ export default function VisitorAnalyticsModal({ isOpen, onClose }) {
                 </div>
               </div>
 
-              <div className="bg-[#1C1C1C] border border-[#2E2E2E] rounded-2xl p-3.5 flex items-center gap-3">
+              <div className="bg-[#1C1C1C] border border-[#2E2E2E] rounded-2xl p-3.5 flex items-center gap-3 col-span-2 sm:col-span-1">
                 <div className="w-10 h-10 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center">
                   <Smartphone className="w-5 h-5" />
                 </div>
                 <div>
-                  <span className="text-[11px] uppercase tracking-wider text-stone-400 font-semibold block">
+                  <span className="text-[10px] uppercase tracking-wider text-stone-400 font-semibold block">
                     Mobile Share
                   </span>
                   <span className="text-xl sm:text-2xl font-black text-white">
@@ -496,6 +520,7 @@ export default function VisitorAnalyticsModal({ isOpen, onClose }) {
                     <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
                       {[
                         { id: 'all', label: 'All Visitors' },
+                        { id: 'identified', label: `👤 With Name & Phone (${stats.identifiedCount})` },
                         { id: 'today', label: '📅 Today' },
                         { id: 'rohtak', label: '📍 Rohtak / Haryana' },
                         { id: 'mobile', label: '📱 Mobile' },
@@ -506,7 +531,7 @@ export default function VisitorAnalyticsModal({ isOpen, onClose }) {
                           onClick={() => setFilterType(pill.id)}
                           className={`px-3 py-1.5 rounded-xl whitespace-nowrap font-medium transition-all ${
                             filterType === pill.id
-                              ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
+                              ? 'bg-amber-500 text-stone-950 font-bold border border-amber-400 shadow-md'
                               : 'bg-[#181818] text-stone-400 border border-[#2A2A2A] hover:text-white'
                           }`}
                         >
@@ -534,6 +559,71 @@ export default function VisitorAnalyticsModal({ isOpen, onClose }) {
                           key={item.id || idx}
                           className="bg-[#181818] hover:bg-[#1D1D1D] border border-[#292929] hover:border-amber-500/30 rounded-2xl p-4 transition-all space-y-3"
                         >
+                          {/* Identified Customer Banner */}
+                          {item.customerName || item.customerPhone ? (
+                            <div className="bg-gradient-to-r from-amber-500/15 via-amber-500/10 to-transparent border border-amber-500/35 rounded-xl p-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+                              <div className="flex items-center gap-3">
+                                <div className="w-9 h-9 rounded-xl bg-amber-500 text-stone-950 flex items-center justify-center font-black text-sm shrink-0 shadow-md">
+                                  {item.customerName ? item.customerName[0].toUpperCase() : 'C'}
+                                </div>
+                                <div>
+                                  <div className="flex items-center gap-2">
+                                    <span className="font-bold text-white text-sm">
+                                      {item.customerName || 'Identified Customer'}
+                                    </span>
+                                    <span className="text-[10px] bg-emerald-500/15 text-emerald-300 font-extrabold px-2 py-0.5 rounded-full border border-emerald-500/30">
+                                      ✓ Name Captured
+                                    </span>
+                                  </div>
+                                  <div className="text-xs text-stone-300 flex flex-wrap items-center gap-3 pt-0.5">
+                                    {item.customerPhone && (
+                                      <span className="font-mono text-amber-300 font-semibold flex items-center gap-1">
+                                        <Phone className="w-3 h-3 text-amber-400" />
+                                        {item.customerPhone}
+                                      </span>
+                                    )}
+                                    {item.customerEmail && (
+                                      <span className="text-stone-400 text-[11px] hidden md:inline">
+                                        ✉️ {item.customerEmail}
+                                      </span>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+
+                              {item.customerPhone && (
+                                <div className="flex items-center gap-2 self-start sm:self-auto shrink-0 pt-1 sm:pt-0">
+                                  <a
+                                    href={`https://wa.me/${item.customerPhone.replace(/\D/g, '')}?text=Hello%20${encodeURIComponent(item.customerName || 'Foodie')},%20greetings%20from%20The%20Black%20Cat%20Cafe!%20Saw%20you%20checked%20out%20our%20menu.%20How%20can%20we%20treat%20you%20today?`}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center gap-1.5 transition-colors shadow-sm"
+                                    title="Send WhatsApp message"
+                                  >
+                                    <span>💬 WhatsApp</span>
+                                  </a>
+                                  <a
+                                    href={`tel:${item.customerPhone.replace(/\s+/g, '')}`}
+                                    className="px-3 py-1.5 rounded-xl bg-[#282828] hover:bg-[#333333] text-stone-200 hover:text-white font-semibold text-xs flex items-center gap-1.5 transition-colors border border-stone-700"
+                                    title="Call Customer"
+                                  >
+                                    <span>📞 Call</span>
+                                  </a>
+                                </div>
+                              )}
+                            </div>
+                          ) : (
+                            <div className="bg-[#141414] border border-[#222222] rounded-xl px-3 py-1.5 flex items-center justify-between text-[11px] text-stone-500">
+                              <span className="flex items-center gap-1.5">
+                                <span>👤 Guest Visitor</span>
+                                <span className="text-stone-600">(Has not submitted VIP Welcome form yet)</span>
+                              </span>
+                              <span className="text-[10px] text-amber-400/80 font-medium">
+                                IP &amp; Location Logged
+                              </span>
+                            </div>
+                          )}
+
                           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#252525] pb-2.5">
                             
                             {/* Location & Flag */}

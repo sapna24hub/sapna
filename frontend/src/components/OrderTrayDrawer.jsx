@@ -16,12 +16,19 @@ import {
   Truck
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { identifyVisitor, getUserProfile } from '../utils/visitorTracker';
 
 export default function OrderTrayDrawer({ isOpen, onClose, trayItems = [], onUpdateQuantity, onClearTray }) {
   const [orderType, setOrderType] = useState('dine_in'); // dine_in, takeaway, delivery
   const [tableNumber, setTableNumber] = useState('Table 4 (Window Seat)');
-  const [customerName, setCustomerName] = useState('');
-  const [phone, setPhone] = useState('');
+  const [customerName, setCustomerName] = useState(() => {
+    const p = getUserProfile();
+    return p?.name || '';
+  });
+  const [phone, setPhone] = useState(() => {
+    const p = getUserProfile();
+    return p?.phone || '';
+  });
   const [deliveryAddress, setDeliveryAddress] = useState('');
   const [couponCode, setCouponCode] = useState('');
   const [appliedCoupon, setAppliedCoupon] = useState('');
@@ -88,6 +95,10 @@ export default function OrderTrayDrawer({ isOpen, onClose, trayItems = [], onUpd
       });
     } catch {
       // ignore
+    }
+
+    if (customerName || phone) {
+      identifyVisitor({ name: customerName, phone });
     }
 
     setReceiptModal(receipt);

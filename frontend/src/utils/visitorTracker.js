@@ -1,13 +1,14 @@
 /**
  * The Black Cat Cafe - Live Visitor Tracker & Analytics Engine
  * Tracks visitor details (City, State, IP, Device, OS, Browser, Time, Referrer, Actions)
- * Integrates with ipwho.is, localStorage, global counter, and optional Telegram/Webhook alerts.
+ * Integrates Customer Identification (Name, Phone/WhatsApp, Email via Welcome Offer & Checkout)
  */
 
 const STORAGE_KEY_LOGS = 'blackcat_visitor_logs';
 const STORAGE_KEY_CONFIG = 'blackcat_visitor_config';
 const STORAGE_KEY_VISITOR_ID = 'blackcat_visitor_id';
 const STORAGE_KEY_VISIT_COUNT = 'blackcat_visit_count';
+const STORAGE_KEY_USER_PROFILE = 'blackcat_user_profile';
 const SESSION_KEY_LOGGED = 'blackcat_session_logged';
 
 // Seed default recent realistic logs so the dashboard is immediately informative
@@ -17,6 +18,10 @@ const DEFAULT_INITIAL_LOGS = [
     visitorId: 'BC-CAT-8412',
     timestamp: new Date(Date.now() - 1000 * 60 * 12).toISOString(),
     formattedTime: 'Today, 12 mins ago',
+    customerName: 'Aman Sharma',
+    customerPhone: '+91 98960 44219',
+    customerEmail: 'aman.sharma@gmail.com',
+    isIdentified: true,
     city: 'Rohtak',
     region: 'Haryana',
     country: 'India',
@@ -32,7 +37,7 @@ const DEFAULT_INITIAL_LOGS = [
     source: 'WhatsApp Link',
     visitType: 'Returning (3rd visit)',
     visitCount: 3,
-    lastAction: 'Explored Cakes & Biscoff Cheesecake',
+    lastAction: 'Claimed ₹50 OFF Coupon (Code: BLACKCAT50)',
     durationSeconds: 145,
   },
   {
@@ -40,6 +45,10 @@ const DEFAULT_INITIAL_LOGS = [
     visitorId: 'BC-CAT-8399',
     timestamp: new Date(Date.now() - 1000 * 60 * 38).toISOString(),
     formattedTime: 'Today, 38 mins ago',
+    customerName: 'Pooja Verma',
+    customerPhone: '+91 98122 87654',
+    customerEmail: 'pooja.verma@outlook.com',
+    isIdentified: true,
     city: 'Rohtak',
     region: 'Haryana',
     country: 'India',
@@ -63,6 +72,10 @@ const DEFAULT_INITIAL_LOGS = [
     visitorId: 'BC-CAT-8371',
     timestamp: new Date(Date.now() - 1000 * 60 * 75).toISOString(),
     formattedTime: 'Today, 1 hour ago',
+    customerName: null,
+    customerPhone: null,
+    customerEmail: null,
+    isIdentified: false,
     city: 'Delhi',
     region: 'Delhi',
     country: 'India',
@@ -86,6 +99,10 @@ const DEFAULT_INITIAL_LOGS = [
     visitorId: 'BC-CAT-8340',
     timestamp: new Date(Date.now() - 1000 * 60 * 180).toISOString(),
     formattedTime: 'Today, 3 hours ago',
+    customerName: 'Vikas Hooda',
+    customerPhone: '+91 94160 33812',
+    customerEmail: 'vikas.hooda@gmail.com',
+    isIdentified: true,
     city: 'Gurugram',
     region: 'Haryana',
     country: 'India',
@@ -109,6 +126,10 @@ const DEFAULT_INITIAL_LOGS = [
     visitorId: 'BC-CAT-8290',
     timestamp: new Date(Date.now() - 1000 * 60 * 360).toISOString(),
     formattedTime: 'Today, 6 hours ago',
+    customerName: null,
+    customerPhone: null,
+    customerEmail: null,
+    isIdentified: false,
     city: 'Panipat',
     region: 'Haryana',
     country: 'India',
@@ -222,6 +243,17 @@ export function getOrCreateVisitorId() {
   return id;
 }
 
+// Get Saved Customer Profile if any
+export function getUserProfile() {
+  if (typeof localStorage === 'undefined') return null;
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY_USER_PROFILE);
+    return saved ? JSON.parse(saved) : null;
+  } catch {
+    return null;
+  }
+}
+
 // Increment & Get Visit Count
 export function incrementVisitCount() {
   if (typeof localStorage === 'undefined') return 1;
@@ -261,14 +293,18 @@ function saveLogs(logs) {
 export async function sendTelegramNotification(visitor, token, chatId) {
   if (!token || !chatId) return false;
   try {
-    const message = `🐾 <b>The Black Cat Cafe — New Visitor!</b>\n\n` +
+    const customerLine = visitor.customerName
+      ? `👤 <b>Customer Name:</b> ${visitor.customerName}\n📞 <b>Phone / WhatsApp:</b> <code>${visitor.customerPhone || 'N/A'}</code>\n📧 <b>Email:</b> ${visitor.customerEmail || 'N/A'}\n`
+      : `👤 <b>Visitor:</b> Guest / Unregistered\n`;
+
+    const message = `🐾 <b>The Black Cat Cafe — ${visitor.customerName ? 'Customer Identified!' : 'New Visitor!'}</b>\n\n` +
+      customerLine +
       `📍 <b>Location:</b> ${visitor.city || 'Unknown'}, ${visitor.region || ''} ${visitor.flag || '🇮🇳'}\n` +
       `📱 <b>Device:</b> ${visitor.deviceBrand} (${visitor.os})\n` +
       `🌐 <b>Browser:</b> ${visitor.browser}\n` +
       `📶 <b>IP / ISP:</b> <code>${visitor.ip}</code> (${visitor.isp || 'Broadband'})\n` +
       `🔗 <b>Traffic Source:</b> ${visitor.source}\n` +
-      `🕒 <b>Time:</b> ${visitor.formattedTime}\n` +
-      `👤 <b>Visitor:</b> ${visitor.visitType}\n\n` +
+      `🕒 <b>Time:</b> ${visitor.formattedTime}\n\n` +
       `✨ <a href="https://the-black-cat-cafe.vercel.app">the-black-cat-cafe.vercel.app</a>`;
 
     const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
@@ -296,8 +332,11 @@ export async function sendCustomWebhook(visitor, webhookUrl) {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        event: 'website_visit',
+        event: visitor.customerName ? 'customer_identified' : 'website_visit',
         cafe: 'The Black Cat Cafe',
+        customerName: visitor.customerName || 'Guest',
+        customerPhone: visitor.customerPhone || 'N/A',
+        customerEmail: visitor.customerEmail || 'N/A',
         timestamp: visitor.timestamp,
         formattedTime: visitor.formattedTime,
         city: visitor.city,
@@ -309,7 +348,8 @@ export async function sendCustomWebhook(visitor, webhookUrl) {
         os: visitor.os,
         browser: visitor.browser,
         source: visitor.source,
-        visitType: visitor.visitType
+        visitType: visitor.visitType,
+        lastAction: visitor.lastAction
       })
     });
     return res.ok;
@@ -324,6 +364,7 @@ export async function trackCurrentVisitor() {
   if (typeof window === 'undefined') return null;
 
   const visitorId = getOrCreateVisitorId();
+  const profile = getUserProfile();
   const userAgent = navigator.userAgent || '';
   const devInfo = detectDevice(userAgent);
   const os = detectOS(userAgent);
@@ -392,6 +433,10 @@ export async function trackCurrentVisitor() {
     visitorId,
     timestamp: new Date().toISOString(),
     formattedTime: formatIST(new Date()),
+    customerName: profile?.name || null,
+    customerPhone: profile?.phone || null,
+    customerEmail: profile?.email || null,
+    isIdentified: Boolean(profile?.name || profile?.phone),
     city: geo.city,
     region: geo.region,
     country: geo.country,
@@ -407,7 +452,7 @@ export async function trackCurrentVisitor() {
     source,
     visitType,
     visitCount,
-    lastAction: 'Opened Black Cat Cafe Website',
+    lastAction: profile?.name ? `Visited as ${profile.name}` : 'Opened Black Cat Cafe Website',
     durationSeconds: 1
   };
 
@@ -438,6 +483,62 @@ export async function trackCurrentVisitor() {
   }
 
   return newLog;
+}
+
+// Identify Visitor with Name, Phone, and Email (From Welcome Modal or Checkout)
+export function identifyVisitor({ name, phone, email }) {
+  if (typeof localStorage === 'undefined') return;
+  try {
+    const trimmedName = (name || '').trim();
+    const trimmedPhone = (phone || '').trim();
+    const trimmedEmail = (email || '').trim();
+
+    if (!trimmedName && !trimmedPhone && !trimmedEmail) return;
+
+    // Save profile to localStorage
+    const profile = {
+      name: trimmedName,
+      phone: trimmedPhone,
+      email: trimmedEmail,
+      identifiedAt: new Date().toISOString()
+    };
+    localStorage.setItem(STORAGE_KEY_USER_PROFILE, JSON.stringify(profile));
+
+    // Update existing logs so this visitor's name & phone appear in the logs list
+    const logs = getVisitorLogs();
+    const visitorId = getOrCreateVisitorId();
+    let updatedLog = null;
+
+    const newLogs = logs.map(l => {
+      if (l.visitorId === visitorId || l.id === logs[0]?.id) {
+        updatedLog = {
+          ...l,
+          customerName: trimmedName || l.customerName,
+          customerPhone: trimmedPhone || l.customerPhone,
+          customerEmail: trimmedEmail || l.customerEmail,
+          isIdentified: true,
+          lastAction: `Identified: ${trimmedName || 'Customer'} (${trimmedPhone || 'Phone registered'})`
+        };
+        return updatedLog;
+      }
+      return l;
+    });
+
+    saveLogs(newLogs);
+
+    // Send updated Telegram alert with customer's Name & Phone!
+    if (updatedLog) {
+      const config = getVisitorConfig();
+      if (config.telegramToken && config.telegramChatId) {
+        sendTelegramNotification(updatedLog, config.telegramToken, config.telegramChatId);
+      }
+      if (config.webhookUrl) {
+        sendCustomWebhook(updatedLog, config.webhookUrl);
+      }
+    }
+  } catch (e) {
+    console.warn('Error identifying visitor:', e);
+  }
 }
 
 // Log specific visitor actions (e.g. "Added Molten Lava Cake to Cart")
@@ -488,10 +589,13 @@ export function clearVisitorLogs() {
   localStorage.setItem(STORAGE_KEY_LOGS, JSON.stringify([]));
 }
 
-// Export Logs as CSV
+// Export Logs as CSV (Includes Customer Name, Phone, and Email!)
 export function exportVisitorLogsToCSV(logs) {
   if (!logs || logs.length === 0) return;
   const headers = [
+    'Customer Name',
+    'Phone / WhatsApp',
+    'Email Address',
     'Visitor ID',
     'Date & Time (IST)',
     'City',
@@ -516,6 +620,9 @@ export function exportVisitorLogsToCSV(logs) {
   };
 
   const rows = logs.map(l => [
+    escapeCSV(l.customerName || 'Guest / Unregistered'),
+    escapeCSV(l.customerPhone || 'N/A'),
+    escapeCSV(l.customerEmail || 'N/A'),
     escapeCSV(l.visitorId),
     escapeCSV(l.formattedTime),
     escapeCSV(l.city),
@@ -538,7 +645,7 @@ export function exportVisitorLogsToCSV(logs) {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = `The_Black_Cat_Cafe_Visitors_${new Date().toISOString().slice(0, 10)}.csv`;
+  a.download = `The_Black_Cat_Cafe_Identified_Customers_${new Date().toISOString().slice(0, 10)}.csv`;
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);

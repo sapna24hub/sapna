@@ -11,6 +11,7 @@ import OrderTrayDrawer from './components/OrderTrayDrawer';
 import AIAssistantChatbot from './components/AIAssistantChatbot';
 import Footer from './components/Footer';
 import VisitorAnalyticsModal from './components/VisitorAnalyticsModal';
+import WelcomeOfferModal from './components/WelcomeOfferModal';
 import { trackCurrentVisitor, logVisitorAction } from './utils/visitorTracker';
 
 export default function App() {
@@ -26,10 +27,20 @@ export default function App() {
 
   const [trayOpen, setTrayOpen] = useState(false);
   const [adminModalOpen, setAdminModalOpen] = useState(false);
+  const [welcomeOfferOpen, setWelcomeOfferOpen] = useState(false);
 
-  // Initialize live visitor tracking on page mount
+  // Initialize live visitor tracking on page mount & offer trigger
   useEffect(() => {
     trackCurrentVisitor();
+
+    // Auto-prompt VIP Welcome Offer after 3.5 seconds if not dismissed this session
+    const dismissed = sessionStorage.getItem('blackcat_offer_dismissed');
+    if (!dismissed) {
+      const timer = setTimeout(() => {
+        setWelcomeOfferOpen(true);
+      }, 3500);
+      return () => clearTimeout(timer);
+    }
   }, []);
 
   useEffect(() => {
@@ -86,6 +97,7 @@ export default function App() {
         trayItems={trayItems}
         onOpenTray={() => setTrayOpen(true)}
         onOpenAdmin={() => setAdminModalOpen(true)}
+        onOpenOffer={() => setWelcomeOfferOpen(true)}
       />
 
       <main className="flex-1">
@@ -136,6 +148,15 @@ export default function App() {
       <VisitorAnalyticsModal
         isOpen={adminModalOpen}
         onClose={() => setAdminModalOpen(false)}
+      />
+
+      {/* First-Time VIP Welcome Offer Modal */}
+      <WelcomeOfferModal
+        isOpen={welcomeOfferOpen}
+        onClose={() => {
+          setWelcomeOfferOpen(false);
+          sessionStorage.setItem('blackcat_offer_dismissed', 'true');
+        }}
       />
 
       {/* Modern Dark Footer */}

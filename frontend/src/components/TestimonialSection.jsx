@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Star, Quote, Heart, Sparkles, Check, MessageSquare, X, Cat, Plus } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { identifyVisitor } from '../utils/visitorTracker';
 
 export default function TestimonialSection() {
   const [modalOpen, setModalOpen] = useState(false);
@@ -118,6 +119,9 @@ export default function TestimonialSection() {
     };
 
     setReviews([newReview, ...reviews]);
+    if (formData.author_name) {
+      identifyVisitor({ name: formData.author_name.trim() });
+    }
     try {
       const saved = localStorage.getItem('blackcat_user_reviews');
       const existing = saved ? JSON.parse(saved) : [];

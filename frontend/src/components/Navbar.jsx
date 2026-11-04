@@ -13,7 +13,7 @@ import {
   ShieldCheck
 } from 'lucide-react';
 
-export default function Navbar({ trayItems = [], onOpenTray, onOpenAdmin }) {
+export default function Navbar({ trayItems = [], onOpenTray, onOpenAdmin, onOpenOffer }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isOpenNow, setIsOpenNow] = useState(true);
@@ -65,9 +65,12 @@ export default function Navbar({ trayItems = [], onOpenTray, onOpenAdmin }) {
               🛵 FREE Delivery on orders above ₹300!
             </span>
             <span className="hidden lg:inline text-stone-600">•</span>
-            <span className="hidden lg:inline text-amber-200/90 font-medium">
-              🔥 Free Garlic Bread above ₹499 (Code: BLACKCAT50)
-            </span>
+            <button
+              onClick={onOpenOffer}
+              className="hidden lg:inline-flex items-center gap-1 text-amber-300 hover:text-white bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 px-2.5 py-0.5 rounded-full font-bold transition-all"
+            >
+              <span>🎁 Claim ₹50 OFF Coupon</span>
+            </button>
           </div>
 
           <div className="flex items-center gap-3 text-stone-300 text-[11px] font-medium">
