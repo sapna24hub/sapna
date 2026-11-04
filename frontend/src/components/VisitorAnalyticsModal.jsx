@@ -36,6 +36,12 @@ import {
   sendCustomWebhook,
   formatIST
 } from '../utils/visitorTracker';
+import { 
+  getGoogleClientId, 
+  saveGoogleClientId, 
+  getGoogleSearchConsoleTag, 
+  saveGoogleSearchConsoleTag 
+} from '../utils/googleAuth';
 
 export default function VisitorAnalyticsModal({ isOpen, onClose }) {
   // Authentication State
@@ -49,13 +55,18 @@ export default function VisitorAnalyticsModal({ isOpen, onClose }) {
   // Dashboard State
   const [logs, setLogs] = useState([]);
   const [config, setConfig] = useState({ pin: '1234', telegramToken: '', telegramChatId: '', webhookUrl: '' });
-  const [activeTab, setActiveTab] = useState('logs'); // 'logs', 'alerts', 'settings'
+  const [activeTab, setActiveTab] = useState('logs'); // 'logs', 'alerts', 'google', 'settings'
   const [searchQuery, setSearchQuery] = useState('');
   const [filterType, setFilterType] = useState('all'); // 'all', 'today', 'rohtak', 'mobile', 'whatsapp'
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [testAlertStatus, setTestAlertStatus] = useState(null); // 'sending', 'success', 'error'
   const [newPinInput, setNewPinInput] = useState('');
   const [pinChangeSuccess, setPinChangeSuccess] = useState(false);
+
+  // Google Console State
+  const [googleClientIdInput, setGoogleClientIdInput] = useState(() => getGoogleClientId());
+  const [googleSearchTagInput, setGoogleSearchTagInput] = useState(() => getGoogleSearchConsoleTag());
+  const [googleSaveSuccess, setGoogleSaveSuccess] = useState(false);
 
   // Load data on open
   useEffect(() => {
@@ -225,6 +236,15 @@ export default function VisitorAnalyticsModal({ isOpen, onClose }) {
     } else {
       alert('Please enter at least a 4-digit PIN');
     }
+  };
+
+  // Handle Save Google Console Credentials
+  const handleSaveGoogleSettings = (e) => {
+    e.preventDefault();
+    saveGoogleClientId(googleClientIdInput);
+    saveGoogleSearchConsoleTag(googleSearchTagInput);
+    setGoogleSaveSuccess(true);
+    setTimeout(() => setGoogleSaveSuccess(false), 3500);
   };
 
   // Handle Clear Logs
@@ -449,6 +469,21 @@ export default function VisitorAnalyticsModal({ isOpen, onClose }) {
                   <Bell className="w-3.5 h-3.5" />
                   <span>Mobile Alerts (Telegram / Webhook)</span>
                   {config.telegramToken && (
+                    <span className="w-2 h-2 rounded-full bg-emerald-400" />
+                  )}
+                </button>
+
+                <button
+                  onClick={() => setActiveTab('google')}
+                  className={`px-4 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 border ${
+                    activeTab === 'google'
+                      ? 'bg-amber-500 text-black border-amber-400 shadow-md'
+                      : 'bg-[#1C1C1C] text-stone-400 border-transparent hover:text-white'
+                  }`}
+                >
+                  <Globe className="w-3.5 h-3.5 text-sky-400" />
+                  <span>Google Console</span>
+                  {googleClientIdInput && (
                     <span className="w-2 h-2 rounded-full bg-emerald-400" />
                   )}
                 </button>
@@ -833,7 +868,120 @@ export default function VisitorAnalyticsModal({ isOpen, onClose }) {
                 </div>
               )}
 
-              {/* TAB 3: SETTINGS & EXPORT */}
+              {/* TAB 3: GOOGLE CONSOLE INTEGRATION */}
+              {activeTab === 'google' && (
+                <div className="space-y-6 max-w-2xl mx-auto py-2">
+                  
+                  {/* Google Cloud Console OAuth 2.0 Sign-In */}
+                  <form onSubmit={handleSaveGoogleSettings} className="bg-[#181818] border border-[#2E2E2E] rounded-2xl p-5 space-y-4">
+                    <div className="flex items-center justify-between border-b border-white/10 pb-3">
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-8 h-8 rounded-xl bg-white text-black flex items-center justify-center font-bold">
+                          G
+                        </div>
+                        <div>
+                          <h4 className="font-serif text-sm font-bold text-white">
+                            Google Cloud Console (Sign in with Google OAuth)
+                          </h4>
+                          <span className="text-[11px] text-stone-400">
+                            Enable customers to 1-click Sign in with their Google/Gmail account
+                          </span>
+                        </div>
+                      </div>
+
+                      <a
+                        href="https://console.cloud.google.com/"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="px-2.5 py-1.5 bg-blue-600/20 hover:bg-blue-600/30 text-blue-300 border border-blue-500/30 rounded-xl text-xs font-bold transition-colors flex items-center gap-1"
+                      >
+                        <span>Console</span>
+                        <ExternalLink className="w-3 h-3" />
+                      </a>
+                    </div>
+
+                    {/* Step-by-Step Instructions */}
+                    <div className="bg-[#141414] border border-[#252525] rounded-xl p-3.5 space-y-2 text-xs text-stone-300 leading-relaxed">
+                      <span className="text-[10px] uppercase font-bold text-amber-400 tracking-wider block">
+                        Google Cloud Console Me Setup Kaise Karein (Easy 5 Steps):
+                      </span>
+                      <ol className="list-decimal list-inside space-y-1.5 text-[11px] text-stone-300">
+                        <li><a href="https://console.cloud.google.com/" target="_blank" rel="noreferrer" className="text-sky-400 underline">console.cloud.google.com</a> par jakar apna <strong>New Project</strong> banayein (*The Black Cat Cafe*).</li>
+                        <li>Left menu me <strong>APIs &amp; Services &gt; OAuth consent screen</strong> open karke User Type <em>External</em> select karein aur Cafe App Name dalein.</li>
+                        <li><strong>Credentials &gt; Create Credentials &gt; OAuth client ID</strong> par click karein aur Application Type: <strong>Web application</strong> chunein.</li>
+                        <li><strong>Authorized JavaScript origins</strong> me ye exact URL dalein:
+                          <code className="block bg-black text-amber-300 p-1.5 rounded-lg mt-1 font-mono text-[11px]">
+                            https://the-black-cat-cafe.vercel.app
+                          </code>
+                        </li>
+                        <li>Google aapko ek <strong>Client ID</strong> dega (e.g. <code>123456789-xxx.apps.googleusercontent.com</code>). Use neeche paste karke Save karein.</li>
+                      </ol>
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-bold text-white block">
+                        Google OAuth Client ID
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="e.g. 1029384756-abcdefghijk.apps.googleusercontent.com"
+                        value={googleClientIdInput}
+                        onChange={(e) => setGoogleClientIdInput(e.target.value)}
+                        className="w-full bg-[#121212] border border-[#333333] focus:border-amber-500 text-white px-3.5 py-2.5 rounded-xl text-xs outline-none font-mono"
+                      />
+                      <p className="text-[10px] text-stone-500">
+                        {googleClientIdInput ? '✓ Custom Google Client ID configured' : 'Note: Website already has a built-in instant Google login flow active even without a custom ID.'}
+                      </p>
+                    </div>
+
+                    {/* Google Search Console SEO Section */}
+                    <div className="pt-3 border-t border-white/10 space-y-2">
+                      <div className="flex items-center justify-between">
+                        <label className="text-xs font-bold text-white block">
+                          Google Search Console (Site Verification Code / Meta Tag)
+                        </label>
+                        <a
+                          href="https://search.google.com/search-console"
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-[11px] text-sky-400 underline flex items-center gap-0.5"
+                        >
+                          <span>search.google.com</span>
+                          <ExternalLink className="w-2.5 h-2.5" />
+                        </a>
+                      </div>
+                      <input
+                        type="text"
+                        placeholder="e.g. google-site-verification=abc123xyz or verification string"
+                        value={googleSearchTagInput}
+                        onChange={(e) => setGoogleSearchTagInput(e.target.value)}
+                        className="w-full bg-[#121212] border border-[#333333] focus:border-amber-500 text-white px-3.5 py-2.5 rounded-xl text-xs outline-none font-mono"
+                      />
+                      <p className="text-[10px] text-stone-400">
+                        Aapki site Google Search par index aur verify karne ke liye Search Console ka verification code yahan save karein.
+                      </p>
+                    </div>
+
+                    <button
+                      type="submit"
+                      className="w-full bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold py-2.5 rounded-xl text-xs transition-colors flex items-center justify-center gap-1.5"
+                    >
+                      <CheckCircle2 className="w-4 h-4" />
+                      <span>Save Google Console Settings</span>
+                    </button>
+
+                    {googleSaveSuccess && (
+                      <p className="text-emerald-400 text-xs font-semibold text-center flex items-center justify-center gap-1 pt-1">
+                        <CheckCircle2 className="w-4 h-4" />
+                        Google Console credentials saved successfully!
+                      </p>
+                    )}
+                  </form>
+
+                </div>
+              )}
+
+              {/* TAB 4: SETTINGS & EXPORT */}
               {activeTab === 'settings' && (
                 <div className="space-y-6 max-w-2xl mx-auto py-2">
                   

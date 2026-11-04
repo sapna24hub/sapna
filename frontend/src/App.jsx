@@ -12,6 +12,7 @@ import AIAssistantChatbot from './components/AIAssistantChatbot';
 import Footer from './components/Footer';
 import VisitorAnalyticsModal from './components/VisitorAnalyticsModal';
 import WelcomeOfferModal from './components/WelcomeOfferModal';
+import GoogleLoginModal from './components/GoogleLoginModal';
 import { trackCurrentVisitor, logVisitorAction } from './utils/visitorTracker';
 
 export default function App() {
@@ -28,6 +29,7 @@ export default function App() {
   const [trayOpen, setTrayOpen] = useState(false);
   const [adminModalOpen, setAdminModalOpen] = useState(false);
   const [welcomeOfferOpen, setWelcomeOfferOpen] = useState(false);
+  const [googleModalOpen, setGoogleModalOpen] = useState(false);
 
   // Initialize live visitor tracking on page mount & offer trigger
   useEffect(() => {
@@ -98,6 +100,7 @@ export default function App() {
         onOpenTray={() => setTrayOpen(true)}
         onOpenAdmin={() => setAdminModalOpen(true)}
         onOpenOffer={() => setWelcomeOfferOpen(true)}
+        onOpenGoogleLogin={() => setGoogleModalOpen(true)}
       />
 
       <main className="flex-1">
@@ -157,6 +160,12 @@ export default function App() {
           setWelcomeOfferOpen(false);
           sessionStorage.setItem('blackcat_offer_dismissed', 'true');
         }}
+      />
+
+      {/* Google Console OAuth Login Modal */}
+      <GoogleLoginModal
+        isOpen={googleModalOpen}
+        onClose={() => setGoogleModalOpen(false)}
       />
 
       {/* Modern Dark Footer */}

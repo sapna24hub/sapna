@@ -12,11 +12,26 @@ import {
   Phone,
   ShieldCheck
 } from 'lucide-react';
+import { GoogleGIcon } from './GoogleLoginModal';
+import { getSavedGoogleUser } from '../utils/googleAuth';
 
-export default function Navbar({ trayItems = [], onOpenTray, onOpenAdmin, onOpenOffer }) {
+export default function Navbar({ trayItems = [], onOpenTray, onOpenAdmin, onOpenOffer, onOpenGoogleLogin }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isOpenNow, setIsOpenNow] = useState(true);
+  const [googleUser, setGoogleUser] = useState(() => getSavedGoogleUser());
+
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setGoogleUser(getSavedGoogleUser());
+    };
+    window.addEventListener('storage', handleStorageChange);
+    const interval = setInterval(handleStorageChange, 2000);
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      clearInterval(interval);
+    };
+  }, []);
 
   // Check if cafe is currently open (9:00 AM - 11:00 PM)
   useEffect(() => {
@@ -164,6 +179,16 @@ export default function Navbar({ trayItems = [], onOpenTray, onOpenAdmin, onOpen
               <ShieldCheck className="w-3.5 h-3.5 text-amber-600" />
               <span>Live Visitors</span>
             </button>
+
+            {/* Google Console Login Button */}
+            <button
+              onClick={onOpenGoogleLogin}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-stone-300 bg-white hover:bg-stone-50 text-stone-900 text-xs font-bold transition-all shadow-xs"
+              title="Sign in with Google"
+            >
+              <GoogleGIcon className="w-3.5 h-3.5" />
+              <span>{googleUser ? googleUser.name.split(' ')[0] : 'Google Login'}</span>
+            </button>
           </nav>
 
           {/* Right Action: Order Tray Button */}
@@ -234,6 +259,18 @@ export default function Navbar({ trayItems = [], onOpenTray, onOpenAdmin, onOpen
               <span className="text-[10px] bg-emerald-500/10 text-emerald-700 font-bold border border-emerald-500/30 px-2 py-0.5 rounded-full flex items-center gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                 Live
+              </span>
+            </button>
+            <button
+              onClick={() => { setMobileMenuOpen(false); onOpenGoogleLogin(); }}
+              className="block w-full text-left py-2 font-bold text-stone-800 border-b border-stone-100 flex items-center justify-between"
+            >
+              <div className="flex items-center gap-2">
+                <GoogleGIcon className="w-4 h-4" />
+                <span>{googleUser ? `Signed in as ${googleUser.name}` : 'Sign in with Google'}</span>
+              </div>
+              <span className="text-[10px] bg-blue-500/10 text-blue-700 font-bold border border-blue-500/30 px-2 py-0.5 rounded-full">
+                {googleUser ? 'Connected' : 'OAuth'}
               </span>
             </button>
             <div className="pt-2">

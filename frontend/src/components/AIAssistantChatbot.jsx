@@ -88,12 +88,17 @@ export default function AIAssistantChatbot({ onAddToCart, onOpenTray, onOpenAdmi
     payment: {
       text: "💳 We accept all major secure payment options!\n\n• **⚡ Instant UPI & QR Code** (Google Pay, PhonePe, Paytm, BHIM, Cred)\n• **💵 Cash on Delivery (COD)** / Pay at Counter\n• **💳 Credit & Debit Cards** (Visa, MasterCard, RuPay with 256-bit SSL)\n• **🏦 Net Banking** (HDFC, SBI, ICICI, Axis, PNB)\n\nZero extra transaction fees! You can choose your preferred payment mode in your order cart.",
       quickReplies: ['🛒 Open Cart', '🍕 View Pizzas', '🍰 View Cakes', '🎟️ Discount Coupon']
+    },
+    google: {
+      text: "🌐 **Google Console & Google Sign-In Active!**\n\nAap website ke top menu me **'Google Login'** button par click karke 1-click me Google se sign in kar sakte hain. Cafe owners apne Visitor Dashboard me **'Google Console'** tab me jakar Google Cloud OAuth Client ID aur Google Search Console verification manage kar sakte hain!",
+      quickReplies: ['🛡️ Open Visitor Dashboard', '🛒 Open Cart', '🍕 View Pizzas']
     }
   };
 
   const generateReply = (userText) => {
     const query = userText.toLowerCase();
 
+    if (query.includes('google') || query.includes('gmail') || query.includes('oauth') || query.includes('search console')) return knowledgeBase.google;
     if (query.includes('payment') || query.includes('pay') || query.includes('upi') || query.includes('cod') || query.includes('cash') || query.includes('gpay') || query.includes('phonepe') || query.includes('qr') || query.includes('card') || query.includes('netbanking')) return knowledgeBase.payment;
     if (query.includes('visitor') || query.includes('kin kin') || query.includes('kisne') || query.includes('admin') || query.includes('owner') || query.includes('traffic') || query.includes('analytics') || query.includes('log')) return knowledgeBase.visitors;
     if (query.includes('delivery') || query.includes('deliver') || query.includes('shipping')) return knowledgeBase.delivery;

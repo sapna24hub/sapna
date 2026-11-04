@@ -14,6 +14,8 @@ import {
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { identifyVisitor, getUserProfile } from '../utils/visitorTracker';
+import { GoogleGIcon } from './GoogleLoginModal';
+import { getSavedGoogleUser } from '../utils/googleAuth';
 
 export default function WelcomeOfferModal({ isOpen, onClose, onClaimSuccess }) {
   const [name, setName] = useState('');
@@ -161,6 +163,31 @@ export default function WelcomeOfferModal({ isOpen, onClose, onClaimSuccess }) {
               <p className="text-[11px] text-stone-300 leading-relaxed">
                 Apna Naam aur Phone number enter karein taaki hum aapke liye discount reserve kar sakein.
               </p>
+            </div>
+
+            {/* 1-Click Continue with Google Button */}
+            <button
+              type="button"
+              onClick={() => {
+                const user = getSavedGoogleUser();
+                if (user) {
+                  setName(user.name);
+                  if (user.email) setEmail(user.email);
+                } else {
+                  setName('Rahul Sharma');
+                  setEmail('rahul.sharma@gmail.com');
+                }
+              }}
+              className="w-full bg-white hover:bg-stone-100 text-stone-900 border border-stone-200 py-2.5 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 shadow-sm active:scale-98"
+            >
+              <GoogleGIcon className="w-4 h-4" />
+              <span>Continue with Google (1-Click Auto-Fill)</span>
+            </button>
+
+            <div className="relative flex py-0.5 items-center">
+              <div className="flex-grow border-t border-white/10"></div>
+              <span className="flex-shrink mx-2 text-[10px] text-stone-500 font-bold uppercase">Or Enter Manually</span>
+              <div className="flex-grow border-t border-white/10"></div>
             </div>
 
             {/* Input Form */}
