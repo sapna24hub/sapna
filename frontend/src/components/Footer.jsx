@@ -1,7 +1,7 @@
 import React from 'react';
-import { Cat, Coffee, Pizza, Heart, ArrowUp, Sparkles, MapPin, Phone } from 'lucide-react';
+import { Cat, Coffee, Pizza, Heart, ArrowUp, Sparkles, MapPin, Phone, ShieldCheck } from 'lucide-react';
 
-export default function Footer() {
+export default function Footer({ onOpenAdmin }) {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -69,6 +69,15 @@ export default function Footer() {
               <li><a href="#menu" className="hover:text-amber-300 transition-colors">⚡ Fast Kitchen Orders</a></li>
               <li><a href="#testimonials" className="hover:text-amber-300 transition-colors">⭐ Customer Reviews</a></li>
               <li><a href="#contact" className="hover:text-amber-300 transition-colors">📍 Location &amp; Directions</a></li>
+              <li>
+                <button
+                  onClick={onOpenAdmin}
+                  className="hover:text-amber-300 text-amber-400 font-semibold transition-colors flex items-center gap-1.5 pt-1"
+                >
+                  <ShieldCheck className="w-3.5 h-3.5" />
+                  <span>🛡️ Visitor Intelligence (Admin)</span>
+                </button>
+              </li>
             </ul>
           </div>
 
@@ -96,7 +105,16 @@ export default function Footer() {
 
         {/* Bottom copyright bar */}
         <div className="pt-8 border-t border-[#262626] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-stone-500">
-          <p>© {new Date().getFullYear()} The Black Cat Cafe. All rights reserved.</p>
+          <div className="flex items-center gap-2">
+            <p>© {new Date().getFullYear()} The Black Cat Cafe. All rights reserved.</p>
+            <span>•</span>
+            <button
+              onClick={onOpenAdmin}
+              className="hover:text-amber-400 transition-colors text-[11px] text-stone-600 hover:underline"
+            >
+              Owner Logs
+            </button>
+          </div>
           
           <button
             onClick={scrollToTop}

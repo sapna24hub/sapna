@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Cat, MessageSquare, X, Send, Sparkles, ShoppingBag, Flame, Coffee, Pizza, RotateCcw } from 'lucide-react';
+import { Cat, MessageSquare, X, Send, Sparkles, ShoppingBag, Flame, Coffee, Pizza, RotateCcw, ShieldCheck } from 'lucide-react';
 
-export default function AIAssistantChatbot({ onAddToCart, onOpenTray }) {
+export default function AIAssistantChatbot({ onAddToCart, onOpenTray, onOpenAdmin }) {
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
@@ -79,12 +79,18 @@ export default function AIAssistantChatbot({ onAddToCart, onOpenTray }) {
       text: "Craving something sweet? 🍰 Our artisanal eggless cakes are baked fresh daily! Top picks: **Black Cat Belgian Dark Truffle (₹149)**, **New York Lotus Biscoff Cheesecake (₹179)**, and our warm **Sizzling Molten Choco Lava Cake (₹129)**. Want me to add one to your cart?",
       recommendItem: { id: 33, name: 'Black Cat Belgian Dark Truffle Cake Slice', price: 149, category: 'Cakes' },
       quickReplies: ['🍰 Belgian Dark Truffle', '🍰 Lotus Biscoff Cheesecake', '🍰 Choco Lava Cake', '🛒 Open Cart']
+    },
+    visitors: {
+      text: "🛡️ **Cafe Owner Visitor Intelligence Dashboard Active!**\n\nAap live dekh sakte hain ki kin-kin logo ne website open ki hai, unka **Sheher (City / Rohtak / Haryana), IP Address, Device (Android / iPhone), Time, aur Traffic Source (WhatsApp / Direct)**! Aap apne phone par instant Telegram alerts bhi setup kar sakte hain. Default PIN: **1234**.",
+      isVisitorAction: true,
+      quickReplies: ['🛡️ Open Visitor Dashboard', '🍕 View Pizzas', '🍰 View Cakes']
     }
   };
 
   const generateReply = (userText) => {
     const query = userText.toLowerCase();
 
+    if (query.includes('visitor') || query.includes('kin kin') || query.includes('kisne') || query.includes('admin') || query.includes('owner') || query.includes('traffic') || query.includes('analytics') || query.includes('log')) return knowledgeBase.visitors;
     if (query.includes('delivery') || query.includes('deliver') || query.includes('shipping')) return knowledgeBase.delivery;
     if (query.includes('cake') || query.includes('pastry') || query.includes('cheesecake') || query.includes('dessert') || query.includes('lava') || query.includes('sweet')) return knowledgeBase.cakes;
     if (query.includes('pizza')) return knowledgeBase.pizza;
@@ -108,6 +114,11 @@ export default function AIAssistantChatbot({ onAddToCart, onOpenTray }) {
     const text = textToSend || input.trim();
     if (!text) return;
 
+    if (text === '🛡️ Open Visitor Dashboard') {
+      if (onOpenAdmin) onOpenAdmin();
+      return;
+    }
+
     const userMessage = {
       id: Date.now(),
       sender: 'user',
@@ -125,6 +136,7 @@ export default function AIAssistantChatbot({ onAddToCart, onOpenTray }) {
         sender: 'bot',
         text: replyData.text,
         recommendItem: replyData.recommendItem,
+        isVisitorAction: replyData.isVisitorAction,
         quickReplies: replyData.quickReplies
       };
       setMessages((prev) => [...prev, botMessage]);
@@ -249,6 +261,21 @@ export default function AIAssistantChatbot({ onAddToCart, onOpenTray }) {
                       >
                         <ShoppingBag className="w-3.5 h-3.5" />
                         <span>Add &amp; View Cart</span>
+                      </button>
+                    </div>
+                  )}
+
+                  {/* Visitor Admin Dashboard Action Button */}
+                  {msg.isVisitorAction && (
+                    <div className="mt-3 pt-2.5 border-t border-white/10">
+                      <button
+                        onClick={() => {
+                          if (onOpenAdmin) onOpenAdmin();
+                        }}
+                        className="w-full px-3 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-stone-950 font-extrabold text-[11px] flex items-center justify-center gap-2 shadow-sm transition-all"
+                      >
+                        <ShieldCheck className="w-3.5 h-3.5" />
+                        <span>Open Live Visitor Dashboard</span>
                       </button>
                     </div>
                   )}

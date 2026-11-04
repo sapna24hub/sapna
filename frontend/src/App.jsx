@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Analytics } from '@vercel/analytics/react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import VibeFeatures from './components/VibeFeatures';
@@ -9,6 +10,8 @@ import ContactAndLocation from './components/ContactAndLocation';
 import OrderTrayDrawer from './components/OrderTrayDrawer';
 import AIAssistantChatbot from './components/AIAssistantChatbot';
 import Footer from './components/Footer';
+import VisitorAnalyticsModal from './components/VisitorAnalyticsModal';
+import { trackCurrentVisitor, logVisitorAction } from './utils/visitorTracker';
 
 export default function App() {
   const [trayItems, setTrayItems] = useState(() => {
@@ -22,6 +25,12 @@ export default function App() {
   });
 
   const [trayOpen, setTrayOpen] = useState(false);
+  const [adminModalOpen, setAdminModalOpen] = useState(false);
+
+  // Initialize live visitor tracking on page mount
+  useEffect(() => {
+    trackCurrentVisitor();
+  }, []);
 
   useEffect(() => {
     try {
@@ -32,6 +41,7 @@ export default function App() {
   }, [trayItems]);
 
   const handleAddToCart = (product) => {
+    logVisitorAction(`Added ${product.name} to Cart`);
     setTrayItems((prev) => {
       const existing = prev.find((item) => item.id === product.id);
       if (existing) {
@@ -68,10 +78,14 @@ export default function App() {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#0A0A0A] text-[#EDEDED] font-sans selection:bg-amber-500 selection:text-black">
+      {/* Official Vercel Web Analytics */}
+      <Analytics />
+
       {/* Top Navbar */}
       <Navbar
         trayItems={trayItems}
         onOpenTray={() => setTrayOpen(true)}
+        onOpenAdmin={() => setAdminModalOpen(true)}
       />
 
       <main className="flex-1">
@@ -106,6 +120,7 @@ export default function App() {
       <AIAssistantChatbot
         onAddToCart={handleAddToCart}
         onOpenTray={() => setTrayOpen(true)}
+        onOpenAdmin={() => setAdminModalOpen(true)}
       />
 
       {/* Slide-over Tray / Order Cart Drawer */}
@@ -117,8 +132,14 @@ export default function App() {
         onClearTray={handleClearTray}
       />
 
+      {/* Visitor Intelligence & Admin Modal */}
+      <VisitorAnalyticsModal
+        isOpen={adminModalOpen}
+        onClose={() => setAdminModalOpen(false)}
+      />
+
       {/* Modern Dark Footer */}
-      <Footer />
+      <Footer onOpenAdmin={() => setAdminModalOpen(true)} />
     </div>
   );
 }

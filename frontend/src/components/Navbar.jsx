@@ -9,10 +9,11 @@ import {
   X, 
   Sparkles, 
   MapPin, 
-  Phone
+  Phone,
+  ShieldCheck
 } from 'lucide-react';
 
-export default function Navbar({ trayItems = [], onOpenTray }) {
+export default function Navbar({ trayItems = [], onOpenTray, onOpenAdmin }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isOpenNow, setIsOpenNow] = useState(true);
@@ -69,13 +70,23 @@ export default function Navbar({ trayItems = [], onOpenTray }) {
             </span>
           </div>
 
-          <div className="flex items-center gap-4 text-stone-300 text-[11px] font-medium">
+          <div className="flex items-center gap-3 text-stone-300 text-[11px] font-medium">
+            <button
+              onClick={onOpenAdmin}
+              className="flex items-center gap-1.5 text-amber-300 hover:text-white bg-black/40 hover:bg-black/60 border border-amber-500/30 px-2.5 py-0.5 rounded-full text-[11px] font-bold transition-all shadow-sm"
+              title="View Live Visitor Analytics & Logs"
+            >
+              <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
+              <span>Live Visitors</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            </button>
+            <span className="text-stone-600">|</span>
             <a href="tel:+919876543210" className="flex items-center gap-1 hover:text-white transition-colors">
               <Phone className="w-3 h-3 text-amber-400" />
               <span>+91 98765 43210</span>
             </a>
-            <span className="text-stone-600">|</span>
-            <span className="flex items-center gap-1">
+            <span className="text-stone-600 hidden sm:inline">|</span>
+            <span className="hidden sm:flex items-center gap-1">
               <MapPin className="w-3 h-3 text-amber-400" />
               <span>Kabulpur / Ritauli, Rohtak</span>
             </span>
@@ -142,6 +153,14 @@ export default function Navbar({ trayItems = [], onOpenTray }) {
             >
               Location &amp; Hours
             </button>
+            <button
+              onClick={onOpenAdmin}
+              className="hover:text-amber-700 transition-colors flex items-center gap-1.5 text-stone-700 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-600/20 px-2.5 py-1 rounded-xl text-xs font-bold"
+              title="Cafe Owner Visitor Intelligence Dashboard"
+            >
+              <ShieldCheck className="w-3.5 h-3.5 text-amber-600" />
+              <span>Live Visitors</span>
+            </button>
           </nav>
 
           {/* Right Action: Order Tray Button */}
@@ -200,6 +219,19 @@ export default function Navbar({ trayItems = [], onOpenTray }) {
               className="block w-full text-left py-2 font-medium text-stone-700 border-b border-stone-100"
             >
               Hours &amp; Location
+            </button>
+            <button
+              onClick={() => { setMobileMenuOpen(false); onOpenAdmin(); }}
+              className="block w-full text-left py-2 font-bold text-amber-900 border-b border-stone-100 flex items-center justify-between"
+            >
+              <div className="flex items-center gap-2">
+                <ShieldCheck className="w-4 h-4 text-amber-600" />
+                <span>Live Visitor Insights (Admin)</span>
+              </div>
+              <span className="text-[10px] bg-emerald-500/10 text-emerald-700 font-bold border border-emerald-500/30 px-2 py-0.5 rounded-full flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                Live
+              </span>
             </button>
             <div className="pt-2">
               <button
