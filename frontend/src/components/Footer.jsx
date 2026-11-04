@@ -103,6 +103,25 @@ export default function Footer({ onOpenAdmin }) {
 
         </div>
 
+        {/* Payment Methods Accepted Bar */}
+        <div className="py-6 border-t border-[#262626] flex flex-wrap items-center justify-between gap-3 text-xs">
+          <div className="flex items-center gap-2 text-stone-400">
+            <ShieldCheck className="w-4 h-4 text-emerald-400" />
+            <span className="font-semibold text-white">100% Secure Payments Accepted:</span>
+            <span>UPI, Cards, Cash on Delivery &amp; Net Banking</span>
+          </div>
+          <div className="flex flex-wrap items-center gap-1.5 text-[11px] font-bold">
+            <span className="px-2 py-0.5 rounded-md bg-stone-900 border border-stone-800 text-sky-400">⚡ GPay</span>
+            <span className="px-2 py-0.5 rounded-md bg-stone-900 border border-stone-800 text-purple-400">⚡ PhonePe</span>
+            <span className="px-2 py-0.5 rounded-md bg-stone-900 border border-stone-800 text-blue-400">⚡ Paytm</span>
+            <span className="px-2 py-0.5 rounded-md bg-stone-900 border border-stone-800 text-amber-300">⚡ BHIM</span>
+            <span className="px-2 py-0.5 rounded-md bg-stone-900 border border-stone-800 text-white">💳 Visa</span>
+            <span className="px-2 py-0.5 rounded-md bg-stone-900 border border-stone-800 text-amber-400">💳 MasterCard</span>
+            <span className="px-2 py-0.5 rounded-md bg-stone-900 border border-stone-800 text-emerald-400">💳 RuPay</span>
+            <span className="px-2 py-0.5 rounded-md bg-stone-900 border border-stone-800 text-emerald-300">💵 Cash on Delivery</span>
+          </div>
+        </div>
+
         {/* Bottom copyright bar */}
         <div className="pt-8 border-t border-[#262626] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-stone-500">
           <div className="flex items-center gap-2">

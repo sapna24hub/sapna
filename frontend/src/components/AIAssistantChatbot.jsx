@@ -84,12 +84,17 @@ export default function AIAssistantChatbot({ onAddToCart, onOpenTray, onOpenAdmi
       text: "🛡️ **Cafe Owner Visitor Intelligence Dashboard Active!**\n\nAap live dekh sakte hain ki kin-kin logo ne website open ki hai, unka **Sheher (City / Rohtak / Haryana), IP Address, Device (Android / iPhone), Time, aur Traffic Source (WhatsApp / Direct)**! Aap apne phone par instant Telegram alerts bhi setup kar sakte hain. Default PIN: **1234**.",
       isVisitorAction: true,
       quickReplies: ['🛡️ Open Visitor Dashboard', '🍕 View Pizzas', '🍰 View Cakes']
+    },
+    payment: {
+      text: "💳 We accept all major secure payment options!\n\n• **⚡ Instant UPI & QR Code** (Google Pay, PhonePe, Paytm, BHIM, Cred)\n• **💵 Cash on Delivery (COD)** / Pay at Counter\n• **💳 Credit & Debit Cards** (Visa, MasterCard, RuPay with 256-bit SSL)\n• **🏦 Net Banking** (HDFC, SBI, ICICI, Axis, PNB)\n\nZero extra transaction fees! You can choose your preferred payment mode in your order cart.",
+      quickReplies: ['🛒 Open Cart', '🍕 View Pizzas', '🍰 View Cakes', '🎟️ Discount Coupon']
     }
   };
 
   const generateReply = (userText) => {
     const query = userText.toLowerCase();
 
+    if (query.includes('payment') || query.includes('pay') || query.includes('upi') || query.includes('cod') || query.includes('cash') || query.includes('gpay') || query.includes('phonepe') || query.includes('qr') || query.includes('card') || query.includes('netbanking')) return knowledgeBase.payment;
     if (query.includes('visitor') || query.includes('kin kin') || query.includes('kisne') || query.includes('admin') || query.includes('owner') || query.includes('traffic') || query.includes('analytics') || query.includes('log')) return knowledgeBase.visitors;
     if (query.includes('delivery') || query.includes('deliver') || query.includes('shipping')) return knowledgeBase.delivery;
     if (query.includes('cake') || query.includes('pastry') || query.includes('cheesecake') || query.includes('dessert') || query.includes('lava') || query.includes('sweet')) return knowledgeBase.cakes;
@@ -116,6 +121,10 @@ export default function AIAssistantChatbot({ onAddToCart, onOpenTray, onOpenAdmi
 
     if (text === '🛡️ Open Visitor Dashboard') {
       if (onOpenAdmin) onOpenAdmin();
+      return;
+    }
+    if (text === '🛒 Open Cart' || text === '🛒 Open Order Cart') {
+      if (onOpenTray) onOpenTray();
       return;
     }
 
