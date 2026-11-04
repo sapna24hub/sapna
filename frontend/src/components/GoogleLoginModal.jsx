@@ -43,7 +43,7 @@ export function GoogleGIcon({ className = "w-4 h-4" }) {
   );
 }
 
-export default function GoogleLoginModal({ isOpen, onClose, onLoginSuccess }) {
+export default function GoogleLoginModal({ isOpen, onClose, onLoginSuccess, onOpenAdmin }) {
   const [currentUser, setCurrentUser] = useState(() => getSavedGoogleUser());
   const [googleName, setGoogleName] = useState('');
   const [googleEmail, setGoogleEmail] = useState('');
@@ -127,7 +127,10 @@ export default function GoogleLoginModal({ isOpen, onClose, onLoginSuccess }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-md animate-fadeIn">
+    <div 
+      className="fixed inset-0 z-[60] flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-md animate-fadeIn"
+      onClick={onClose}
+    >
       <div 
         className="bg-[#141414] border border-[#2E2E2E] rounded-3xl w-full max-w-md shadow-2xl overflow-hidden text-[#E8D7C3] relative"
         onClick={(e) => e.stopPropagation()}
@@ -325,7 +328,22 @@ export default function GoogleLoginModal({ isOpen, onClose, onLoginSuccess }) {
               </button>
             </form>
 
-            <div className="pt-2 text-center border-t border-white/5">
+            <div className="pt-2.5 border-t border-white/10 flex items-center justify-between text-[11px]">
+              <span className="text-stone-400">Cafe Owner?</span>
+              <button
+                type="button"
+                onClick={() => {
+                  onClose();
+                  if (onOpenAdmin) onOpenAdmin();
+                }}
+                className="text-amber-400 hover:text-amber-300 font-bold underline flex items-center gap-1 cursor-pointer"
+              >
+                <span>Owner Google Console (PIN: 1234)</span>
+                <ArrowRight className="w-3 h-3" />
+              </button>
+            </div>
+
+            <div className="pt-1 text-center border-t border-white/5">
               <p className="text-[10px] text-stone-500 leading-relaxed">
                 By continuing, you agree to The Black Cat Cafe's Terms of Service &amp; Privacy Policy. Google Cloud Console verified.
               </p>

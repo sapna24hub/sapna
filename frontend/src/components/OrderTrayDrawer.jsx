@@ -28,8 +28,10 @@ import {
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { identifyVisitor, getUserProfile, logVisitorAction } from '../utils/visitorTracker';
+import { GoogleGIcon } from './GoogleLoginModal';
+import { getSavedGoogleUser } from '../utils/googleAuth';
 
-export default function OrderTrayDrawer({ isOpen, onClose, trayItems = [], onUpdateQuantity, onClearTray }) {
+export default function OrderTrayDrawer({ isOpen, onClose, trayItems = [], onUpdateQuantity, onClearTray, onOpenGoogleLogin }) {
   // Order Fulfillment States
   const [orderType, setOrderType] = useState('dine_in'); // 'dine_in', 'takeaway', 'delivery'
   const [tableNumber, setTableNumber] = useState('Table 4 (Window Seat)');
@@ -400,8 +402,24 @@ export default function OrderTrayDrawer({ isOpen, onClose, trayItems = [], onUpd
                   </div>
                 )}
 
+                {/* 1-Click Fast Google Checkout Button */}
+                <div className="pt-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (onOpenGoogleLogin) onOpenGoogleLogin();
+                    }}
+                    className="w-full bg-white hover:bg-stone-100 text-stone-900 border border-stone-200 py-2 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 shadow-xs cursor-pointer active:scale-98"
+                  >
+                    <GoogleGIcon className="w-3.5 h-3.5" />
+                    <span>
+                      {getSavedGoogleUser() ? `Logged in as ${getSavedGoogleUser().name}` : '1-Click Fast Checkout with Google'}
+                    </span>
+                  </button>
+                </div>
+
                 {/* ORDER FULFILLMENT MODE */}
-                <div className="pt-4 border-t border-white/10 space-y-3">
+                <div className="pt-3 border-t border-white/10 space-y-3">
                   <span className="text-[11px] uppercase tracking-wider text-stone-400 font-bold block">
                     1. Order Type
                   </span>

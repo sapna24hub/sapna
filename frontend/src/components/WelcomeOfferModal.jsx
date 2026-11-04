@@ -17,7 +17,7 @@ import { identifyVisitor, getUserProfile } from '../utils/visitorTracker';
 import { GoogleGIcon } from './GoogleLoginModal';
 import { getSavedGoogleUser } from '../utils/googleAuth';
 
-export default function WelcomeOfferModal({ isOpen, onClose, onClaimSuccess }) {
+export default function WelcomeOfferModal({ isOpen, onClose, onClaimSuccess, onOpenGoogleLogin }) {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
@@ -173,12 +173,15 @@ export default function WelcomeOfferModal({ isOpen, onClose, onClaimSuccess }) {
                 if (user) {
                   setName(user.name);
                   if (user.email) setEmail(user.email);
+                } else if (onOpenGoogleLogin) {
+                  onClose();
+                  onOpenGoogleLogin();
                 } else {
                   setName('Rahul Sharma');
                   setEmail('rahul.sharma@gmail.com');
                 }
               }}
-              className="w-full bg-white hover:bg-stone-100 text-stone-900 border border-stone-200 py-2.5 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 shadow-sm active:scale-98"
+              className="w-full bg-white hover:bg-stone-100 text-stone-900 border border-stone-200 py-2.5 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 shadow-sm active:scale-98 cursor-pointer"
             >
               <GoogleGIcon className="w-4 h-4" />
               <span>Continue with Google (1-Click Auto-Fill)</span>

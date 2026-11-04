@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Cat, MessageSquare, X, Send, Sparkles, ShoppingBag, Flame, Coffee, Pizza, RotateCcw, ShieldCheck } from 'lucide-react';
 
-export default function AIAssistantChatbot({ onAddToCart, onOpenTray, onOpenAdmin }) {
+export default function AIAssistantChatbot({ onAddToCart, onOpenTray, onOpenAdmin, onOpenGoogleLogin }) {
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
@@ -90,8 +90,8 @@ export default function AIAssistantChatbot({ onAddToCart, onOpenTray, onOpenAdmi
       quickReplies: ['🛒 Open Cart', '🍕 View Pizzas', '🍰 View Cakes', '🎟️ Discount Coupon']
     },
     google: {
-      text: "🌐 **Google Console & Google Sign-In Active!**\n\nAap website ke top menu me **'Google Login'** button par click karke 1-click me Google se sign in kar sakte hain. Cafe owners apne Visitor Dashboard me **'Google Console'** tab me jakar Google Cloud OAuth Client ID aur Google Search Console verification manage kar sakte hain!",
-      quickReplies: ['🛡️ Open Visitor Dashboard', '🛒 Open Cart', '🍕 View Pizzas']
+      text: "🌐 **Google Console & Google Sign-In Active!**\n\nAap website ke top menu ya floating button me **'Google Login'** par click karke 1-click me Google se sign in kar sakte hain. Cafe owners Visitor Dashboard me **'Google Console'** tab me jakar Google Cloud OAuth Client ID aur Search Console verification manage kar sakte hain!",
+      quickReplies: ['🌐 Open Google Login', '🛡️ Open Visitor Dashboard', '🛒 Open Cart']
     }
   };
 
@@ -124,8 +124,12 @@ export default function AIAssistantChatbot({ onAddToCart, onOpenTray, onOpenAdmi
     const text = textToSend || input.trim();
     if (!text) return;
 
-    if (text === '🛡️ Open Visitor Dashboard') {
+    if (text === '🛡️ Open Visitor Dashboard' || text === '🛡️ Visitor Dashboard') {
       if (onOpenAdmin) onOpenAdmin();
+      return;
+    }
+    if (text === '🌐 Open Google Login' || text === '🌐 Open Google Console Login' || text === '🌐 Google Login') {
+      if (onOpenGoogleLogin) onOpenGoogleLogin();
       return;
     }
     if (text === '🛒 Open Cart' || text === '🛒 Open Order Cart') {

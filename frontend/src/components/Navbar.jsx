@@ -191,11 +191,31 @@ export default function Navbar({ trayItems = [], onOpenTray, onOpenAdmin, onOpen
             </button>
           </nav>
 
-          {/* Right Action: Order Tray Button */}
-          <div className="flex items-center gap-3">
+          {/* Right Action: Mobile Quick Actions & Order Tray */}
+          <div className="flex items-center gap-2 sm:gap-3">
+            {/* Quick Mobile Google Login Button */}
+            <button
+              onClick={onOpenGoogleLogin}
+              className="lg:hidden flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border border-stone-300 bg-white hover:bg-stone-50 text-stone-900 text-xs font-bold transition-all shadow-xs cursor-pointer active:scale-95"
+              title="Sign in with Google"
+            >
+              <GoogleGIcon className="w-3.5 h-3.5" />
+              <span className="text-[11px]">{googleUser ? googleUser.name.split(' ')[0] : 'Google'}</span>
+            </button>
+
+            {/* Quick Mobile Admin Button (PIN: 1234) */}
+            <button
+              onClick={onOpenAdmin}
+              className="lg:hidden flex items-center gap-1 px-2.5 py-1.5 rounded-xl border border-amber-600/30 bg-amber-500/10 hover:bg-amber-500/20 text-amber-900 text-xs font-bold transition-all shadow-xs cursor-pointer active:scale-95"
+              title="Admin Dashboard (PIN: 1234)"
+            >
+              <ShieldCheck className="w-3.5 h-3.5 text-amber-600" />
+              <span className="text-[11px]">1234</span>
+            </button>
+
             <button
               onClick={onOpenTray}
-              className="relative flex items-center gap-2.5 bg-[#181818] hover:bg-stone-900 text-white px-5 py-2.5 rounded-2xl shadow-md transition-all font-semibold text-xs sm:text-sm group border border-amber-500/20"
+              className="relative flex items-center gap-2 sm:gap-2.5 bg-[#181818] hover:bg-stone-900 text-white px-3 sm:px-5 py-2 sm:py-2.5 rounded-2xl shadow-md transition-all font-semibold text-xs sm:text-sm group border border-amber-500/20 active:scale-95"
             >
               <ShoppingBag className="w-4 h-4 text-amber-400 group-hover:scale-110 transition-transform" />
               <div className="flex flex-col text-left">
