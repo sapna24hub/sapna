@@ -14,6 +14,7 @@ export default function AIAssistantChatbot({ onAddToCart, onOpenTray }) {
       text: "Meow! 🐾 Welcome to The Black Cat Cafe! 'Come hungry, leave happy' — great taste every time, because good food means good mood! How can Luna tempt your tastebuds today?",
       quickReplies: [
         '🛵 Free Delivery (Above ₹300)',
+        '🍰 Best Cakes & Pastries',
         '🍕 Recommend a Pizza',
         '🍔 Best Burger',
         '🧋 Cold Coffee Picks',
@@ -73,6 +74,11 @@ export default function AIAssistantChatbot({ onAddToCart, onOpenTray }) {
     delivery: {
       text: "🛵 Purr-fect news! We offer **100% FREE Home Delivery on all orders above ₹300**! For orders below ₹300, delivery fee is just ₹40. Packed in thermal bags so pizzas stay fresh and hot!",
       quickReplies: ['🍕 View Pizzas', '🍔 View Burgers', '🎟️ Discount Coupon', '🛒 Open Cart']
+    },
+    cakes: {
+      text: "Craving something sweet? 🍰 Our artisanal eggless cakes are baked fresh daily! Top picks: **Black Cat Belgian Dark Truffle (₹149)**, **New York Lotus Biscoff Cheesecake (₹179)**, and our warm **Sizzling Molten Choco Lava Cake (₹129)**. Want me to add one to your cart?",
+      recommendItem: { id: 33, name: 'Black Cat Belgian Dark Truffle Cake Slice', price: 149, category: 'Cakes' },
+      quickReplies: ['🍰 Belgian Dark Truffle', '🍰 Lotus Biscoff Cheesecake', '🍰 Choco Lava Cake', '🛒 Open Cart']
     }
   };
 
@@ -80,6 +86,7 @@ export default function AIAssistantChatbot({ onAddToCart, onOpenTray }) {
     const query = userText.toLowerCase();
 
     if (query.includes('delivery') || query.includes('deliver') || query.includes('shipping')) return knowledgeBase.delivery;
+    if (query.includes('cake') || query.includes('pastry') || query.includes('cheesecake') || query.includes('dessert') || query.includes('lava') || query.includes('sweet')) return knowledgeBase.cakes;
     if (query.includes('pizza')) return knowledgeBase.pizza;
     if (query.includes('burger')) return knowledgeBase.burger;
     if (query.includes('cold coffee') || query.includes('frappe') || query.includes('brew') || query.includes('shake')) return knowledgeBase.cold_coffee;

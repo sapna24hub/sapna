@@ -109,7 +109,7 @@ export default function Navbar({ trayItems = [], onOpenTray }) {
                 </span>
               </div>
               <p className="text-[11px] text-[#7B5A34] tracking-wide font-medium">
-                Pizzas • Burgers • Cold Coffee • Shakes
+                Pizzas • Burgers • Cakes • Cold Brews
               </p>
             </div>
           </div>

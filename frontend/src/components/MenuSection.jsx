@@ -14,7 +14,8 @@ import {
   Clock,
   Tag,
   ShoppingBag,
-  UtensilsCrossed
+  UtensilsCrossed,
+  CakeSlice
 } from 'lucide-react';
 import { API_BASE } from '../apiConfig';
 
@@ -24,13 +25,14 @@ export default function MenuSection({ onAddToCart, trayItems = [] }) {
   const [vegOnly, setVegOnly] = useState(false);
   const [recentlyAddedId, setRecentlyAddedId] = useState(null);
 
-  // 6 Core Required Categories for Black Cat Cafe
+  // Core Required Categories for Black Cat Cafe
   const categories = [
-    { id: 'all', slug: 'all', name: 'All Items', icon: Sparkles, count: 32 },
+    { id: 'all', slug: 'all', name: 'All Items', icon: Sparkles, count: 38 },
     { id: 'pizza', slug: 'pizza', name: 'Pizza', icon: Pizza, count: 6 },
     { id: 'burger', slug: 'burger', name: 'Burger', icon: Flame, count: 5 },
     { id: 'sandwich', slug: 'sandwich', name: 'Sandwich', icon: Sandwich, count: 5 },
     { id: 'fries', slug: 'fries', name: 'French Fries', icon: UtensilsCrossed, count: 5 },
+    { id: 'cakes', slug: 'cakes', name: 'Cakes & Pastries', icon: CakeSlice, count: 6 },
     { id: 'hot-coffee', slug: 'hot-coffee', name: 'Hot Coffee', icon: Coffee, count: 6 },
     { id: 'cold-coffee', slug: 'cold-coffee', name: 'Cold Coffee', icon: Coffee, count: 5 },
   ];
@@ -399,6 +401,74 @@ export default function MenuSection({ onAddToCart, trayItems = [] }) {
       prep_time: "5 mins",
       image_url: "https://images.unsplash.com/photo-1541167760496-1628856ab772?auto=format&fit=crop&w=700&q=80",
     },
+
+    // 🍰 CAKES & PASTRIES
+    {
+      id: 33,
+      category_slug: 'cakes',
+      name: "Black Cat Belgian Dark Truffle Cake Slice",
+      description: "Moist Dutch cocoa sponge layered with rich 70% Belgian dark chocolate ganache, finished with golden cat sparkles. 100% Eggless.",
+      price: 149,
+      is_veg: true,
+      badge: "Chef's Signature",
+      prep_time: "Fresh Baked",
+      image_url: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=700&q=80",
+    },
+    {
+      id: 34,
+      category_slug: 'cakes',
+      name: "New York Lotus Biscoff Cheesecake Slice",
+      description: "Velvety baked Philadelphia cream cheesecake with a spiced Biscoff biscuit crust, topped with molten lotus spread and cookie crumb.",
+      price: 179,
+      is_veg: true,
+      badge: "Bestseller Cake",
+      prep_time: "Chilled",
+      image_url: "https://images.unsplash.com/photo-1533134242443-d4fd215305ad?auto=format&fit=crop&w=700&q=80",
+    },
+    {
+      id: 35,
+      category_slug: 'cakes',
+      name: "Warm Sizzling Molten Choco Lava Cake",
+      description: "Warm single-serve chocolate bundt cake with an oozing molten dark chocolate center, dusted with snowy powdered sugar.",
+      price: 129,
+      is_veg: true,
+      badge: "Gooey Delight",
+      prep_time: "6 mins",
+      image_url: "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=700&q=80",
+    },
+    {
+      id: 36,
+      category_slug: 'cakes',
+      name: "Royal Red Velvet Cream Cheese Pastry",
+      description: "Delicate crimson cocoa sponge layered with rich Philadelphia vanilla bean cream cheese frosting and fine red velvet sponge dust.",
+      price: 149,
+      is_veg: true,
+      badge: "Customer Favorite",
+      prep_time: "Fresh Baked",
+      image_url: "https://images.unsplash.com/photo-1586788680434-30d324b2d46f?auto=format&fit=crop&w=700&q=80",
+    },
+    {
+      id: 37,
+      category_slug: 'cakes',
+      name: "Wild Blueberry Glazed Baked Cheesecake",
+      description: "Dense and creamy baked cheesecake sitting on a golden graham cracker crust, topped with sweet and tangy wild blueberry compote.",
+      price: 169,
+      is_veg: true,
+      badge: "Fruity Bliss",
+      prep_time: "Chilled",
+      image_url: "https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&w=700&q=80",
+    },
+    {
+      id: 38,
+      category_slug: 'cakes',
+      name: "Ferrero Nutella Hazelnut Crunch Cake Slice",
+      description: "Decadent chocolate hazelnut praline mousse layered between soft dark sponge, topped with crushed Ferrero Rocher glaze and roasted nuts.",
+      price: 169,
+      is_veg: true,
+      badge: "Rich & Nutty",
+      prep_time: "Fresh Baked",
+      image_url: "https://images.unsplash.com/photo-1588195538326-c5b1e9f80a1b?auto=format&fit=crop&w=700&q=80",
+    },
   ];
 
   const handleAdd = (item) => {
@@ -443,7 +513,7 @@ export default function MenuSection({ onAddToCart, trayItems = [] }) {
           </h2>
 
           <p className="text-sm sm:text-base text-stone-300 leading-relaxed font-normal">
-            <strong>Good Food, Good Mood!</strong> Fresh wood-fired pizzas, gourmet smash burgers, crispy French fries, grilled sandwiches &amp; artisan cold brews.
+            <strong>Good Food, Good Mood!</strong> Fresh wood-fired pizzas, gourmet smash burgers, crispy French fries, grilled sandwiches, artisanal cakes &amp; cold brews.
           </p>
         </div>
 
@@ -455,7 +525,7 @@ export default function MenuSection({ onAddToCart, trayItems = [] }) {
             <Search className="w-4 h-4 text-stone-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
-              placeholder="Search Pizza, Burger, Fries, Coffee..."
+              placeholder="Search Pizza, Burger, Cakes, Fries, Coffee..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-9 pr-4 py-2.5 bg-[#1F1F1F] border border-white/10 focus:border-amber-500/50 rounded-xl text-xs sm:text-sm text-white placeholder-stone-400 focus:outline-none transition-all"

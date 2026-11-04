@@ -55,7 +55,7 @@ export default function Hero({ onExploreCombos, onExploreMenu }) {
 
             {/* Subtitle */}
             <p className="text-base sm:text-lg text-stone-300 leading-relaxed max-w-2xl font-normal">
-              Step into <strong>The Black Cat Cafe</strong>! <em>Come hungry, leave happy</em> with <strong>great taste every time</strong>. Savor wood-fired pizzas, smash burgers, golden fries, and chilled artisan frappes — because <strong>good food means good mood!</strong> 🐾
+              Step into <strong>The Black Cat Cafe</strong>! <em>Come hungry, leave happy</em> with <strong>great taste every time</strong>. Savor wood-fired pizzas, smash burgers, golden fries, artisanal cakes, and chilled frappes — because <strong>good food means good mood!</strong> 🐾
             </p>
 
             {/* Slogans Pill Badges */}

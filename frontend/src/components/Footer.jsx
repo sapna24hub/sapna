@@ -52,6 +52,7 @@ export default function Footer() {
             <ul className="space-y-2 text-xs text-[#A68864]">
               <li><a href="#menu" className="hover:text-amber-300 transition-colors">🍕 Wood-Fired Pizzas</a></li>
               <li><a href="#menu" className="hover:text-amber-300 transition-colors">🍔 Gourmet Smash Burgers</a></li>
+              <li><a href="#menu" className="hover:text-amber-300 transition-colors">🍰 Fresh Cakes &amp; Pastries</a></li>
               <li><a href="#menu" className="hover:text-amber-300 transition-colors">🧋 Chilled Cold Coffee &amp; Frappes</a></li>
               <li><a href="#menu" className="hover:text-amber-300 transition-colors">🥪 Grilled Club Sandwiches</a></li>
               <li><a href="#menu" className="hover:text-amber-300 transition-colors">🍟 Loaded Peri-Peri Fries</a></li>
